@@ -25,10 +25,8 @@ AudioInput input ;
 
 int bands_max ;
 
-
-
 void set_sound(int max) {
-  bands_max = 512 ;
+  bands_max = max ;
   minim = new Minim(this);
   //sound from outside
  //  minim.debugOn();
@@ -90,31 +88,30 @@ void spectrum_scale(float scale) {
 }
 
 
-
-
-
-
-/**
-BAND
-
-*/
 // scale .5 be good
-
-float band(int target) {
+float spectrum(int target) {
   if(source_buffer == null) {
     source_buffer = input.mix ;
   }
-  return band(source_buffer, target, scale_spectrum) ;
+  return spectrum(source_buffer, target, scale_spectrum) ;
 }
 
-float band(AudioBuffer fftData, int target) {
-  return band(fftData, target, scale_spectrum) ;
+float spectrum(AudioBuffer fftData, int target) {
+  return spectrum(fftData, target, scale_spectrum) ;
 }
 
-float band(AudioBuffer fftData, int target, float scale) {
+float spectrum(AudioBuffer fftData, int target, float scale) {
   fft.forward(fftData) ;
   fft.scaleBand(target, scale_spectrum) ;
   return fft.getBand(target) ;
+}
+
+float [] spectrum() {
+  float [] f = new float[spectrum_bands] ;
+  for(int i = 0 ; i < spectrum_bands ; i++) {
+    f[i] = fft.getBand(i) ;
+  }
+  return f ;
 }
 
 int num_bands() {
@@ -134,21 +131,29 @@ BEAT
 
 */
 float [] beat_alert ;
+int num_section ;
 
 void set_beat(float... threshold) {
   beat_alert = new float[spectrum_bands] ;
-  int length_part = spectrum_bands / threshold.length ;
+  int section = spectrum_bands / threshold.length ;
 
   int count = 0 ;
   for(int i = 0 ; i < spectrum_bands ; i++) {
     beat_alert[i] = threshold[count] ;
-    if(i > length_part) {
-      length_part += length_part ;
+    if(i > section) {
+      section += section ;
       count++ ;
     }   
   }
+  num_section = count +1 ;
 }
 
+int beat_section(int target) {
+  println(target, spectrum_bands, num_section) ;
+  int section = ceil((float)target /spectrum_bands *num_section) ;
+  if(section == 0) section = 1 ;
+  return section ;
+}
 
 float get_beat_alert(int target) {
   return beat_alert[target] ;
@@ -156,7 +161,7 @@ float get_beat_alert(int target) {
 
 
 boolean beat_is(int target) {
-  if(band(target) > beat_alert[target]) {
+  if(spectrum(target) > beat_alert[target]) {
     return true ; 
   } else {
     return false ;

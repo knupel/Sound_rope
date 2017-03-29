@@ -1,8 +1,9 @@
 /**
-RPE UTILS 1.17.4.0
-RPE – Romanesco Processing Environment – 2015 – 2016
+RPE UTILS  2015 – 2017
+v 1.23.1.2
+Rope – Romanesco Processing Environment – 
 * @author Stan le Punk
-* @see https://github.com/StanLepunK/Utils
+* @see https://github.com/StanLepunK/Utils_rope
 */
 
 /**
@@ -13,8 +14,599 @@ final float PHI = (1 + sqrt(5))/2; //a number of polys use the golden ratio...
 final float ROOT2 = sqrt(2); //...and the square root of two, the famous first irrationnal number by Pythagore
 final float EULER = 2.718281828459045235360287471352; // Constant d'Euler
 // about constant https://en.wikipedia.org/wiki/Mathematical_constant
+
+
+
 /**
-TABLE METHOD
+
+COLOR 0.2.0
+
+*/
+/**
+camaieu 0.1.1
+*/
+// return hue or other date in range of specific data float
+float camaieu(float max, float color_ref, float range) {
+  float camaieu = 0 ;
+  float which_color = random(-range, range) ;
+  camaieu = color_ref +which_color ;
+  if(camaieu < 0 ) camaieu = max +camaieu ;
+  if(camaieu > max) camaieu = camaieu -max ;
+  return camaieu ;
+}
+
+/**
+color pool 0.2.0
+*/
+// color pool Vec4 RGB
+Vec4 [] color_pool_RGB(int num) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  float range = g.colorModeX *.5 ;
+  int num_group = 1 ;
+  float key_hue = -1 ;
+  return color_pool_RGB(num, num_group, key_hue, range, sat_range, bright_range, alpha_range) ;
+}
+
+Vec4 [] color_pool_RGB(int num, float key_hue) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  float range = g.colorModeX *.5 ;
+  int num_group = 1 ;
+  return color_pool_RGB(num, num_group, key_hue, range, sat_range, bright_range, alpha_range) ;
+}
+
+
+Vec4 [] color_pool_RGB(int num, int num_group, float hue_range) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  float key_hue = -1 ;
+  return color_pool_RGB(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+}
+
+
+Vec4 [] color_pool_RGB(int num, int num_group, float key_hue, float hue_range) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  return color_pool_RGB(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+}
+
+Vec4 [] color_pool_RGB(int num, int num_group, float hue_range, Vec2 sat_range, Vec2 bright_range, Vec2 alpha_range) {
+  float key_hue = -1 ;
+  return color_pool_RGB(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+}
+
+
+Vec4 [] color_pool_RGB(int num, int num_group, float key_hue, float hue_range, Vec2 sat_range, Vec2 bright_range, Vec2 alpha_range) {
+  Vec4 [] list = new Vec4[num]  ;
+  int [] c = color_pool(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+  for(int i = 0 ; i <list.length ; i++) {
+    list[i] = new Vec4(red(c[i]),green(c[i]),blue(c[i]),alpha(c[i])) ;
+  }
+  return list ;
+}
+
+// color pool Vec4 HSB
+Vec4 [] color_pool_HSB(int num) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  float range = g.colorModeX *.5 ;
+  int num_group = 1 ;
+  float key_hue = -1 ;
+  return color_pool_HSB(num, num_group, key_hue, range, sat_range, bright_range, alpha_range) ;
+}
+
+Vec4 [] color_pool_HSB(int num, float key_hue) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  float range = g.colorModeX *.5 ;
+  int num_group = 1 ;
+  return color_pool_HSB(num, num_group, key_hue, range, sat_range, bright_range, alpha_range) ;
+}
+
+
+Vec4 [] color_pool_HSB(int num, int num_group, float hue_range) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  float key_hue = -1 ;
+  return color_pool_HSB(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+}
+
+
+Vec4 [] color_pool_HSB(int num, int num_group, float key_hue, float hue_range) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  return color_pool_HSB(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+}
+
+Vec4 [] color_pool_HSB(int num, int num_group, float hue_range, Vec2 sat_range, Vec2 bright_range, Vec2 alpha_range) {
+  float key_hue = -1 ;
+  return color_pool_HSB(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+}
+
+
+Vec4 [] color_pool_HSB(int num, int num_group, float key_hue, float hue_range, Vec2 sat_range, Vec2 bright_range, Vec2 alpha_range) {
+  Vec4 [] list = new Vec4[num]  ;
+  int [] c = color_pool(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+  for(int i = 0 ; i <list.length ; i++) {
+    list[i] = new Vec4(hue(c[i]),saturation(c[i]),brightness(c[i]),alpha(c[i])) ;
+  }
+  return list ;
+}
+
+// color pool int
+int [] color_pool(int num) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  float range = g.colorModeX *.5 ;
+  int num_group = 1 ;
+  float key_hue = -1 ;
+  return color_pool(num, num_group, key_hue, range, sat_range, bright_range, alpha_range) ;
+}
+
+int [] color_pool(int num, float key_hue) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  float range = g.colorModeX *.5 ;
+  int num_group = 1 ;
+  return color_pool(num, num_group, key_hue, range, sat_range, bright_range, alpha_range) ;
+}
+
+int [] color_pool(int num, int num_group, float hue_range) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  float key_hue = -1 ;
+  return color_pool(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+}
+
+int [] color_pool(int num, int num_group, float key_hue, float hue_range) {
+  Vec2 sat_range = Vec2(g.colorModeY) ;
+  Vec2 bright_range = Vec2(g.colorModeZ) ;
+  Vec2 alpha_range = Vec2(g.colorModeA) ;
+  return color_pool(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+}
+
+int [] color_pool(int num, int num_group, float hue_range, Vec2 sat_range, Vec2 bright_range, Vec2 alpha_range) {
+  float key_hue = -1 ;
+  return color_pool(num, num_group, key_hue, hue_range, sat_range, bright_range, alpha_range) ;
+
+}
+
+// color pool by group
+int [] color_pool(int num, int num_group, float key_hue, float hue_range, Vec2 sat_range, Vec2 bright_range, Vec2 alpha_range) {
+  int ref = g.colorMode ;
+  float x = g.colorModeX ;
+  float y = g.colorModeY ;
+  float z = g.colorModeZ ;
+  float a = g.colorModeA ;
+  colorMode(HSB,360,100,100,100) ;
+
+  float [] color_ref = new float[num_group] ;
+  if(key_hue >= 0 ) {
+    color_ref[0] = key_hue ;
+  } else {
+    color_ref[0] = random(g.colorModeX) ;
+  }
+  if(num_group > 1) {
+    float step = g.colorModeX / num_group ;
+    for(int i = 1 ; i < num_group ; i++) {
+      color_ref[i] = color_ref[i -1] + step ;
+      if(color_ref[i] > g.colorModeX) {
+        color_ref[i] = color_ref[i] - g.colorModeX ;
+      }      
+    }
+  }
+
+  int [] list = new int[num] ;
+  int count = 0 ;
+  int step = num / num_group ;
+  int next_stop = step ; ;
+  for(int i = 0 ; i < list.length ; i++) {
+    if(i > next_stop) {
+      next_stop += step ;
+    }
+    float saturation = random(sat_range) ;
+    float brightness = random(bright_range) ;
+    float alpha = random(alpha_range) ;
+    float hue = camaieu(g.colorModeX, color_ref[count], hue_range) ;
+    list[i] = color(hue, saturation,brightness, alpha) ;
+    count++ ;
+    if(count >= color_ref.length) count = 0 ;
+
+  }
+  colorMode(ref,x,y,z,a) ;
+  return list ;
+}
+
+
+
+
+
+/**
+componenet range
+*/
+boolean alpha_range(float min, float max, int colour) {
+  float alpha = alpha(colour) ;
+  return in_range(min, max, alpha) ;
+}
+
+boolean red_range(float min, float max, int colour) {
+  float  r = red(colour) ;
+  return in_range(min, max, r) ;
+}
+
+boolean green_range(float min, float max, int colour) {
+  float  g = green(colour) ;
+  return in_range(min, max, g) ;
+}
+
+boolean blue_range(float min, float max, int colour) {
+  float  b = blue(colour) ;
+  return in_range(min, max, b) ;
+}
+
+boolean saturation_range(float min, float max, int colour) {
+  float  s = saturation(colour) ;
+  return in_range(min, max, s) ;
+}
+
+boolean brightness_range(float min, float max, int colour) {
+  float  b = brightness(colour) ;
+  return in_range(min, max, b) ;
+}
+
+
+boolean hue_range(float min, float max, int colour) {
+  int c_m = g.colorMode ;
+  float c_x = g.colorModeX ;
+  float c_y = g.colorModeY ;
+  float c_z = g.colorModeZ ;
+  float c_a = g.colorModeA ;
+  colorMode(HSB, c_x, c_y, c_z, c_a) ;
+  float  h = hue(colour) ;
+
+  boolean result = false ;
+  // test for the wheel value, hue is one of them ;
+  result = in_range_wheel(min, max, c_x, h) ;
+  // return to the current colorMode
+  colorMode(c_m, c_x, c_y, c_z, c_a) ;
+  return result ;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+convert color 0.0.1
+*/
+//convert color HSB to RVB
+Vec3 HSB_to_RGB(float hue, float saturation, float brightness) {
+  Vec4 vecRGB = HSB_to_RGB(hue, saturation, brightness, g.colorModeA).copy() ;
+  return Vec3(vecRGB.x,vecRGB.y,vecRGB.z) ;
+}
+
+Vec4 HSB_to_RGB(float hue, float saturation, float brightness, float alpha) {
+  Vec4 ref = Vec4(g.colorModeX, g.colorModeY, g.colorModeY, g.colorModeA) ;
+  color c = color (hue, saturation, brightness, alpha);
+
+  colorMode(RGB,255) ;
+  Vec4 vecRGBa = Vec4 (red(c), green(c), blue(c), alpha(c)) ;
+  // return to the previous colorMode
+  colorMode(HSB,ref.r, ref.g, ref.b, ref.a) ;
+  return vecRGBa ;
+}
+
+
+
+// color context
+/*
+* good when the text is on different background
+*/
+int color_context(int colorRef, int threshold, int clear, int dark) {
+  int new_color ;
+  if( brightness( colorRef ) < threshold ) {
+    new_color = clear;
+  } else {
+    new_color = dark ;
+  }
+  return new_color ;
+}
+/**
+
+END COLOR
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+EXPORT FILE PDF_PNG 0.0.3
+
+*/
+// global PDF / PNG
+String default_folder_shot_pdf = "pdf_folder" ;
+String default_folder_shot_png = "png_folder" ;
+String default_name_pdf = "pdf_file_" ;
+String default_name_png = "png_file_" ;
+String ranking_shot = "_######" ;
+
+void start_shot(String path_folder, String name_file) {
+  start_PDF(path_folder, name_file) ;
+  start_PNG(path_folder, name_file) ;
+}
+
+void start_shot(String name_file) {
+  start_PDF(default_folder_shot_pdf, name_file) ;
+  start_PNG(default_folder_shot_png, name_file) ;
+}
+
+void start_shot() {
+  start_PDF() ;
+  // start_PNG() ;
+}
+
+void save_shot() {
+  save_PDF() ;
+  save_PNG() ;
+}
+void event_shot() {
+  event_PNG() ;
+  event_PDF() ;
+}
+
+
+
+
+// PDF
+import processing.pdf.*;
+boolean record_PDF;
+void start_PDF() {
+  start_PDF(default_folder_shot_pdf, default_name_pdf+ranking_shot) ;
+}
+
+void start_PDF(String name_file) {
+  start_PDF(default_folder_shot_pdf, name_file) ;
+}
+void start_PDF(String path_folder, String name_file) {
+  if (record_PDF && !record_PNG) {
+    if(renderer_P3D()) {
+      beginRaw(PDF, path_folder+"/"+name_file+".pdf"); 
+    } else {
+      beginRecord(PDF, path_folder+"/"+name_file+".pdf");
+    }
+  }
+}
+
+void save_PDF() {
+  if (record_PDF && !record_PNG) {
+    if(renderer_P3D()) {
+      endRaw(); 
+    } else {
+      endRecord() ;
+    }
+    record_PDF = false;
+  }
+}
+
+void event_PDF() {
+  record_PDF = true;
+}
+
+
+
+
+// PNG
+boolean record_PNG ;
+boolean naming_PNG ;
+String path_folder_png, name_file_png  ;
+
+void start_PNG(String path_folder, String name_file) {
+  path_folder_png = path_folder ;
+  name_file_png = name_file ;
+  naming_PNG = true ;
+}
+
+void save_PNG() {
+  if(record_PNG) {
+    if(!naming_PNG) {
+      saveFrame(default_folder_shot_png +"/"+ default_name_png + ranking_shot+".png");
+    } else {
+      saveFrame(path_folder_png +"/"+ name_file_png +".png");
+    }
+    record_PNG = false ;
+  }
+}
+
+void event_PNG() {
+  record_PNG = true;
+}
+
+/**
+END EXPORT FILE PDF / PNG
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+Rope – Romanesco Processing environment – 
+BACKGROUND_2D_3D 0.0.3
+* @author Stan le Punk
+* @see other Processing work on https://github.com/StanLepunK
+*/
+
+float MAX_RATIO_DEPTH = 6.9 ;
+
+/**
+Normalize background
+*/
+
+void background_norm(Vec4 bg) {
+  background_norm(bg.x, bg.y, bg.z, bg.a) ;
+}
+
+void background_norm(Vec3 bg) {
+  background_norm(bg.x, bg.y, bg.z, 1) ;
+}
+
+void background_norm(Vec2 bg) {
+  background_norm(bg.x, bg.x, bg.x, bg.y) ;
+}
+
+void background_norm(float c, float a) {
+  background_norm(c, c, c, a) ;
+}
+
+void background_norm(float c) {
+  background_norm(c, c, c, 1) ;
+}
+
+void background_norm(float r,float g, float b) {
+  background_norm(r, g, b, 1) ;
+}
+
+// Main method
+void background_norm(float r_c, float g_c, float b_c, float a_c) {
+  rectMode(CORNER) ;
+  float x = map(r_c,0,1, 0, g.colorModeX) ;
+  float y = map(g_c,0,1, 0, g.colorModeY) ;
+  float z = map(b_c,0,1, 0, g.colorModeZ) ;
+  float a = map(a_c,0,1, 0, g.colorModeA) ;
+  noStroke() ;
+  fill(x, y, z, a) ;
+  int canvas_x = width ;
+  int canvas_y = height ;
+  if(renderer_P3D()) {
+    canvas_x = width *100 ;
+    canvas_y = height *100 ;
+    int pos_x = - canvas_x /2 ;
+    int pos_y = - canvas_y /2 ;
+    // this problem of depth is not clarify, is must refactoring
+    int pos_z = int( -height *MAX_RATIO_DEPTH) ;
+    pushMatrix() ;
+    translate(0,0,pos_z) ;
+    rect(pos_x,pos_y,canvas_x, canvas_y) ;
+    popMatrix() ;
+  } else {
+    rect(0,0,canvas_x, canvas_y) ;
+  }
+  // HSB mode
+  if(g.colorMode == 3) {
+    fill(0, 0, g.colorModeZ) ;
+    stroke(0) ;
+  // RGB MODE
+  } else if (g.colorMode == 1) {
+    fill(g.colorModeX, g.colorModeY, g.colorModeZ) ;
+    stroke(0) ;
+
+  }
+  strokeWeight(1) ; 
+}
+
+
+
+/**
+Background
+*/
+void background_rope(float colour) {
+  background_norm(colour / g.colorModeX, colour / g.colorModeY, colour / g.colorModeZ) ;
+  // background_2D(colour, g.colorModeA) ;
+}
+
+void background_rope(float colour, float alpha) {
+  background_norm(colour / g.colorModeX, colour / g.colorModeY, colour / g.colorModeZ, alpha / g.colorModeA) ;
+}
+
+
+void background_rope(float red, float green, float blue, float alpha) {
+  background_norm(red / g.colorModeX, green / g.colorModeY, blue / g.colorModeZ, alpha / g.colorModeA) ;
+}
+
+void background_rope(float red, float green, float blue) {
+  background_norm(red / g.colorModeX, green / g.colorModeY, blue / g.colorModeZ) ;
+}
+
+void background_rope(Vec4 c) {
+  background_norm(c.x / g.colorModeX, c.y / g.colorModeY, c.z / g.colorModeZ, c.w / g.colorModeA) ;
+}
+
+void background_rope(Vec3 c) {
+  background_norm(c.x / g.colorModeX, c.y / g.colorModeY, c.z / g.colorModeZ) ;
+}
+
+void background_rope(Vec2 c) {
+  background_norm(c.x / g.colorModeX, c.x / g.colorModeY, c.x / g.colorModeZ, c.y / g.colorModeA) ;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+TABLE METHOD 0.0.3
 for Table with the first COLLUMN is used for name and the next 6 for the value.
 The method is used with the Class Info
 
@@ -50,12 +642,9 @@ void setTable(Table table, TableRow [] rows, Info_obj... info) {
     if(rows[i] != null) {
       for(int j = 0 ; j < info.length ; j++) {
         if(info[j] != null && info[j].get_name().equals(rows[i].getString(table.getColumnTitle(0)))) {
-          if(table.getColumnCount() > 1 && info[j].catch_a() != null)  write_row(rows[i], table.getColumnTitle(1), info[j].catch_a()) ;
-          if(table.getColumnCount() > 2 && info[j].catch_b() != null)  write_row(rows[i], table.getColumnTitle(2), info[j].catch_b()) ;
-          if(table.getColumnCount() > 3 && info[j].catch_c() != null)  write_row(rows[i], table.getColumnTitle(3), info[j].catch_c()) ;
-          if(table.getColumnCount() > 4 && info[j].catch_d() != null)  write_row(rows[i], table.getColumnTitle(4), info[j].catch_d()) ;
-          if(table.getColumnCount() > 5 && info[j].catch_e() != null)  write_row(rows[i], table.getColumnTitle(5), info[j].catch_e()) ;
-          if(table.getColumnCount() > 6 && info[j].catch_f() != null)  write_row(rows[i], table.getColumnTitle(6), info[j].catch_f()) ;
+          for(int k = 1 ; k < 7 ; k++) {
+            if(table.getColumnCount() > k && info[j].catch_obj(k-1) != null)  write_row(rows[i], table.getColumnTitle(k), info[j].catch_obj(k-1)) ;
+          }
         }
         
       }
@@ -67,12 +656,9 @@ void setTable(Table table, TableRow [] rows, Info_obj... info) {
 void setRow(Table table, Info_obj info) {
   TableRow result = table.findRow(info.get_name(), table.getColumnTitle(0)) ;
   if(result != null) {
-    if(table.getColumnCount() > 1 && info.catch_a() != null)  write_row(result, table.getColumnTitle(1), info.catch_a()) ;
-    if(table.getColumnCount() > 2 && info.catch_b() != null)  write_row(result, table.getColumnTitle(2), info.catch_b()) ;
-    if(table.getColumnCount() > 3 && info.catch_c() != null)  write_row(result, table.getColumnTitle(3), info.catch_c()) ;
-    if(table.getColumnCount() > 4 && info.catch_d() != null)  write_row(result, table.getColumnTitle(4), info.catch_d()) ;
-    if(table.getColumnCount() > 5 && info.catch_e() != null)  write_row(result, table.getColumnTitle(5), info.catch_e()) ;
-    if(table.getColumnCount() > 6 && info.catch_f() != null)  write_row(result, table.getColumnTitle(6), info.catch_f()) ;
+    for(int k = 1 ; k < 7 ; k++) {
+      if(table.getColumnCount() > k && info.catch_obj(k-1) != null)  write_row(result, table.getColumnTitle(k), info.catch_obj(k-1)) ;
+    }
   }
 }
 
@@ -106,12 +692,36 @@ void write_row(TableRow row, String col_name, Object o) {
 
 
 /**
-print tempo
+print tempo 0.0.3
 
 */
 void printTempo(int tempo, Object... var) {
   if(frameCount%tempo == 0 ) {
     println(var) ;
+  }
+}
+
+void printArrayTempo(int tempo, Object[] var) {
+  if(frameCount%tempo == 0 ) {
+    printArray(var) ;
+  }
+}
+
+void printArrayTempo(int tempo, float[] var) {
+  if(frameCount%tempo == 0 ) {
+    printArray(var) ;
+  }
+}
+
+void printArrayTempo(int tempo, int[] var) {
+  if(frameCount%tempo == 0 ) {
+    printArray(var) ;
+  }
+}
+
+void printArrayTempo(int tempo, String[] var) {
+  if(frameCount%tempo == 0 ) {
+    printArray(var) ;
   }
 }
 
@@ -121,8 +731,9 @@ void printTempo(int tempo, Object... var) {
 
 
 
+
 /**
-Class info 0.2.2
+Info_dict 0.2.4
 
 */
 public class Info_dict {
@@ -131,7 +742,6 @@ public class Info_dict {
 
   Info_dict(char type_list) {
     this.type_list = type_list ;
-
   }
 
   Info_dict() {
@@ -163,18 +773,24 @@ public class Info_dict {
     Info_obj info = new Info_obj(name, a,b,c,d,e,f) ;
     list.add(info) ;
   }
- 
-  /**
-  read
-  */  
+  void add(String name, Object a, Object b, Object c, Object d, Object e, Object f, Object g) {
+    Info_obj info = new Info_obj(name, a,b,c,d,e,f,g) ;
+    list.add(info) ;
+  }
+
+   // size
+   int size() {
+    return list.size() ;
+   }
+
+  // read
   void read() {
     for(Info a : list) {
       println(a, type(type_list)) ;
     }
   }
-  /**
-  check type
-  */ 
+
+  // check type
   String type (char type)  {
     String t = ("Unknow") ;
     if(type == 'i') t = "Integer" ;
@@ -186,9 +802,8 @@ public class Info_dict {
     return t ;
   }
   
-  /**
-  get
-  */
+
+  // get
   Info get(int target) {
     if(target < list.size() && target >= 0) {
       return list.get(target) ;
@@ -218,15 +833,13 @@ public class Info_dict {
     }
     if(info.length == 1 && info[0] == null )return null ; else return info ;
   }
-  /**
-  clear
-  */
+
+  // clear
   void clear() {
     list.clear() ;
   }
-  /**
-  remove
-  */
+
+  // remove
   void remove(String which) {
     for(int i = 0 ; i < list.size() ; i++) {
       Info a = list.get(i) ;
@@ -245,8 +858,8 @@ public class Info_dict {
 
 /**
 Info_int_dict
-
 */
+
 public class Info_int_dict extends Info_dict {
   ArrayList<Info_int> list_int ;
   Info_int_dict() {
@@ -281,18 +894,26 @@ public class Info_int_dict extends Info_dict {
     Info_int info = new Info_int(name, a,b,c,d,e,f) ;
     list_int.add(info) ;
   }
-  /**
-  read
-  */ 
+  void add(String name, int a, int b, int c, int d, int e, int f, int g) {
+    Info_int info = new Info_int(name, a,b,c,d,e,f,g) ;
+    list_int.add(info) ;
+  }
+
+
+  // size
+  int size() {
+    return list_int.size() ;
+  }
+
+  // read
   void read() {
     for(Info a : list_int) {
       println(a, type(a.get_type())) ;
     }
   }
   
-  /**
-  get
-  */
+
+  // get
   Info_int get(int target) {
     if(target < list_int.size() && target >= 0) {
       return list_int.get(target) ;
@@ -322,15 +943,13 @@ public class Info_int_dict extends Info_dict {
     }
     if(info.length == 1 && info[0] == null )return null ; else return info ;
   }
-  /**
-  clear
-  */
+
+  // clear
   void clear() {
     list_int.clear() ;
   }
-  /**
-  remove
-  */
+
+  // remove
   void remove(String which) {
     for(int i = 0 ; i < list_int.size() ; i++) {
       Info_int a = list_int.get(i) ;
@@ -346,7 +965,6 @@ public class Info_int_dict extends Info_dict {
     }
   }
 }
-
 
 /**
 Info_float_dict
@@ -384,18 +1002,25 @@ public class Info_float_dict extends Info_dict {
     Info_float info = new Info_float(name, a,b,c,d,e,f) ;
     list_float.add(info) ;
   }
-  /**
-  read
-  */
+  void add(String name, float a, float b, float c, float d, float e, float f, float g) {
+    Info_float info = new Info_float(name, a,b,c,d,e,f,g) ;
+    list_float.add(info) ;
+  }
+
+  // size
+  int size() {
+    return list_float.size() ;
+  }
+
+  //read
   void read() {
     for(Info a : list_float) {
       println(a, type(a.get_type())) ;
     }
   }
    
-  /**
-  get
-  */
+
+  // get
   Info_float get(int target) {
     if(target < list_float.size() && target >= 0) {
       return list_float.get(target) ;
@@ -425,15 +1050,13 @@ public class Info_float_dict extends Info_dict {
     }
     if(info.length == 1 && info[0] == null )return null ; else return info ;
   }
-  /**
-  clear
-  */
+
+  // clear
   void clear() {
     list_float.clear() ;
   }
-  /**
-  remove
-  */
+
+  // remove
   void remove(String which) {
     for(int i = 0 ; i < list_float.size() ; i++) {
       Info a = list_float.get(i) ;
@@ -488,17 +1111,25 @@ public class Info_String_dict extends Info_dict {
     Info_String info = new Info_String(name, a,b,c,d,e,f) ;
     list_String.add(info) ;
   }
+  void add(String name, String a, String b, String c, String d, String e, String f,String g) {
+    Info_String info = new Info_String(name, a,b,c,d,e,f,g) ;
+    list_String.add(info) ;
+  }
 
-  
+  // size
+  int size() {
+    return list_String.size() ;
+  }
+
+  //read
   void read() {
     for(Info a : list_String) {
       println(a, type(a.get_type())) ;
     }
   }
   
-  /**
-  get
-  */
+
+  // get
   Info_String get(int target) {
     if(target < list_String.size() && target >= 0) {
       return list_String.get(target) ;
@@ -528,15 +1159,13 @@ public class Info_String_dict extends Info_dict {
     }
     if(info.length == 1 && info[0] == null )return null ; else return info ;
   }
-  /**
-  clear
-  */
+
+  // clear
   void clear() {
     list_String.clear() ;
   }
-  /**
-  remove
-  */
+
+  // remove
   void remove(String which) {
     for(int i = 0 ; i < list_String.size() ; i++) {
       Info_String a = list_String.get(i) ;
@@ -556,7 +1185,6 @@ public class Info_String_dict extends Info_dict {
 
 /**
 Info_Vec_dict
-
 */
 public class Info_Vec_dict extends Info_dict {
   ArrayList<Info_Vec> list_Vec ;
@@ -590,17 +1218,25 @@ public class Info_Vec_dict extends Info_dict {
     Info_Vec info = new Info_Vec(name, a,b,c,d,e,f) ;
     list_Vec.add(info) ;
   }
+  void add(String name, Vec a, Vec b, Vec c, Vec d, Vec e, Vec f, Vec g) {
+    Info_Vec info = new Info_Vec(name, a,b,c,d,e,f,g) ;
+    list_Vec.add(info) ;
+  }
 
-  
+  // size
+  int size() {
+    return list_Vec.size() ;
+  }
+
+  //read
   void read() {
     for(Info a : list_Vec) {
       println(a, type(a.get_type())) ;
     }
   }
   
-  /**
-  get
-  */
+
+  // get
   Info_Vec get(int target) {
     if(target < list_Vec.size() && target >= 0) {
       return list_Vec.get(target) ;
@@ -630,15 +1266,13 @@ public class Info_Vec_dict extends Info_dict {
     }
     if(info.length == 1 && info[0] == null )return null ; else return info ;
   }
-  /**
-  clear
-  */
+
+  // clear
   void clear() {
     list_Vec.clear() ;
   }
-  /**
-  remove
-  */
+
+  // remove
   void remove(String which) {
     for(int i = 0 ; i < list_Vec.size() ; i++) {
       Info_Vec a = list_Vec.get(i) ;
@@ -658,25 +1292,23 @@ public class Info_Vec_dict extends Info_dict {
 
 
 /**
-
-Class Info
+Info 0.1.0.1
 
 */
 interface Info {
   String get_name() ;
-  
-  Object catch_a() ;
-  Object catch_b() ;
-  Object catch_c() ;
-  Object catch_d() ;
-  Object catch_e() ;
-  Object catch_f() ;
+
+  Object [] catch_all() ;
+  Object catch_obj(int arg) ;
 
   char get_type() ;
 }
  
 abstract class Info_method implements Info {
   String name  ;
+  // error message
+  String error_target = "Your target is beyond of my knowledge !" ;
+  String error_value_message = "This value is beyond of my power mate !" ;
   Info_method (String name) {
     this.name = name ;
   }
@@ -694,11 +1326,9 @@ INFO int
 */
 class Info_int extends Info_method {
   char type = 'i' ;
-  int a, b, c, d, e, f ;
+  int a, b, c, d, e, f, g ;
   int num_value ;  
-  /**
-  int value
-  */
+
 
   Info_int(String name) {
     super(name) ;
@@ -706,37 +1336,77 @@ class Info_int extends Info_method {
 
   Info_int(String name, int... var) {
     super(name) ;
-    if(var.length > 6 ) num_value = 6 ; else num_value = var.length ;
+    if(var.length > 7 ) {
+      num_value = 7 ; 
+    } else {
+      num_value = var.length ;
+    }
     if(var.length > 0) this.a = var[0] ;
     if(var.length > 1) this.b = var[1] ;
     if(var.length > 2) this.c = var[2] ;
     if(var.length > 3) this.d = var[3] ;
     if(var.length > 4) this.e = var[4] ;
     if(var.length > 5) this.f = var[5] ;
+    if(var.length > 6) this.g = var[6] ;
   }
 
-  /**
-  get
-  */
-  int get_a() { return a ; }
-  int get_b() { return b ; }
-  int get_c() { return c ; }
-  int get_d() { return d ; }
-  int get_e() { return e ; }
-  int get_f() { return f ; }
 
-  Object catch_a() { return a ; }
-  Object catch_b() { return b ; }
-  Object catch_c() { return c ; }
-  Object catch_d() { return d ; }
-  Object catch_e() { return e ; }
-  Object catch_f() { return f ; }
+  // get
+  int [] get_all() {
+    int [] list = new int[]{a,b,c,d,e,f,g} ;
+    return list ;
+  }
+
+  int get(int which) {
+    if(which == 0) {
+      return a ; 
+    } else if(which == 1) {
+      return b ;
+    } else if(which == 2) {
+      return c ;
+    } else if(which == 3) {
+      return d ;
+    } else if(which == 4) {
+      return e ;
+    } else if(which == 5) {
+      return f ;
+    } else if(which == 6) {
+      return g ;
+    } else {
+      System.err.println(error_target) ;
+      return 0 ;
+    } 
+  }
+  
+  Object [] catch_all() {
+    Object [] list = new Object[]{a,b,c,d,e,f,g} ;
+    return list ;
+  }
+
+  Object catch_obj(int which) {
+    if(which == 0) {
+      return a ; 
+    } else if(which == 1) {
+      return b ;
+    } else if(which == 2) {
+      return c ;
+    } else if(which == 3) {
+      return d ;
+    } else if(which == 4) {
+      return e ;
+    } else if(which == 5) {
+      return f ;
+    } else if(which == 6) {
+      return g ;
+    } else {
+      System.err.println(error_target) ;
+      return null ;
+    } 
+  }
   
   char get_type() { return type ; }
 
-  /**
-  Print info
-  */
+  // Print info
   @ Override String toString() {
     if(num_value == 1) {
       return "[ " + name + ": " + a + " ]";
@@ -750,7 +1420,11 @@ class Info_int extends Info_method {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + " ]";
     } else if(num_value == 6) {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + " ]";
+    } else if(num_value == 7) {
+      return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + ", " + g +" ]";
     } else {
+      System.err.println(num_value) ;
+      System.err.println(error_value_message) ;
       return "hmmm hmmm there is problem with your stuff mate";
     }
   }
@@ -758,11 +1432,10 @@ class Info_int extends Info_method {
 
 /**
 INFO String
-
 */
 class Info_String extends Info_method {
   char type = 's' ;
-  String a, b, c, d, e, f ;
+  String a, b, c, d, e, f, g ;
   int num_value ;  
 
   Info_String(String name) {
@@ -771,37 +1444,78 @@ class Info_String extends Info_method {
 
   Info_String(String name, String... var) {
     super(name) ;
-    if(var.length > 6 ) num_value = 6 ; else num_value = var.length ;
+    if(var.length > 7 ) {
+      num_value = 7 ; 
+    } else {
+      num_value = var.length ;
+    }
     if(var.length > 0) this.a = var[0] ;
     if(var.length > 1) this.b = var[1] ;
     if(var.length > 2) this.c = var[2] ;
     if(var.length > 3) this.d = var[3] ;
     if(var.length > 4) this.e = var[4] ;
     if(var.length > 5) this.f = var[5] ;
+    if(var.length > 6) this.g = var[6] ;
   }
 
-  /**
-  get
-  */
-  String get_a() { return a ; }
-  String get_b() { return b ; }
-  String get_c() { return c ; }
-  String get_d() { return d ; }
-  String get_e() { return e ; }
-  String get_f() { return f ; }
 
-  Object catch_a() { return a ; }
-  Object catch_b() { return b ; }
-  Object catch_c() { return c ; }
-  Object catch_d() { return d ; }
-  Object catch_e() { return e ; }
-  Object catch_f() { return f ; }
+  // get
+  String [] get_all() {
+    String [] list = new String[]{a,b,c,d,e,f,g} ;
+    return list ;
+  }
+
+  String get(int which) {
+    if(which == 0) {
+      return a ; 
+    } else if(which == 1) {
+      return b ;
+    } else if(which == 2) {
+      return c ;
+    } else if(which == 3) {
+      return d ;
+    } else if(which == 4) {
+      return e ;
+    } else if(which == 5) {
+      return f ;
+    } else if(which == 6) {
+      return g ;
+    }else {
+      System.err.println(error_target) ;
+      return null ;
+    }
+  }
+  
+  Object [] catch_all() {
+    Object [] list = new Object[]{a,b,c,d,e,f,g} ;
+    return list ;
+  }
+
+  Object catch_obj(int which) {
+    if(which == 0) {
+      return a ; 
+    } else if(which == 1) {
+      return b ;
+    } else if(which == 2) {
+      return c ;
+    } else if(which == 3) {
+      return d ;
+    } else if(which == 4) {
+      return e ;
+    } else if(which == 5) {
+      return f ;
+    } else if(which == 6) {
+      return g ;
+    }else {
+      System.err.println(error_target) ;
+      return null ;
+    }
+  }
 
   char get_type() { return type ; }
 
-  /**
-  Print info
-  */
+
+  // Print info
   @ Override String toString() {
     if(num_value == 1) {
       return "[ " + name + ": " + a + " ]";
@@ -815,7 +1529,11 @@ class Info_String extends Info_method {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + " ]";
     } else if(num_value == 6) {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + " ]";
+    } else if(num_value == 7) {
+      return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + ", " + g + " ]";
     } else {
+      System.err.println(num_value) ;
+      System.err.println(error_value_message) ;
       return "hmmm hmmm there is problem with your stuff mate";
     }
   }
@@ -823,11 +1541,10 @@ class Info_String extends Info_method {
 
 /**
 INFO float
-
 */
 class Info_float extends Info_method {
   char type = 'f' ;
-  float a, b, c, d, e, f ;
+  float a, b, c, d, e, f, g ;
   int num_value ; 
 
   Info_float(String name) {
@@ -836,37 +1553,76 @@ class Info_float extends Info_method {
 
   Info_float(String name, float... var) {
     super(name) ;
-    if(var.length > 6 ) num_value = 6 ; else num_value = var.length ;
+    if(var.length > 7 ) {
+      num_value = 7 ; 
+    } else {
+      num_value = var.length ;
+    }
     if(var.length > 0) this.a = var[0] ;
     if(var.length > 1) this.b = var[1] ;
     if(var.length > 2) this.c = var[2] ;
     if(var.length > 3) this.d = var[3] ;
     if(var.length > 4) this.e = var[4] ;
     if(var.length > 5) this.f = var[5] ;
+    if(var.length > 6) this.g = var[6] ;
   }
 
+  // get
+  float [] get_all() {
+    float [] list = new float[]{a,b,c,d,e,f,g} ;
+    return list ;
+  }
 
-  /**
-  get
-  */
-  float get_a() { return a ; }
-  float get_b() { return b ; }
-  float get_c() { return c ; }
-  float get_d() { return d ; }
-  float get_e() { return e ; }
-  float get_f() { return f ; }
-
-  Object catch_a() { return a ; }
-  Object catch_b() { return b ; }
-  Object catch_c() { return c ; }
-  Object catch_d() { return d ; }
-  Object catch_e() { return e ; }
-  Object catch_f() { return f ; }
+  float get(int which) {
+    if(which == 0) {
+      return a ; 
+    } else if(which == 1) {
+      return b ;
+    } else if(which == 2) {
+      return c ;
+    } else if(which == 3) {
+      return d ;
+    } else if(which == 4) {
+      return e ;
+    } else if(which == 5) {
+      return f ;
+    } else if(which == 6) {
+      return g ;
+    } else {
+      System.err.println(error_target) ;
+      return 0.0 ;
+    }
+  }
   
+  Object [] catch_all() {
+    Object [] list = new Object[]{a,b,c,d,e,f,g} ;
+    return list ;
+  }
+
+  Object catch_obj(int which) {
+    if(which == 0) {
+      return a ; 
+    } else if(which == 1) {
+      return b ;
+    } else if(which == 2) {
+      return c ;
+    } else if(which == 3) {
+      return d ;
+    } else if(which == 4) {
+      return e ;
+    } else if(which == 5) {
+      return f ;
+    } else if(which == 6) {
+      return g ;
+    } else {
+      System.err.println(error_target) ;
+      return null ;
+    }
+  }
+
   char get_type() { return type ; }
-  /**
-  Print info
-  */
+  
+  // Print info
   @ Override String toString() {
     if(num_value == 1) {
       return "[ " + name + ": " + a + " ]";
@@ -880,7 +1636,11 @@ class Info_float extends Info_method {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + " ]";
     } else if(num_value == 6) {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + " ]";
+    } else if(num_value == 7) {
+      return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + ", " + g + " ]";
     } else {
+      System.err.println(num_value) ;
+      System.err.println(error_value_message) ;
       return "hmmm hmmm there is problem with your stuff mate";
     }
   }
@@ -891,49 +1651,89 @@ INFO Vec
 */
 class Info_Vec extends Info_method {
   char type = 'v' ;
-  Vec a, b, c, d, e, f ;
+  Vec a, b, c, d, e, f, g ;
   int num_value ;  
 
   Info_Vec(String name) {
     super(name) ;
   }
-  /**
-  Vec value
-  */
+
+  // Vec value
   Info_Vec(String name, Vec... var) {
     super(name) ;
-    if(var.length > 6 ) num_value = 6 ; else num_value = var.length ;
+    if(var.length > 7 ) {
+      num_value = 7 ; 
+    } else {
+      num_value = var.length ;
+    }
     if(var.length > 0) this.a = var[0] ;
     if(var.length > 1) this.b = var[1] ;
     if(var.length > 2) this.c = var[2] ;
     if(var.length > 3) this.d = var[3] ;
     if(var.length > 4) this.e = var[4] ;
     if(var.length > 5) this.f = var[5] ;
+    if(var.length > 6) this.g = var[6] ;
   }
 
 
 
-  /**
-  get
-  */
-  Vec get_a() { return a ; }
-  Vec get_b() { return b ; }
-  Vec get_c() { return c ; }
-  Vec get_d() { return d ; }
-  Vec get_e() { return e ; }
-  Vec get_f() { return f ; }
 
-  Object catch_a() { return a ; }
-  Object catch_b() { return b ; }
-  Object catch_c() { return c ; }
-  Object catch_d() { return d ; }
-  Object catch_e() { return e ; }
-  Object catch_f() { return f ; }
+  // get
+  Vec [] get_all() {
+    Vec [] list = new Vec[]{a,b,c,d,e,f,g} ;
+    return list ;
+  }
+
+  Vec get(int which) {
+    if(which == 0) {
+      return a ; 
+    } else if(which == 1) {
+      return b ;
+    } else if(which == 2) {
+      return c ;
+    } else if(which == 3) {
+      return d ;
+    } else if(which == 4) {
+      return e ;
+    } else if(which == 5) {
+      return f ;
+    } else if(which == 6) {
+      return g ;
+    }else {
+      System.err.println(error_target) ;
+      return null ;
+    }
+  }
   
+  Object [] catch_all() {
+    Object [] list = new Object[]{a,b,c,d,e,f,g} ;
+    return list ;
+  }
+
+  Object catch_obj(int which) {
+    if(which == 0) {
+      return a ; 
+    } else if(which == 1) {
+      return b ;
+    } else if(which == 2) {
+      return c ;
+    } else if(which == 3) {
+      return d ;
+    } else if(which == 4) {
+      return e ;
+    } else if(which == 5) {
+      return f ;
+    } else if(which == 6) {
+      return g ;
+    } else {
+      System.err.println(error_target) ;
+      return null ;
+    }
+  }
+
   char get_type() { return type ; }
-  /**
-  Print info
-  */
+
+  // Print info
   @ Override String toString() {
     if(num_value == 1) {
       return "[ " + name + ": " + a + " ]";
@@ -947,7 +1747,11 @@ class Info_Vec extends Info_method {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + " ]";
     } else if(num_value == 6) {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + " ]";
+    } else if(num_value == 7) {
+      return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + ", " + g + " ]";
     } else {
+      System.err.println(num_value) ;
+      System.err.println(error_value_message) ;
       return "hmmm hmmm there is problem with your stuff mate";
     }
   }
@@ -961,50 +1765,89 @@ INFO OBJECT
 */
 class Info_obj extends Info_method {
   char type = 'o' ;
-  Object a, b, c, d, e, f ;
+  Object a, b, c, d, e, f, g ;
   int num_value ;
 
   Info_obj(String name) {
     super(name) ;
   }
 
-  /**
-  Object value
-  */
+
+  // Object value
   Info_obj(String name, Object... var) {
     super(name) ;
-    if(var.length > 6 ) num_value = 6 ; else num_value = var.length ;
+    if(var.length > 7 ) {
+      num_value = 7 ; 
+    } else {
+      num_value = var.length ;
+    }
     if(var.length > 0) this.a = var[0] ;
     if(var.length > 1) this.b = var[1] ;
     if(var.length > 2) this.c = var[2] ;
     if(var.length > 3) this.d = var[3] ;
     if(var.length > 4) this.e = var[4] ;
     if(var.length > 5) this.f = var[5] ;
+    if(var.length > 6) this.g = var[6] ;
   }
 
 
-  /**
-  get
-  */
-  Object get_a() { return a ; }
-  Object get_b() { return b ; }
-  Object get_c() { return c ; }
-  Object get_d() { return d ; }
-  Object get_e() { return e ; }
-  Object get_f() { return f ; }
+  // get
+  Object [] get_all() {
+    Object [] list = new Object []{a,b,c,d,e,f,g} ;
+    return list ;
+  }
 
-  Object catch_a() { return a ; }
-  Object catch_b() { return b ; }
-  Object catch_c() { return c ; }
-  Object catch_d() { return d ; }
-  Object catch_e() { return e ; }
-  Object catch_f() { return f ; }
+  Object get(int which) {
+    if(which == 0) {
+      return a ; 
+    } else if(which == 1) {
+      return b ;
+    } else if(which == 2) {
+      return c ;
+    } else if(which == 3) {
+      return d ;
+    } else if(which == 4) {
+      return e ;
+    } else if(which == 5) {
+      return f ;
+    } else if(which == 6) {
+      return g ;
+    } else {
+      System.err.println(error_target) ;
+      return null ;
+    }
+  }
+  
+  Object [] catch_all() {
+    Object [] list = new Object[]{a,b,c,d,e,f,g} ;
+    return list ;
+  }
+
+  Object catch_obj(int which) {
+    if(which == 0) {
+      return a ; 
+    } else if(which == 1) {
+      return b ;
+    } else if(which == 2) {
+      return c ;
+    } else if(which == 3) {
+      return d ;
+    } else if(which == 4) {
+      return e ;
+    } else if(which == 5) {
+      return f ;
+    } else if(which == 6) {
+      return g ;
+    } else {
+      System.err.println(error_target) ;
+      return null ;
+    }
+  }
   
   char get_type() { return type ; }
 
-  /**
-  Print info
-  */
+
+  // Print info
   @ Override String toString() {
     if(num_value == 1) {
       return "[ " + name + ": " + a + " ]";
@@ -1018,31 +1861,37 @@ class Info_obj extends Info_method {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + " ]";
     } else if(num_value == 6) {
       return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + " ]";
+    } else if(num_value == 7) {
+      return "[ " + name + ": " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + ", " + g + " ]";
     } else {
+      System.err.println(num_value) ;
+      System.err.println(error_value_message) ;
       return "hmmm hmmm there is problem with your stuff mate";
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
 /**
-Random around value
+END INFO LIST
+
 */
 
-float random_gaussian(float value) {
-  float distrib = random(-1, 1) ;
-  return (pow(distrib,5)) *(value*.4) +value ;
-}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1142,6 +1991,41 @@ float map_smooth(float value, float sourceMin, float sourceMax, float targetMin,
 
 
 
+/**
+MISC
+
+
+*/
+
+/**
+Random around value
+*/
+
+float random_gaussian(float value) {
+  return random_gaussian( value, .4) ;
+}
+
+
+float random_gaussian(float value, float range) {
+  range = abs(range) ;
+  float distrib = random(-1, 1) ;
+  float result = 0 ;
+  if(value == 0) {
+    value = 1 ;
+    result = (pow(distrib,5)) *(value *range) +value ;
+    result-- ;
+  } else {
+    result = (pow(distrib,5)) *(value *range) +value ;
+  }
+   
+  return  result;
+}
+
+
+
+
+
+
 
 
 /**
@@ -1174,6 +2058,12 @@ String get_renderer_name(final PGraphics graph) {
 }
 
 
+
+
+
+
+
+
 /**
 Check Type
 */
@@ -1204,6 +2094,44 @@ public String object_type(Object t) {
 }
 
 
+
+
+
+
+
+
+
+/**
+check value in range
+*/
+boolean in_range(float min, float max, float value) {
+  if(value <= max && value >= min) {
+    return true ; 
+  } else {
+    return false ;
+  }
+}
+
+boolean in_range_wheel(float min, float max, float roof_max, float value) {
+  if(value <= max && value >= min) {
+    return true ;
+  } else {
+    // wheel value
+    if(max > roof_max ) {
+      // test hight value
+      if(value <= (max - roof_max)) {
+        return true ;
+      } 
+    } 
+    if (min < 0) {
+      // here it's + min 
+      if(value >= (roof_max + min)) {
+        return true ;
+      } 
+    } 
+    return false ;
+  }
+}
 
 
 
@@ -1364,7 +2292,7 @@ int longest_word( String[] listWordsToSort, int start, int finish ) {
 int longest_word_in_pixel(String[] listWordsToSort, int size_font) {
   int sizeWord = 0 ;
   for ( int i = 0 ; i < listWordsToSort.length ; i++) {
-    if (length_String_in_pixel(listWordsToSort[i], size_font) > sizeWord )  sizeWord = length_String_in_pixel(listWordsToSort[i],size_font) ;
+    if (width_String(listWordsToSort[i], size_font) > sizeWord )  sizeWord = width_String(listWordsToSort[i],size_font) ;
   }
   return  sizeWord ;
 }
@@ -1373,7 +2301,7 @@ int longest_word_in_pixel(String[] listWordsToSort, int size_font) {
 int longest_word_in_pixel( String[] listWordsToSort, int size_font, int start, int finish ) {
   int sizeWord = 0 ;
   for ( int i = start ; i <= finish ; i++) {
-    if (length_String_in_pixel(listWordsToSort[i], size_font) > sizeWord )  sizeWord = length_String_in_pixel(listWordsToSort[i],size_font) ;
+    if (width_String(listWordsToSort[i], size_font) > sizeWord )  sizeWord = width_String(listWordsToSort[i],size_font) ;
   }
   return  sizeWord ;
 }
@@ -1382,7 +2310,7 @@ int longest_word_in_pixel( String[] listWordsToSort, int size_font, int start, i
 int longest_word_in_pixel( String[] listWordsToSort, int [] size_font) {
   int sizeWord = 0 ;
   for ( int i = 0 ; i < listWordsToSort.length ; i++) {
-    if (length_String_in_pixel(listWordsToSort[i], size_font[i]) > sizeWord )  sizeWord = length_String_in_pixel(listWordsToSort[i],size_font[i]) ;
+    if (width_String(listWordsToSort[i], size_font[i]) > sizeWord )  sizeWord = width_String(listWordsToSort[i],size_font[i]) ;
   }
   return  sizeWord ;
 }
@@ -1391,7 +2319,7 @@ int longest_word_in_pixel( String[] listWordsToSort, int [] size_font) {
 int longest_word_in_pixel( String[] listWordsToSort, int [] size_font, int start, int finish ) {
   int sizeWord = 0 ;
   for ( int i = start ; i <= finish ; i++) {
-    if (length_String_in_pixel(listWordsToSort[i], size_font[i]) > sizeWord )  sizeWord = length_String_in_pixel(listWordsToSort[i],size_font[i]) ;
+    if (width_String(listWordsToSort[i], size_font[i]) > sizeWord )  sizeWord = width_String(listWordsToSort[i],size_font[i]) ;
   }
   return  sizeWord ;
 }
@@ -1403,12 +2331,30 @@ import java.awt.Font;
 import java.awt.image.BufferedImage ;
 import java.awt.FontMetrics ;
 
-int length_String_in_pixel(String target, int ratio) {
-  Font font = new Font("defaultFont", Font.BOLD, ratio) ;
+int width_String(String target, int size) {
+  return width_String("defaultFont", target, size) ;
+}
+
+
+int width_String(String font_name, String target, int size) {
+  Font font = new Font(font_name, Font.BOLD, size) ;
   BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
   FontMetrics fm = img.getGraphics().getFontMetrics(font);
   return fm.stringWidth(target);
 }
+
+
+int width_char(char target, int size) {
+  return width_char("defaultFont", target, size) ;
+}
+
+int width_char(String font_name, char target, int size) {
+  Font font = new Font(font_name, Font.BOLD, size) ;
+  BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+  FontMetrics fm = img.getGraphics().getFontMetrics(font);
+  return fm.charWidth(target);
+}
+
 
 
 
