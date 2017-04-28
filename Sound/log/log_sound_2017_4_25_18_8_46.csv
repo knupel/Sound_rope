@@ -1,0 +1,4 @@
+time,band id,section,beat,threshold,spectrum
+18 8 48 60,0,1,true,0.6,4.7671084
+18 8 49 120,0,1,true,0.6,1.8359985
+18 8 50 180,0,1,true,0.6,0.78477174

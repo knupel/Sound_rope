@@ -1,5 +1,6 @@
 /**
-CLASS ROPE VEC 1.8.5.0
+CLASS ROPE VEC 
+v 2.0.1
 Rope – Romanesco Processing Environment: 2015–2017
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Vec
@@ -8,7 +9,200 @@ Rope – Romanesco Processing Environment: 2015–2017
 * that RopeVec(), ROVec(), RPEVec() or RVec(), plus there is no confusion with PVector, so stay simple !
 */
 /**
+iVec Master
+v 0.0.2
+2017-2017
+Integer precision
+
+*/
+abstract class iVec {
+  int x,y,z,w ;
+  int a,b,c,d,e,f  ;
+  iVec() {}
+}
+/**
+iVec class
+*/
+class iVec2 extends iVec {
+  iVec2(int x, int y) {
+    super() ;
+    this.x = x;
+    this.y = y;
+  }
+
+  @ Override String toString() {
+    return "[ " + x + ", " + y + " ]" ;
+  }
+}
+
+
+class iVec3 extends iVec {
+  iVec3(int x, int y, int z) {
+    super() ;
+    this.x = x;
+    this.y = y;
+    this.z = z;
+  }
+
+  @ Override String toString() {
+    return "[ " + x + ", " + y + ", " + z + " ]" ;
+  }
+}
+
+
+class iVec4 extends iVec {
+  iVec4(int x, int y, int z, int w) {
+    super() ;
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.w = w;
+  }
+  @ Override String toString() {
+    return "[ " + x + ", " + y + ", " + z + ", " + w + " ]" ;
+  }
+}
+
+
+class iVec5 extends iVec {
+  iVec5(int a, int b, int c, int d, int e) {
+    super() ;
+    this.a = a;
+    this.b = b;
+    this.c = c;
+    this.d = d;
+    this.e = e;
+  }
+    @ Override String toString() {
+    return "[ " + a + ", " + b + ", " + c + ", " + d + ", " + f + " ]" ;
+  }
+}
+
+class iVec6 extends iVec {
+  iVec6(int a, int b, int c, int d, int e, int f) {
+    super() ;
+    this.a = a;
+    this.b = b;
+    this.c = c;
+    this.d = d;
+    this.e = e;
+    this.f = f;
+  }
+  @ Override String toString() {
+    return "[ " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + " ]" ;
+  }
+}
+
+
+//
+iVec2 iVec2() {
+  return iVec2(0) ;
+}
+
+iVec2 iVec2(int v) {
+  return new iVec2(v,v) ;
+}
+
+iVec2 iVec2(int x, int y) { 
+  return new iVec2(x,y) ;
+}
+
+//
+iVec3 iVec3() {
+  return iVec3(0) ;
+}
+
+iVec3 iVec3(int v) {
+  return new iVec3(v,v,v) ;
+}
+
+iVec3 iVec3(int x, int y, int z) { 
+  return new iVec3(x,y,z) ;
+}
+
+
+//
+iVec4 iVec4() {
+  return iVec4(0) ;
+}
+
+iVec4 iVec4(int v) {
+  return new iVec4(v,v,v,v) ;
+}
+
+iVec4 iVec4(int x, int y, int z, int w) { 
+  return new iVec4(x,y,z,w) ;
+}
+
+//
+iVec5 iVec5() {
+  return iVec5(0) ;
+}
+iVec5 iVec5(int v) {
+  return new iVec5(v,v,v,v,v) ;
+}
+
+iVec5 iVec5(int a, int b, int c, int d, int e) { 
+  return new iVec5(a,b,c,d,e) ;
+}
+
+//
+iVec6 iVec6() {
+  return iVec6(0) ;
+}
+
+iVec6 iVec6(int v) {
+  return new iVec6(v,v,v,v,v,v) ;
+}
+
+iVec6 iVec6(int a, int b, int c, int d, int e, int f) { 
+  return new iVec6(a,b,c,d,e,f) ;
+}
+//
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
 Vec Master
+v 1.8.5.0
+2015-2017
+float precision
 
 */
 abstract class Vec {
@@ -24,6 +218,7 @@ abstract class Vec {
 
   Vec() {}
 }
+
 
 /**
 VEC 2

@@ -1,16 +1,9 @@
 /**
 SOUND rope
-v 1.0.1
+v 1.0.3
 */
 import ddf.minim.*;
 import ddf.minim.analysis.*;
-
-
-
-
-
-
-
 
 
 
@@ -60,7 +53,7 @@ void audio_buffer(int which) {
 
 /**
 SPECTRUM
-
+v 0.0.2
 */
 float[] spectrum  ;
 FFT fft;
@@ -69,23 +62,22 @@ float band_size ;
 float scale_spectrum = .1 ;
 
 
-void set_spectrum(int n) {
-  if(n > bands_max) {
+void set_spectrum(int num, float scale) {
+  if(num > bands_max) {
     spectrum_bands = bands_max ;
   } else {
-    spectrum_bands = n ;
+    spectrum_bands = num ;
   }
 
   band_size = bands_max / spectrum_bands ;
   spectrum = new float [spectrum_bands] ;
   fft = new FFT(input.bufferSize(), input.sampleRate());
   fft.linAverages(spectrum_bands);
-}
 
-
-void spectrum_scale(float scale) {
   scale_spectrum = scale ;
 }
+
+
 
 
 // scale .5 be good
@@ -127,58 +119,230 @@ int num_bands() {
 
 
 /**
-BEAT
-
+BEAT 
+v 0.0.2
 */
-float [] beat_alert ;
-int num_section ;
-
-void set_beat(float... threshold) {
-  beat_alert = new float[spectrum_bands] ;
-  int section = spectrum_bands / threshold.length ;
-
-  int count = 0 ;
-  for(int i = 0 ; i < spectrum_bands ; i++) {
-    beat_alert[i] = threshold[count] ;
-    if(i > section) {
-      section += section ;
-      count++ ;
-    }   
+/**
+class
+*/
+class Beat {
+  float sensibility ;
+  int in ;
+  int out ;
+  int [] beat_band ;
+  Beat(int in, int out, float sensibility) {
+    beat_band = new int[out -in +1];
+    this.in = in;
+    this.out = out;
+    this.sensibility = sensibility;
   }
-  num_section = count +1 ;
+
+  boolean beat_is() {
+    boolean beat_is = false ;
+    int max = out ;
+    if(out >= spectrum_bands) {
+      max = spectrum_bands -1;
+    }
+
+    for(int i = in ; i <= max ; i++) {
+      if(spectrum(i) > sensibility) {
+        beat_is = true ;
+        break ;
+      }
+    }
+    return beat_is ;
+  }
+
+  int get_in() {
+    return in ;
+  }
+
+  int get_out() {
+    return out ;
+  }
 }
 
-int beat_section(int target) {
-  println(target, spectrum_bands, num_section) ;
-  int section = ceil((float)target /spectrum_bands *num_section) ;
-  if(section == 0) section = 1 ;
-  return section ;
+
+
+
+/**
+method
+v 0.0.1
+*/
+// float [] beat_alert ;
+int num_beat_section ;
+Beat beat_rope[] ;
+boolean beat_advance_is ;
+boolean [] beat_band_is ;
+
+
+/**
+setting
+*/
+void set_beat_basic(float... threshold) {
+  // beat_alert = new float[spectrum_bands] ;
+  num_beat_section = threshold.length ;
+  beat_rope = new Beat[num_beat_section] ;
+  for(int i = 0 ; i < num_beat_section ; i++) {
+    int length_analyze = int(spectrum_bands /num_beat_section);
+    int in = i *length_analyze ;
+    // may be there is an error on the out, but no matter !
+    int out = i *length_analyze +length_analyze;
+    beat_rope[i] = new Beat(in, out,threshold[i]);
+  }
 }
 
-float get_beat_alert(int target) {
-  return beat_alert[target] ;
+void set_beat_advance(iVec2[] in_out,  float[] threshold) {
+  beat_advance_is = true ;
+  beat_band_is = new boolean [spectrum_bands] ;
+  // beat_alert = new float[spectrum_bands] ;
+  num_beat_section = in_out.length ;
+  beat_rope = new Beat[num_beat_section] ;
+  // check the max value of beat analyze
+  for(int i = 0 ; i< num_beat_section ; i++) {
+    if(in_out[i].y > spectrum_bands) {
+      in_out[i].y = spectrum_bands;
+      in_out[i].x = spectrum_bands -1;
+      System.err.print("'OUT' of beat is upper of spectrum, the value beat 'y' max analyze is cap to the spectrum, and 'x' to spectrum minus '1") ;
+    }
+    if(in_out[i].x > spectrum_bands) {
+      in_out[i].y = spectrum_bands;
+      in_out[i].x = spectrum_bands -1;
+      System.err.print("'IN' of beat is upper of spectrum, the value beat 'y' max analyze is cap to the spectrum, and 'x' to spectrum minus '1") ;
+    }
+  }
+
+  // build the beat analyze if every thing is ok
+  for(int i = 0 ; i < num_beat_section ; i++) {
+    int length_analyze = in_out[i].y - in_out[i].x ;
+    beat_rope[i] = new Beat(in_out[i].x, in_out[i].y, threshold[i]);
+  }
+
+  // declare which band must be analyze when there is a beat detection
+  for(int i = 0 ; i < beat_rope.length ; i++ ) {
+    for(int k = beat_rope[i].in ; k < beat_rope[i].out ; k++) {
+      beat_band_is[k] = true ;
+    }
+  }
 }
 
 
-boolean beat_is(int target) {
-  if(spectrum(target) > beat_alert[target]) {
+
+
+
+/**
+method
+*/
+boolean beat_is() {
+  boolean beat_is = false ;
+  for(int i = 0 ; i < spectrum_bands ; i++ ) {
+    if(beat_band_is(i)) {
+      beat_is = true ; 
+      break ;
+    }
+  }
+  return beat_is ;
+}
+
+boolean beat_is(int target_beat_range) {
+  boolean beat_is = false ;
+  for(int i = beat_rope[target_beat_range].in ; i < beat_rope[target_beat_range].out ; i++ ) {
+    if(beat_band_is(i, target_beat_range)) {
+      if(target_beat_range == 1)println("BASSE", beat_rope[target_beat_range].in, beat_rope[target_beat_range].out, i, frameCount);
+      beat_is = true ; 
+      break ;
+    }
+  }
+  return beat_is ;
+}
+
+
+
+// beat band is
+boolean beat_band_is(int target) {
+  boolean beat_is = false ;
+  if(spectrum(target) > get_beat_alert(target)) {
+    beat_is = true ;
+  }
+  return beat_is ;
+}
+
+boolean beat_band_is(int target, int which_beat) {
+  if(spectrum(target) > get_beat_alert(target, which_beat)) {
     return true ; 
   } else {
     return false ;
   }
 }
 
-boolean beat_is() {
-  boolean beat_is = false ;
-  for(int i = 0 ; i < spectrum_bands ; i++ ) {
-    if(beat_is(i)) {
-      beat_is = true ; 
-      break ;
-    }
 
+float get_beat_alert(int target) {
+  float alert = Float.MAX_VALUE ;
+  // check if the target is on the beat range analyze
+  if(beat_advance_is && beat_band_is[target]) {
+    // advance
+    for(int i = 0 ; i < beat_rope.length ; i++) {
+      // println(60, "advanded mode", frameCount) ;
+      if(target > beat_rope[i].in && target < beat_rope[i].out) {
+        alert = beat_rope[i].sensibility ;
+        break ;
+      }
+    }
+  } else if(!beat_advance_is) { 
+    // classic
+    int section = beat_section(target) ;
+    alert = beat_rope[section].sensibility;
   }
-  return beat_is ;
+  return alert;
 }
+
+
+float get_beat_alert(int target, int which_beat) {
+  float alert = Float.MAX_VALUE ;
+  // check if the target is on the beat range analyze
+  if(beat_advance_is && beat_band_is[target]) {
+    // advance
+  //  printTempo(60, "beat", which_beat, "band",target) ;
+    alert = beat_rope[which_beat].sensibility ;
+  } 
+  return alert;
+}
+
+
+
+
+
+
+
+
+
+int beat_section(int target) {
+  int section = floor((float)target /spectrum_bands *num_beat_section) ;
+  // if(section == 0) section = 1 ;
+  return section ;
+}
+
+
+
+int get_beat_in(int which_beat) {
+  return beat_rope[ which_beat].in ;
+}
+
+int get_beat_out(int which_beat) {
+  return beat_rope[ which_beat].out ;
+}
+
+int beat_num() {
+  return beat_rope.length ;
+}
+
+
+
+// get beat alert
+
+
+
+
 
 
 

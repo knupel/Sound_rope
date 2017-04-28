@@ -22,11 +22,11 @@ audio_buffer(MIX) ;
 
 Spectrum
 --
-set_spectrum(int bands) ;
+void set_spectrum(int num, float scale, float scale)
 >set your sound, the max of bands can be analyze is '256'
+>set the scale of represention of sound spectrum values, this value is used to detect the beat too.
 
-spectrum_scale(float value)
-> set the scale of represention of sound spectrum values.
+
 
 
 
@@ -54,13 +54,33 @@ int num_bands() ;
 
 Beat
 --
+void set_beat(float... threshold) ;
+>Add threshold to detect the beat, the value is set by block, if you have two value, the first is for the left part of spectrum, and the other is for the right part
+>If you have more band than value pass, the algorithm restart from the first value ; the value are in relation with the spectrum_scale value
+
+
+boolean beat_is() ;
+>return true if there is beat
+
+boolean beat_is(int target_beat_range) ;
+>return true if there is beat on this specific beat range
+
+
 float get_beat_alert(int target) ;
 >return the beat value alert of the target band
 
 
-void set_beat(float... threshold) ;
->Add threshold to detect the beat, the value is set by block, if you have two value, the first is for the left part of spectrum, and the other is for the right part
->If you have more band than value pass, the algorithm restart from the first value ; the value are in relation with the spectrum_scale value
+boolean beat_band_is(int target_band) ;
+>return true is there is a beat on this band
+
+int get_beat_in(int which_beat) 
+>return the entry band of this beat
+
+int get_beat_out(int which_beat) {
+>return the exit band of this beat
+
+int beat_num()
+>return the quantity of beat analyze
 
 
 
