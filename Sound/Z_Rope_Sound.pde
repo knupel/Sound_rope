@@ -1,6 +1,6 @@
 /**
 SOUND rope
-v 1.0.3
+v 1.0.5
 */
 import ddf.minim.*;
 import ddf.minim.analysis.*;
@@ -45,6 +45,7 @@ void audio_buffer(int which) {
       source_buffer = input.mix ;
   }
 }
+
 
 
 
@@ -110,6 +111,49 @@ int num_bands() {
   return spectrum_bands ;
 }
 
+
+float get_spectrum_sum() {
+  float result = 0 ;
+  for (int i = 0 ; i < num_bands() ; i++) {
+    result += spectrum(i) ;
+  }
+  return result ;
+}
+
+
+/**
+time track
+v 1.0.0
+*/
+int time_track_elapse ;
+float no_sound_since ;
+float threshold_spectrum_sensibility = .6;
+float time_to_reset_time_track = 1;
+
+void set_time_track(float threshold, float time_to_reset) {
+  threshold_spectrum_sensibility = threshold;
+  time_to_reset_time_track = time_to_reset;
+}
+
+float get_time_track() {
+  float result = 0;
+  if(get_spectrum_sum() < threshold_spectrum_sensibility) {
+    no_sound_since += .1;
+  } else {
+    no_sound_since = 0;
+  }
+
+  if(no_sound_since > time_to_reset_time_track) {
+    time_track_elapse = 0;
+    result = 0 ;
+  } else {
+    time_track_elapse += millis()%10 ;
+    result = time_track_elapse *.01 ;
+  }
+
+  result = round(result *10.0f) /10.0f ;
+  return result; 
+}
 
 
 
@@ -248,7 +292,7 @@ boolean beat_is(int target_beat_range) {
   boolean beat_is = false ;
   for(int i = beat_rope[target_beat_range].in ; i < beat_rope[target_beat_range].out ; i++ ) {
     if(beat_band_is(i, target_beat_range)) {
-      if(target_beat_range == 1)println("BASSE", beat_rope[target_beat_range].in, beat_rope[target_beat_range].out, i, frameCount);
+//      if(target_beat_range == 1)println("BASSE", beat_rope[target_beat_range].in, beat_rope[target_beat_range].out, i, frameCount);
       beat_is = true ; 
       break ;
     }
@@ -337,8 +381,11 @@ int beat_num() {
 }
 
 
+/**
 
-// get beat alert
+*/
+
+
 
 
 

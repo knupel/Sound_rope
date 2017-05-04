@@ -1,6 +1,6 @@
 
 Sound rope
-v 1.0.1
+v 1.0.4
 --
 >author Stan le Punk
 >see other Processing work on https://github.com/StanLepunK
@@ -43,6 +43,24 @@ float band(AudioBuffer fftData, int target, float scale) ;
 
 int num_bands() ;
 >return the num of active band in the spectrum
+
+
+
+
+
+
+
+
+
+TIME TRACK
+--
+void set_time_track(float threshold, float time_to_reset);
+>set the sensibility of your time_track
+>threshold is use to comapre this value with the spectrum sum, by default this value is '0.5'
+>float time_to_reset is the threshold to reset the time, each frame when there is no sound detected, the '0.1' is add to the silence timer. By default the 'time_to_reset' is '1.0' when the this value is more than, the tracker is reset to '0'
+
+float get_time_track();
+>return the time in seconde elapse since the last silence
 
 
 
