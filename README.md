@@ -1,6 +1,6 @@
 
 Sound rope
-v 1.0.4
+v 1.0.6
 --
 >author Stan le Punk
 >see other Processing work on https://github.com/StanLepunK
@@ -70,7 +70,7 @@ float get_time_track();
 
 
 
-Beat
+BEAT
 --
 void set_beat(float... threshold) ;
 >Add threshold to detect the beat, the value is set by block, if you have two value, the first is for the left part of spectrum, and the other is for the right part
@@ -99,6 +99,17 @@ int get_beat_out(int which_beat) {
 
 int beat_num()
 >return the quantity of beat analyze
+
+
+
+
+COLOUR
+--
+int [] color_spectrum(int component_colour, int sort) :
+>return an array in of colour, the length depend of the num of component and the type of color depend of type of sort
+
+arg
+>int component_colour from 1 to 4, 1 is grey, 2 is grey + alpha, 3 is RVB or HSB depend of your color mode, 4 you add alpha
 
 
 
