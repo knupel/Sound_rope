@@ -1,6 +1,6 @@
 /**
 SOUND rope
-v 1.0.5
+v 1.0.6
 */
 import ddf.minim.*;
 import ddf.minim.analysis.*;
@@ -382,8 +382,72 @@ int beat_num() {
 
 
 /**
-
+color spectrum
+v 0.0.1
 */
+int [] color_spectrum(int component, int sort) {
+  int x = 0 ;
+  int y = 0 ;
+  int z = 0 ;
+  int a = 0 ;
+
+  int [] line = new int[floor(num_bands()/component)];
+  int c = 0;
+  int where = 0;
+  int offset_0 = 0 ;
+  int offset_1 = 0 ;
+  int offset_2 = 0 ;
+  int offset_3 = 0 ;
+
+  for(int i = 0 ; i < line.length ; i++) {
+    if(sort == 0 ) {
+
+      where = i * component;
+      offset_0 = 0 ;
+      offset_1 = 1 ;
+      offset_2 = 2 ;
+      offset_3 = 3 ;
+    } else if(sort == 1) {
+      where = i ;
+      offset_0 = 0 ;
+      offset_1 = line.length;
+      offset_2 = line.length *2 ;
+      offset_3 = line.length *3 ;
+    }
+    switch(component) {
+      case 1:
+      x = int(spectrum(where) *g.colorModeX);
+      c = color(x);
+      break ;
+      case 2:
+      x = int(spectrum(where) *g.colorModeX);
+      y = int(spectrum(where) *g.colorModeY);
+      z = int(spectrum(where) *g.colorModeZ);
+      a = int(spectrum(where +offset_1) *g.colorModeA);
+      c = color(x,y,z,a);
+      break ;
+      case 3:
+      x = int(spectrum(where) *g.colorModeX);
+      y = int(spectrum(where +offset_1) *g.colorModeY);
+      z = int(spectrum(where +offset_2) *g.colorModeZ);
+      c = color(x,y,z);
+      break ;
+      case 4:
+      x = int(spectrum(where) *g.colorModeX);
+      y = int(spectrum(where +offset_1) *g.colorModeY);
+      z = int(spectrum(where +offset_2) *g.colorModeZ);
+      a = int(spectrum(where +offset_3) *g.colorModeA);
+      c = color(x,y,z,a);
+      break ;
+      default:
+      x = int(spectrum(where) *g.colorModeX);
+      c = color(x);
+      break ;
+    }
+    line[i] = c ;
+  }
+  return line ;
+}
 
 
 
