@@ -1,6 +1,6 @@
 /**
 SOUND rope
-v 1.0.6
+v 1.0.8
 */
 import ddf.minim.*;
 import ddf.minim.analysis.*;
@@ -383,64 +383,169 @@ int beat_num() {
 
 /**
 color spectrum
-v 0.0.1
+v 0.0.4
 */
+
 int [] color_spectrum(int component, int sort) {
-  int x = 0 ;
-  int y = 0 ;
-  int z = 0 ;
-  int a = 0 ;
+  Vec2 range = Vec2(-1) ;
+  return color_spectrum(component, sort, range);
+}
+
+
+int [] color_spectrum(int component, int sort, Vec2... range) {
+  // set range
+  boolean range_is = false ;
+  Vec2 range_x = null;
+  Vec2 range_y = null;
+  Vec2 range_z = null;
+  Vec2 range_a = null;
+  if(range.length == 1 && range.equals(-1)) {
+    range_is = false ;
+  } else {
+    range_is = true ;
+    if(range.length == 1) {
+      range_x = range[0];
+      range_y = range[0];
+      range_z = range[0];
+      range_a = range[0];
+    } else if(range.length == 2) {
+      range_x = range[0];
+      range_y = range[0];
+      range_z = range[0];
+      range_a = range[1];
+    } else if(range.length == 3) {
+      range_x = range[0];
+      range_y = range[1];
+      range_z = range[2];
+    } else if(range.length == 4) {
+      range_x = range[0];
+      range_y = range[1];
+      range_z = range[2];
+      range_a = range[3];
+    } 
+  }
+  
+  // spectrum part
+  int x = 0;
+  int y = 0;
+  int z = 0;
+  int a = 0;
+
+  float norm_x = 1.;
+  float norm_y = 1.;
+  float norm_z = 1.;
+  float norm_a = 1.;
 
   int [] line = new int[floor(num_bands()/component)];
   int c = 0;
   int where = 0;
-  int offset_0 = 0 ;
-  int offset_1 = 0 ;
-  int offset_2 = 0 ;
-  int offset_3 = 0 ;
+  int offset_0 = 0;
+  int offset_1 = 0;
+  int offset_2 = 0;
+  int offset_3 = 0;
 
   for(int i = 0 ; i < line.length ; i++) {
     if(sort == 0 ) {
 
       where = i * component;
-      offset_0 = 0 ;
-      offset_1 = 1 ;
-      offset_2 = 2 ;
-      offset_3 = 3 ;
+      offset_0 = 0;
+      offset_1 = 1;
+      offset_2 = 2;
+      offset_3 = 3;
     } else if(sort == 1) {
-      where = i ;
-      offset_0 = 0 ;
+      where = i;
+      offset_0 = 0;
       offset_1 = line.length;
-      offset_2 = line.length *2 ;
-      offset_3 = line.length *3 ;
+      offset_2 = line.length *2;
+      offset_3 = line.length *3;
     }
     switch(component) {
       case 1:
-      x = int(spectrum(where) *g.colorModeX);
+      norm_x = spectrum(where);
+      if(norm_x > 1) norm_x = 1;
+
+      if(range_is) {
+        norm_x = map(norm_x, 0,1, range_x.x, range_x.y) ;
+      }
+
+      x = int(norm_x *g.colorModeX);
       c = color(x);
       break ;
+      //
       case 2:
-      x = int(spectrum(where) *g.colorModeX);
-      y = int(spectrum(where) *g.colorModeY);
-      z = int(spectrum(where) *g.colorModeZ);
-      a = int(spectrum(where +offset_1) *g.colorModeA);
+      norm_x = spectrum(where);
+      norm_a = spectrum(where +offset_1);
+
+      if(norm_x > 1) norm_x = 1 ;
+      if(norm_a > 1) norm_a = 1 ;
+
+      if(range_is) {
+        norm_x = map(norm_x, 0,1, range_x.x, range_x.y) ;
+        norm_a = map(norm_a, 0,1, range_a.x, range_a.y) ;
+      }
+      
+      x = int(norm_x *g.colorModeX);
+      y = int(norm_x *g.colorModeY);
+      z = int(norm_x *g.colorModeZ);
+      a = int(norm_a *g.colorModeA);
       c = color(x,y,z,a);
       break ;
+      //
       case 3:
-      x = int(spectrum(where) *g.colorModeX);
-      y = int(spectrum(where +offset_1) *g.colorModeY);
-      z = int(spectrum(where +offset_2) *g.colorModeZ);
+      norm_x = spectrum(where);
+      norm_y = spectrum(where +offset_1);
+      norm_z = spectrum(where +offset_2);
+
+      if(norm_x > 1) norm_x = 1;
+      if(norm_y > 1) norm_y = 1;
+      if(norm_z > 1) norm_z = 1;
+
+      if(range_is) {
+        norm_x = map(norm_x, 0,1, range_x.x, range_x.y) ;
+        norm_y = map(norm_y, 0,1, range_y.x, range_y.y) ;
+        norm_z = map(norm_z, 0,1, range_z.x, range_z.y) ;
+      }
+
+      x = int(norm_x *g.colorModeX);
+      y = int(norm_y *g.colorModeY);
+      z = int(norm_z *g.colorModeZ);
       c = color(x,y,z);
       break ;
+      //
       case 4:
-      x = int(spectrum(where) *g.colorModeX);
-      y = int(spectrum(where +offset_1) *g.colorModeY);
-      z = int(spectrum(where +offset_2) *g.colorModeZ);
-      a = int(spectrum(where +offset_3) *g.colorModeA);
+      norm_x = spectrum(where);
+      norm_y = spectrum(where +offset_1);
+      norm_z = spectrum(where +offset_2);
+      norm_a = spectrum(where +offset_3);
+
+      if(norm_x > 1) norm_x = 1;
+      if(norm_y > 1) norm_y = 1;
+      if(norm_z > 1) norm_z = 1;
+      if(norm_a > 1) norm_a = 1;
+
+      if(range_is) {
+        norm_x = map(norm_x, 0,1, range_x.x, range_x.y) ;
+        norm_y = map(norm_y, 0,1, range_y.x, range_y.y) ;
+        norm_z = map(norm_z, 0,1, range_z.x, range_z.y) ;
+        norm_a = map(norm_a, 0,1, range_a.x, range_a.y) ;
+      }
+
+      x = int(norm_x *g.colorModeX);
+      y = int(norm_y *g.colorModeY);
+      z = int(norm_z *g.colorModeZ);
+      a = int(norm_a *g.colorModeA);
       c = color(x,y,z,a);
       break ;
+      //
       default:
-      x = int(spectrum(where) *g.colorModeX);
+      norm_x = spectrum(where);
+
+      if(norm_x > 1) norm_x = 1;
+
+      if(range_is) {
+        norm_x = map(norm_x, 0,1, range_x.x, range_x.y) ;
+      }
+      x = int(norm_x *g.colorModeX);
       c = color(x);
       break ;
     }
