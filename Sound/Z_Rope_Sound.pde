@@ -1,6 +1,6 @@
 /**
 SOUND rope
-v 1.0.9.1
+v 1.0.9.2
 */
 import ddf.minim.*;
 import ddf.minim.analysis.*;
@@ -383,7 +383,7 @@ int beat_num() {
 
 /**
 color spectrum
-v 0.0.5
+v 0.0.5.1
 */
 
 
@@ -401,7 +401,7 @@ int [] color_spectrum(int component, int sort, Vec2... range) {
   Vec2 range_y = null;
   Vec2 range_z = null;
   Vec2 range_a = null;
-  if(range.length == 1 && range.equals(-1)) {
+  if(range.length == 1 && range[0].equals(-1)) {
     range_is = false ;
   } else {
     range_is = true ;
