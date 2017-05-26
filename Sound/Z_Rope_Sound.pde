@@ -1,6 +1,6 @@
 /**
 SOUND rope
-v 1.0.8
+v 1.0.9.1
 */
 import ddf.minim.*;
 import ddf.minim.analysis.*;
@@ -211,7 +211,7 @@ class Beat {
 
 /**
 method
-v 0.0.1
+v 0.0.2
 */
 // float [] beat_alert ;
 int num_beat_section ;
@@ -247,12 +247,12 @@ void set_beat_advance(iVec2[] in_out,  float[] threshold) {
     if(in_out[i].y > spectrum_bands) {
       in_out[i].y = spectrum_bands;
       in_out[i].x = spectrum_bands -1;
-      System.err.print("'OUT' of beat is upper of spectrum, the value beat 'y' max analyze is cap to the spectrum, and 'x' to spectrum minus '1") ;
+      println("'OUT' of beat is upper of spectrum, the value beat 'y' max analyze is cap to the spectrum, and 'x' to spectrum minus '1") ;
     }
     if(in_out[i].x > spectrum_bands) {
       in_out[i].y = spectrum_bands;
       in_out[i].x = spectrum_bands -1;
-      System.err.print("'IN' of beat is upper of spectrum, the value beat 'y' max analyze is cap to the spectrum, and 'x' to spectrum minus '1") ;
+      println("'IN' of beat is upper of spectrum, the value beat 'y' max analyze is cap to the spectrum, and 'x' to spectrum minus '1") ;
     }
   }
 
@@ -383,8 +383,9 @@ int beat_num() {
 
 /**
 color spectrum
-v 0.0.4
+v 0.0.5
 */
+
 
 int [] color_spectrum(int component, int sort) {
   Vec2 range = Vec2(-1) ;
@@ -393,6 +394,7 @@ int [] color_spectrum(int component, int sort) {
 
 
 int [] color_spectrum(int component, int sort, Vec2... range) {
+  boolean reverse_alpha = true;
   // set range
   boolean range_is = false ;
   Vec2 range_x = null;
@@ -445,20 +447,13 @@ int [] color_spectrum(int component, int sort, Vec2... range) {
   int offset_3 = 0;
 
   for(int i = 0 ; i < line.length ; i++) {
-    if(sort == 0 ) {
+    iVec5 sort_colour = sort_colour(i, line.length, component, sort);
+    where = sort_colour.a;
+    offset_0 = sort_colour.b;
+    offset_1 = sort_colour.c;
+    offset_2 = sort_colour.d;
+    offset_3 = sort_colour.e;
 
-      where = i * component;
-      offset_0 = 0;
-      offset_1 = 1;
-      offset_2 = 2;
-      offset_3 = 3;
-    } else if(sort == 1) {
-      where = i;
-      offset_0 = 0;
-      offset_1 = line.length;
-      offset_2 = line.length *2;
-      offset_3 = line.length *3;
-    }
     switch(component) {
       case 1:
       norm_x = spectrum(where);
@@ -474,11 +469,16 @@ int [] color_spectrum(int component, int sort, Vec2... range) {
       //
       case 2:
       norm_x = spectrum(where);
-      norm_a = spectrum(where +offset_1);
+      if(norm_x > 1) norm_x = 1;
 
-      if(norm_x > 1) norm_x = 1 ;
-      if(norm_a > 1) norm_a = 1 ;
-
+      if(!reverse_alpha) {
+        norm_a = spectrum(where +offset_1);
+        if(norm_a > 1) norm_a = 1 ;
+      } else {
+        norm_a = 1 -spectrum(where +offset_1);
+        if(norm_a < 0) norm_a = 0;
+      }
+      
       if(range_is) {
         norm_x = map(norm_x, 0,1, range_x.x, range_x.y) ;
         norm_a = map(norm_a, 0,1, range_a.x, range_a.y) ;
@@ -516,12 +516,18 @@ int [] color_spectrum(int component, int sort, Vec2... range) {
       norm_x = spectrum(where);
       norm_y = spectrum(where +offset_1);
       norm_z = spectrum(where +offset_2);
-      norm_a = spectrum(where +offset_3);
 
       if(norm_x > 1) norm_x = 1;
       if(norm_y > 1) norm_y = 1;
       if(norm_z > 1) norm_z = 1;
-      if(norm_a > 1) norm_a = 1;
+
+      if(!reverse_alpha) {
+        norm_a = spectrum(where +offset_3);
+        if(norm_a > 1) norm_a = 1 ;
+      } else {
+        norm_a = 1 -spectrum(where +offset_3);
+        if(norm_a < 0) norm_a = 0;
+      }
 
       if(range_is) {
         norm_x = map(norm_x, 0,1, range_x.x, range_x.y) ;
@@ -552,6 +558,49 @@ int [] color_spectrum(int component, int sort, Vec2... range) {
     line[i] = c ;
   }
   return line ;
+}
+
+// constant sorting
+int SORT_HASH = 0;
+
+int SORT_BLOCK_RGBA = 1;
+int SORT_BLOCK_ARGB = 1;
+
+
+iVec5 sort_colour(int i, int line_length, int component, int sort) {
+  // iVec5 result = iVec5();
+  int w = 0;
+  int r = 0;
+  int g = 0;
+  int b = 0;
+  int a = 0;
+  if(sort == SORT_HASH) {
+    // pixel position
+    w = i *component;
+    // pixel component
+    r = 0;
+    g = 1;
+    b = 2;
+    a = 3;
+  } else if(sort == SORT_BLOCK_RGBA) {
+    // pixel position
+    w = i;
+    // pixel component
+    r = 0;
+    g = line_length;
+    b = line_length *2;
+    a = line_length *3;
+  } else if(sort == SORT_BLOCK_ARGB) {
+    // pixel position
+    w = i;
+    // pixel component
+    a = 0;
+    r = line_length;
+    g = line_length *2;
+    b = line_length *3;
+  }
+ //  iVec5 result = ;
+  return iVec5(w,r,g,b,a);
 }
 
 
