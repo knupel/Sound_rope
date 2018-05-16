@@ -12,12 +12,12 @@ void setup() {
   build_log_sound() ;
   surface.setSize(length_analyze, length_analyze) ;
 
-  background(255);
+  background(0);
 
   // beat alert
   set_sound(length_analyze) ;
 
-  int num_spectrum_bands = 128 ;
+  int num_spectrum_bands = 32 ;
   float scale_spectrum_sound = .11 ;
   set_spectrum(num_spectrum_bands, scale_spectrum_sound) ;
 
@@ -34,7 +34,8 @@ void setup() {
   beat_in_out[1] = iVec2(5,30);
   beat_in_out[2] = iVec2(30,85);
   beat_in_out[3] = iVec2(85,128);
-  set_beat_advance(beat_in_out, beat_part_sensibility);
+  // set_beat(beat_in_out, beat_part_sensibility);
+  set_beat(.5,.6);
 
 }      
 
@@ -43,7 +44,7 @@ float radius_x_bass, radius_bass, radius_medium, radius_high ;
 void draw() { 
   // background_rope(255,75) ;
   // println(frameRate) ;
-  background_rope(255) ;
+  background_rope(0);
   noStroke() ;
 
   if(beat_is(0)) {
@@ -51,7 +52,7 @@ void draw() {
     radius_x_bass = height *.75 ;
   }
   if(beat_is(1)) {
-    println("BASSE", frameCount) ;
+    // println("BASSE", frameCount) ;
     radius_bass = height *.75 ;
   }
   if(beat_is(2)) {
@@ -63,68 +64,69 @@ void draw() {
     radius_high= height *.75 ;
   }
   
-  radius_x_bass *= .95 ;
-  radius_bass *= .95 ;
-  radius_medium *= .95 ;
-  radius_high *= .95 ;
-  float dist = width /5 ;
-  textAlign(CENTER) ;
-  fill(255,0,0) ;
-  if(radius_x_bass > 0) {
+  radius_x_bass *= .95;
+  radius_bass *= .95;
+  radius_medium *= .95;
+  radius_high *= .95;
+  float dist = width /5;
+  textAlign(CENTER);
+  fill(r.BLOOD);
+  float min_text_size = 1.;
+  if(radius_x_bass > min_text_size) {
     textSize(radius_x_bass *.05);
     text("extra-basse", dist, height/3);
   }
-  if(radius_bass > 0) {
+  if(radius_bass > min_text_size) {
     textSize(radius_bass *.05);
     text("basse", dist*2, height/3);
   }
-  if(radius_medium > 0) {
+  if(radius_medium > min_text_size) {
     textSize(radius_medium *.05);
     text("medium", dist*3, height/3);
   }
-  if(radius_high > 0) {
+  if(radius_high > min_text_size) {
     textSize(radius_high *.05);
     text("haut", dist*4, height/3);
   }
-  fill(255,230,0, 90) ;
+  fill(r.YELLOW);
   ellipse(dist,height/2,radius_x_bass,radius_x_bass) ;
   ellipse(dist*2,height/2,radius_bass,radius_bass) ;
   ellipse(dist*3,height/2,radius_medium,radius_medium) ; 
   ellipse(dist*4,height/2,radius_high,radius_high) ;
   // line
-  stroke(0) ;
-  float step = length_analyze / num_bands() ;
+  stroke(r.BLACK);
+  float step = length_analyze / num_bands();
   for(int i = 0 ; i < beat_num() ; i++) {
-    int line_in_x = int(get_beat_in(i) *step) ;
+    int line_in_x = int(get_beat_in(i) *step);
     line(line_in_x, 0, line_in_x, height) ;
-    int line_out_x = int(get_beat_out(i) *step) ;
-    line(line_out_x, 0, line_out_x, height) ;
+    int line_out_x = int(get_beat_out(i) *step);
+    line(line_out_x, 0, line_out_x, height);
   }
 
 
   audio_buffer(RIGHT) ;
 
-  fill(0) ;
-  noStroke() ;
-  show_beat(Vec2(0), height/2) ;
+  fill(r.BLACK);
+  noStroke();
+  show_beat(Vec2(0), height/2);
 
-  fill(255,0,0) ;
+  fill(255,0,0);
 
-  show_spectrum(Vec2(0), height/2) ; 
+  show_spectrum(Vec2(0),height/2); 
   
 
-  audio_buffer(LEFT) ;
-  fill(0) ;
-  noStroke() ;
-  show_beat(Vec2(0), -height/2) ;
+  audio_buffer(LEFT);
+  fill(r.BLACK);
+  noStroke();
+  show_beat(Vec2(0),-height/2) ;
 
-  fill(255,0,0) ;
-  noStroke() ;
-  show_spectrum(Vec2(0), -height/2) ; 
+  fill(r.WHITE);
+  noStroke();
+  show_spectrum(Vec2(0),-height/2) ; 
   
 
-  int log_each_frame = 60 ;
-  boolean log_on_beat_only = true ;
+  int log_each_frame = 60;
+  boolean log_on_beat_only = true;
   // log_sound(log_each_frame, log_on_beat_only) ;
 
 }

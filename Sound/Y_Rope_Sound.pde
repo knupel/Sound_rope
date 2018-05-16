@@ -1,21 +1,12 @@
 /**
 SOUND rope
-v 1.0.9.2
+2017-2018
+v 1.1.0
 */
 import ddf.minim.*;
 import ddf.minim.analysis.*;
-
-
-
-/**
-setting
-*/
 Minim minim ;
 AudioInput input ;
-
-
-
-
 int bands_max ;
 
 void set_sound(int max) {
@@ -28,7 +19,6 @@ void set_sound(int max) {
 
 
 AudioBuffer source_buffer ;
-
 int MIX = 41 ;
 void audio_buffer(int which) {
   switch(which) {
@@ -211,7 +201,7 @@ class Beat {
 
 /**
 method
-v 0.0.2
+v 0.0.3
 */
 // float [] beat_alert ;
 int num_beat_section ;
@@ -223,8 +213,15 @@ boolean [] beat_band_is ;
 /**
 setting
 */
-void set_beat_basic(float... threshold) {
+void set_beat(float... threshold) {
+  iVec2 [] in_out = new iVec2[threshold.length];
+  int part = spectrum_bands / in_out.length;
+  for(int i = 0 ; i < in_out.length ; i++) {
+    in_out[i] = iVec2(i*part,(i+1)*part);
+  }
+  set_beat(in_out, threshold);
   // beat_alert = new float[spectrum_bands] ;
+  /*
   num_beat_section = threshold.length ;
   beat_rope = new Beat[num_beat_section] ;
   for(int i = 0 ; i < num_beat_section ; i++) {
@@ -234,9 +231,10 @@ void set_beat_basic(float... threshold) {
     int out = i *length_analyze +length_analyze;
     beat_rope[i] = new Beat(in, out,threshold[i]);
   }
+  */
 }
 
-void set_beat_advance(iVec2[] in_out,  float[] threshold) {
+void set_beat(iVec2[] in_out,  float[] threshold) {
   beat_advance_is = true ;
   beat_band_is = new boolean [spectrum_bands] ;
   // beat_alert = new float[spectrum_bands] ;
@@ -288,14 +286,18 @@ boolean beat_is() {
   return beat_is ;
 }
 
-boolean beat_is(int target_beat_range) {
+boolean beat_is(int target) {
   boolean beat_is = false ;
-  for(int i = beat_rope[target_beat_range].in ; i < beat_rope[target_beat_range].out ; i++ ) {
-    if(beat_band_is(i, target_beat_range)) {
-//      if(target_beat_range == 1)println("BASSE", beat_rope[target_beat_range].in, beat_rope[target_beat_range].out, i, frameCount);
-      beat_is = true ; 
-      break ;
+  if(target < beat_rope.length) {
+    for(int i = beat_rope[target].in ; i < beat_rope[target].out ; i++) {
+      if(beat_band_is(i, target)) {
+        beat_is = true ; 
+        break ;
+      }
     }
+    //return beat_is ;
+  } else {
+    printErrTempo(60,"method beat_is(",target,") is out of the range, by default method return false",frameCount); 
   }
   return beat_is ;
 }
