@@ -1,40 +1,27 @@
 /**
 SOUND rope
 2017-2018
-v 1.1.0
+v 1.1.2
 */
 import ddf.minim.*;
 import ddf.minim.analysis.*;
-Minim minim ;
-AudioInput input ;
-int bands_max ;
+Minim minim;
+AudioInput input;
+AudioBuffer source_buffer ;
+FFT fft;
+
+int bands_max;
+// boolean sound_rope_play_is;
 
 void set_sound(int max) {
   bands_max = max ;
   minim = new Minim(this);
   //sound from outside
- //  minim.debugOn();
   input = minim.getLineIn(Minim.STEREO, bands_max);
 }
 
 
-AudioBuffer source_buffer ;
-int MIX = 41 ;
-void audio_buffer(int which) {
-  switch(which) {
-    case RIGHT :
-      source_buffer = input.right ;
-      break ;
-    case LEFT :
-      source_buffer = input.left ;
-      break ;
-    case 41 :
-      source_buffer = input.mix ;
-      break ;
-    default :
-      source_buffer = input.mix ;
-  }
-}
+
 
 
 
@@ -43,77 +30,39 @@ void audio_buffer(int which) {
 
 
 /**
-SPECTRUM
-v 0.0.2
+MISC
+v 0.1.0
 */
-float[] spectrum  ;
-FFT fft;
-int spectrum_bands = 0 ;
-float band_size ;
-float scale_spectrum = .1 ;
-
-
-void set_spectrum(int num, float scale) {
-  if(num > bands_max) {
-    spectrum_bands = bands_max ;
-  } else {
-    spectrum_bands = num ;
-  }
-
-  band_size = bands_max / spectrum_bands ;
-  spectrum = new float [spectrum_bands] ;
-  fft = new FFT(input.bufferSize(), input.sampleRate());
-  fft.linAverages(spectrum_bands);
-
-  scale_spectrum = scale ;
+int target_sound = 1 ;
+float get_right(float scale) {
+  return input.right.get(target_sound) *scale; 
 }
 
-
-
-
-// scale .5 be good
-float spectrum(int target) {
-  if(source_buffer == null) {
-    source_buffer = input.mix ;
-  }
-  return spectrum(source_buffer, target, scale_spectrum) ;
+float get_left(float scale) {
+  return input.left.get(target_sound) *scale; 
 }
 
-float spectrum(AudioBuffer fftData, int target) {
-  return spectrum(fftData, target, scale_spectrum) ;
+float get_mix(float scale) {
+  return input.mix.get(target_sound) *scale; 
 }
 
-float spectrum(AudioBuffer fftData, int target, float scale) {
-  fft.forward(fftData) ;
-  fft.scaleBand(target, scale_spectrum) ;
-  return fft.getBand(target) ;
+float get_right() {
+  return input.right.get(target_sound); 
 }
 
-float [] spectrum() {
-  float [] f = new float[spectrum_bands] ;
-  for(int i = 0 ; i < spectrum_bands ; i++) {
-    f[i] = fft.getBand(i) ;
-  }
-  return f ;
+float get_left() {
+  return input.left.get(target_sound); 
 }
 
-int num_bands() {
-  return spectrum_bands ;
+float get_mix() {
+  return input.mix.get(target_sound); 
 }
 
-
-float get_spectrum_sum() {
-  float result = 0 ;
-  for (int i = 0 ; i < num_bands() ; i++) {
-    result += spectrum(i) ;
-  }
-  return result ;
-}
 
 
 /**
 time track
-v 1.0.0
+v 1.1.0
 */
 int time_track_elapse ;
 float no_sound_since ;
@@ -146,6 +95,132 @@ float get_time_track() {
 }
 
 
+boolean sound_plays_is() {
+  if(get_time_track() > .2 ) return true ; else return false;
+}
+
+
+
+
+int MIX = 41 ;
+void audio_buffer(int canal) {
+  switch(canal) {
+    case RIGHT :
+      source_buffer = input.right ;
+      break ;
+    case LEFT :
+      source_buffer = input.left ;
+      break ;
+    case 41 :
+      source_buffer = input.mix ;
+      break ;
+    default :
+      source_buffer = input.mix ;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+SPECTRUM
+v 0.0.3
+*/
+float[] spectrum  ;
+int spectrum_bands = 0 ;
+float band_size ;
+float scale_spectrum = .1 ;
+void set_spectrum(int num, float scale) {
+  if(num > bands_max) {
+    spectrum_bands = bands_max ;
+  } else {
+    spectrum_bands = num ;
+  }
+
+  band_size = bands_max / spectrum_bands ;
+  spectrum = new float [spectrum_bands] ;
+  fft = new FFT(input.bufferSize(), input.sampleRate());
+  fft.linAverages(spectrum_bands);
+
+  scale_spectrum = scale ;
+}
+
+void update_spectrum() {
+  if(source_buffer == null) {
+    println("void spectrum(): there is no AudioBuffer selected, by default AudioBuffer input.mix is used");
+    source_buffer = input.mix;
+  }
+  fft.forward(source_buffer);
+  for(int i = 0 ; i < band_num();i++) {
+    fft.scaleBand(i,scale_spectrum);
+  }
+  
+}
+
+
+float [] get_spectrum() {
+  float [] f = new float[spectrum_bands] ;
+  for(int i = 0 ; i < spectrum_bands ; i++) {
+    f[i] = fft.getBand(i);
+  }
+  return f;
+}
+
+
+float get_spectrum(int target){
+  if(target < band_num()) {
+    return fft.getBand(target);
+  } else return Float.NaN; 
+}
+
+int band_num() {
+  return spectrum_bands;
+}
+
+
+float get_spectrum_sum() {
+  float result = 0 ;
+  for (int i = 0 ; i < band_num() ; i++) {
+    result += get_spectrum(i);
+  }
+  return result ;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -154,62 +229,16 @@ float get_time_track() {
 
 /**
 BEAT 
-v 0.0.2
-*/
-/**
-class
-*/
-class Beat {
-  float sensibility ;
-  int in ;
-  int out ;
-  int [] beat_band ;
-  Beat(int in, int out, float sensibility) {
-    beat_band = new int[out -in +1];
-    this.in = in;
-    this.out = out;
-    this.sensibility = sensibility;
-  }
-
-  boolean beat_is() {
-    boolean beat_is = false ;
-    int max = out ;
-    if(out >= spectrum_bands) {
-      max = spectrum_bands -1;
-    }
-
-    for(int i = in ; i <= max ; i++) {
-      if(spectrum(i) > sensibility) {
-        beat_is = true ;
-        break ;
-      }
-    }
-    return beat_is ;
-  }
-
-  int get_in() {
-    return in ;
-  }
-
-  int get_out() {
-    return out ;
-  }
-}
-
-
-
-
-/**
-method
 v 0.0.3
 */
-// float [] beat_alert ;
+/**
+beat method
+v 0.0.3
+*/
 int num_beat_section ;
 Beat beat_rope[] ;
 boolean beat_advance_is ;
 boolean [] beat_band_is ;
-
-
 /**
 setting
 */
@@ -220,21 +249,9 @@ void set_beat(float... threshold) {
     in_out[i] = iVec2(i*part,(i+1)*part);
   }
   set_beat(in_out, threshold);
-  // beat_alert = new float[spectrum_bands] ;
-  /*
-  num_beat_section = threshold.length ;
-  beat_rope = new Beat[num_beat_section] ;
-  for(int i = 0 ; i < num_beat_section ; i++) {
-    int length_analyze = int(spectrum_bands /num_beat_section);
-    int in = i *length_analyze ;
-    // may be there is an error on the out, but no matter !
-    int out = i *length_analyze +length_analyze;
-    beat_rope[i] = new Beat(in, out,threshold[i]);
-  }
-  */
 }
 
-void set_beat(iVec2[] in_out,  float[] threshold) {
+void set_beat(iVec2[] in_out,  float... threshold) {
   beat_advance_is = true ;
   beat_band_is = new boolean [spectrum_bands] ;
   // beat_alert = new float[spectrum_bands] ;
@@ -295,7 +312,6 @@ boolean beat_is(int target) {
         break ;
       }
     }
-    //return beat_is ;
   } else {
     printErrTempo(60,"method beat_is(",target,") is out of the range, by default method return false",frameCount); 
   }
@@ -307,22 +323,29 @@ boolean beat_is(int target) {
 // beat band is
 boolean beat_band_is(int target) {
   boolean beat_is = false ;
-  if(spectrum(target) > get_beat_alert(target)) {
+  if(get_spectrum(target) > get_beat(target)) {
     beat_is = true ;
   }
   return beat_is ;
 }
 
 boolean beat_band_is(int target, int which_beat) {
-  if(spectrum(target) > get_beat_alert(target, which_beat)) {
+  if(get_spectrum(target) > get_beat(target, which_beat)) {
     return true ; 
   } else {
     return false ;
   }
 }
 
+float get_beat() {
+  float sum = 0;
+  for(int i = 0 ; i < beat_num() ; i++) {
+    sum += get_beat(i);
+  }
+  return sum;
+}
 
-float get_beat_alert(int target) {
+float get_beat(int target) {
   float alert = Float.MAX_VALUE ;
   // check if the target is on the beat range analyze
   if(beat_advance_is && beat_band_is[target]) {
@@ -330,26 +353,30 @@ float get_beat_alert(int target) {
     for(int i = 0 ; i < beat_rope.length ; i++) {
       // println(60, "advanded mode", frameCount) ;
       if(target > beat_rope[i].in && target < beat_rope[i].out) {
-        alert = beat_rope[i].sensibility ;
+        alert = beat_rope[i].get_threshold();
         break ;
       }
     }
   } else if(!beat_advance_is) { 
     // classic
-    int section = beat_section(target) ;
-    alert = beat_rope[section].sensibility;
+    int section = beat_section(target);
+    if(beat_rope != null && section < beat_rope.length) {
+      alert = beat_rope[section].get_threshold();
+    } else {
+      printErrTempo(60, "method get_beat(): to use this method init the beat system");
+    }
+    
   }
   return alert;
 }
 
 
-float get_beat_alert(int target, int which_beat) {
+float get_beat(int target, int which_beat) {
   float alert = Float.MAX_VALUE ;
   // check if the target is on the beat range analyze
   if(beat_advance_is && beat_band_is[target]) {
     // advance
-  //  printTempo(60, "beat", which_beat, "band",target) ;
-    alert = beat_rope[which_beat].sensibility ;
+    alert = beat_rope[which_beat].get_threshold();
   } 
   return alert;
 }
@@ -357,38 +384,193 @@ float get_beat_alert(int target, int which_beat) {
 
 
 
-
-
-
-
-
 int beat_section(int target) {
-  int section = floor((float)target /spectrum_bands *num_beat_section) ;
-  // if(section == 0) section = 1 ;
+  int section = floor((float)target /band_num() *num_beat_section) ;
   return section ;
 }
 
-
-
-int get_beat_in(int which_beat) {
-  return beat_rope[ which_beat].in ;
+int get_beat_in(int target) {
+  return beat_rope[target].in ;
 }
 
-int get_beat_out(int which_beat) {
-  return beat_rope[ which_beat].out ;
+int get_beat_out(int target) {
+  return beat_rope[target].out ;
 }
 
 int beat_num() {
-  return beat_rope.length ;
+  if(beat_rope != null && beat_rope.length > 0) {
+    return beat_rope.length ;
+  } else return -1;
 }
 
 
 /**
-color spectrum
-v 0.0.5.1
+class beat
+v 0.0.2
 */
+class Beat {
+  float threshold;
+  int in ;
+  int out ;
+  int [] beat_band ;
+  public Beat(int in, int out, float threshold) {
+    beat_band = new int[out -in +1];
+    this.in = in;
+    this.out = out;
+    this.threshold = threshold;
+  }
+
+  public boolean beat_is() {
+    boolean beat_is = false ;
+    int max = out ;
+    if(out >= spectrum_bands) {
+      max = spectrum_bands -1;
+    }
+
+    for(int i = in ; i <= max ; i++) {
+      if(get_spectrum(i) > threshold) {
+        beat_is = true ;
+        break ;
+      }
+    }
+    return beat_is ;
+  }
+  
+  // set
+  public void set_threshold(float threshold) {
+    this.threshold = threshold;
+  }
+
+  public void set_in(int in) {
+    beat_band = new int[out -in +1];
+    this.in = in;
+  }
+
+  public void set_out(int out) {
+    beat_band = new int[out -in +1];
+    this.out = out;
+  }
+
+  // get
+  public float get_threshold() {
+    return threshold;
+  }
+
+  public int get_in() {
+    return in ;
+  }
+
+  public int get_out() {
+    return out ;
+  }
+}
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+TEMPO
+v 0.2.0
+*/
+float [] tempo_rope, tempo_rope_ref ;
+void set_tempo() {
+  if(beat_num() > 0) {
+    tempo_rope_ref = new float[beat_num()];
+    tempo_rope = new float[beat_num()];
+    for(int i = 0 ; i < beat_num() ; i++) {
+      tempo_rope_ref[i] = 0;
+      tempo_rope[i] = 0;
+    }
+  } else {
+    printErr("method set_tempo() must be used after set_bet() method");
+  }
+  
+}
+
+float get_tempo_ref() {
+  // I remove the snare because is very bad information and slow down the the speed
+  float ref = 0;
+  float sum = 0;
+  for(int i = 0 ; i < beat_num() ; i++) {
+    sum += get_tempo_ref(i);
+  }
+  float div = 1./beat_num();
+  return 1 -(sum *div);
+}
+
+
+
+float get_tempo_ref(int target) {
+  float value = 0;
+  float max = 1.;
+  if(tempo_rope_ref != null) {
+    if(target < beat_num()) {
+      if (tempo_rope_ref[target] > max || get_spectrum_sum() < .03) {
+        tempo_rope_ref[target] = max;
+      } 
+    }  
+    return tempo_rope_ref[target];
+  } else return Float.NaN;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+color spectrum
+v 0.1.0
+*/
 int [] color_spectrum(int component, int sort) {
   Vec2 range = Vec2(-1) ;
   return color_spectrum(component, sort, range);
@@ -440,7 +622,7 @@ int [] color_spectrum(int component, int sort, Vec2... range) {
   float norm_z = 1.;
   float norm_a = 1.;
 
-  int [] line = new int[floor(num_bands()/component)];
+  int [] line = new int[floor(band_num()/component)];
   int c = 0;
   int where = 0;
   int offset_0 = 0;
@@ -458,7 +640,7 @@ int [] color_spectrum(int component, int sort, Vec2... range) {
 
     switch(component) {
       case 1:
-      norm_x = spectrum(where);
+      norm_x = get_spectrum(where);
       if(norm_x > 1) norm_x = 1;
 
       if(range_is) {
@@ -470,14 +652,14 @@ int [] color_spectrum(int component, int sort, Vec2... range) {
       break ;
       //
       case 2:
-      norm_x = spectrum(where);
+      norm_x = get_spectrum(where);
       if(norm_x > 1) norm_x = 1;
 
       if(!reverse_alpha) {
-        norm_a = spectrum(where +offset_1);
+        norm_a = get_spectrum(where +offset_1);
         if(norm_a > 1) norm_a = 1 ;
       } else {
-        norm_a = 1 -spectrum(where +offset_1);
+        norm_a = 1 -get_spectrum(where +offset_1);
         if(norm_a < 0) norm_a = 0;
       }
       
@@ -494,9 +676,9 @@ int [] color_spectrum(int component, int sort, Vec2... range) {
       break ;
       //
       case 3:
-      norm_x = spectrum(where);
-      norm_y = spectrum(where +offset_1);
-      norm_z = spectrum(where +offset_2);
+      norm_x = get_spectrum(where);
+      norm_y = get_spectrum(where +offset_1);
+      norm_z = get_spectrum(where +offset_2);
 
       if(norm_x > 1) norm_x = 1;
       if(norm_y > 1) norm_y = 1;
@@ -515,19 +697,19 @@ int [] color_spectrum(int component, int sort, Vec2... range) {
       break ;
       //
       case 4:
-      norm_x = spectrum(where);
-      norm_y = spectrum(where +offset_1);
-      norm_z = spectrum(where +offset_2);
+      norm_x = get_spectrum(where);
+      norm_y = get_spectrum(where +offset_1);
+      norm_z = get_spectrum(where +offset_2);
 
       if(norm_x > 1) norm_x = 1;
       if(norm_y > 1) norm_y = 1;
       if(norm_z > 1) norm_z = 1;
 
       if(!reverse_alpha) {
-        norm_a = spectrum(where +offset_3);
+        norm_a = get_spectrum(where +offset_3);
         if(norm_a > 1) norm_a = 1 ;
       } else {
-        norm_a = 1 -spectrum(where +offset_3);
+        norm_a = 1 -get_spectrum(where +offset_3);
         if(norm_a < 0) norm_a = 0;
       }
 
@@ -546,7 +728,7 @@ int [] color_spectrum(int component, int sort, Vec2... range) {
       break ;
       //
       default:
-      norm_x = spectrum(where);
+      norm_x = get_spectrum(where);
 
       if(norm_x > 1) norm_x = 1;
 
@@ -564,7 +746,6 @@ int [] color_spectrum(int component, int sort, Vec2... range) {
 
 // constant sorting
 int SORT_HASH = 0;
-
 int SORT_BLOCK_RGBA = 1;
 int SORT_BLOCK_ARGB = 1;
 
@@ -601,7 +782,6 @@ iVec5 sort_colour(int i, int line_length, int component, int sort) {
     g = line_length *2;
     b = line_length *3;
   }
- //  iVec5 result = ;
   return iVec5(w,r,g,b,a);
 }
 

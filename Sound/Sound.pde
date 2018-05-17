@@ -6,6 +6,7 @@ void settings() {
 
 int length_analyze = 512 ;
 // Beat [] beat = new Beat[4] ;
+float [] radius;
 
 void setup() {
   
@@ -17,113 +18,48 @@ void setup() {
   // beat alert
   set_sound(length_analyze) ;
 
-  int num_spectrum_bands = 32 ;
+  int num_spectrum_bands = 128;
   float scale_spectrum_sound = .11 ;
   set_spectrum(num_spectrum_bands, scale_spectrum_sound) ;
 
   // classic beat setting
   
-  float [] beat_part_sensibility = {1.5,.8,.3,.3};
-  //set_beat_basic(beat_part_sensibility) ;
+  float [] beat_part_threshold = {3.5,4.5,1.5,.6};
+  // float [] beat_part_threshold = {6.5,4.5,1.5};
+  //set_beat(beat_part_sensibility) ;
 
 
   // class Beat
 
-  iVec2 [] beat_in_out = new iVec2[beat_part_sensibility.length];
+  iVec2 [] beat_in_out = new iVec2[beat_part_threshold.length];
+  /*
+  beat_in_out[0] = iVec2(0,5);
+  beat_in_out[1] = iVec2(5,10);
+  beat_in_out[2] = iVec2(10,16);
+  */
+  
   beat_in_out[0] = iVec2(0,5);
   beat_in_out[1] = iVec2(5,30);
   beat_in_out[2] = iVec2(30,85);
   beat_in_out[3] = iVec2(85,128);
-  // set_beat(beat_in_out, beat_part_sensibility);
-  set_beat(.5,.6);
+
+  set_beat(beat_in_out, beat_part_threshold);
+  // set_beat(.5,.6);
+
+  radius = new float[beat_part_threshold.length];
 
 }      
 
 
-float radius_x_bass, radius_bass, radius_medium, radius_high ;
+
 void draw() { 
-  // background_rope(255,75) ;
-  // println(frameRate) ;
-  background_rope(0);
+  background_rope(r.BLOOD);
   noStroke() ;
+  update_spectrum();
 
-  if(beat_is(0)) {
-    //println("EXTRA BASSE", frameCount) ;
-    radius_x_bass = height *.75 ;
-  }
-  if(beat_is(1)) {
-    // println("BASSE", frameCount) ;
-    radius_bass = height *.75 ;
-  }
-  if(beat_is(2)) {
-    // println("MEDIUM", frameCount) ;
-    radius_medium = height *.75 ;
-  }
-  if(beat_is(3)) {
-    // println("HIGH", frameCount) ;
-    radius_high= height *.75 ;
-  }
-  
-  radius_x_bass *= .95;
-  radius_bass *= .95;
-  radius_medium *= .95;
-  radius_high *= .95;
-  float dist = width /5;
-  textAlign(CENTER);
-  fill(r.BLOOD);
-  float min_text_size = 1.;
-  if(radius_x_bass > min_text_size) {
-    textSize(radius_x_bass *.05);
-    text("extra-basse", dist, height/3);
-  }
-  if(radius_bass > min_text_size) {
-    textSize(radius_bass *.05);
-    text("basse", dist*2, height/3);
-  }
-  if(radius_medium > min_text_size) {
-    textSize(radius_medium *.05);
-    text("medium", dist*3, height/3);
-  }
-  if(radius_high > min_text_size) {
-    textSize(radius_high *.05);
-    text("haut", dist*4, height/3);
-  }
-  fill(r.YELLOW);
-  ellipse(dist,height/2,radius_x_bass,radius_x_bass) ;
-  ellipse(dist*2,height/2,radius_bass,radius_bass) ;
-  ellipse(dist*3,height/2,radius_medium,radius_medium) ; 
-  ellipse(dist*4,height/2,radius_high,radius_high) ;
-  // line
-  stroke(r.BLACK);
-  float step = length_analyze / num_bands();
-  for(int i = 0 ; i < beat_num() ; i++) {
-    int line_in_x = int(get_beat_in(i) *step);
-    line(line_in_x, 0, line_in_x, height) ;
-    int line_out_x = int(get_beat_out(i) *step);
-    line(line_out_x, 0, line_out_x, height);
-  }
-
-
-  audio_buffer(RIGHT) ;
-
-  fill(r.BLACK);
-  noStroke();
-  show_beat(Vec2(0), height/2);
-
-  fill(255,0,0);
-
-  show_spectrum(Vec2(0),height/2); 
-  
-
-  audio_buffer(LEFT);
-  fill(r.BLACK);
-  noStroke();
-  show_beat(Vec2(0),-height/2) ;
-
-  fill(r.WHITE);
-  noStroke();
-  show_spectrum(Vec2(0),-height/2) ; 
-  
+  show_spectrum();
+  show_beat();
+  show_beat_range();
 
   int log_each_frame = 60;
   boolean log_on_beat_only = true;
@@ -133,22 +69,75 @@ void draw() {
 
 
 
-/**
-sound method
-*/
-void show_spectrum(Vec2 pos, int size) {
-  for(int i = 0; i < num_bands(); i++) {
+void show_beat_range() {
+  stroke(r.ORANGE);
+  strokeWeight(3);
+  float step = length_analyze / band_num();
+  for(int i = 1 ; i < beat_num() -1 ; i++) {
+    int line_in_x = int(get_beat_in(i) *step);
+    line(line_in_x, 0, line_in_x, height) ;
+    int line_out_x = int(get_beat_out(i) *step);
+    line(line_out_x, 0, line_out_x, height);
+  }
+}
+
+
+
+void show_beat() {
+  for(int i = 0 ; i < radius.length ;i++) {
+    if(beat_is(i)) {
+      radius[i] = height *.75 ;
+    }
+    radius[i] *= .95;
+  }
+
+  float dist = width /5;
+  textAlign(CENTER);  
+  float min_text_size = 1.;
+  for(int i = 0 ; i < radius.length ;i++) {
+    int step = (i+1);
+    fill(r.YELLOW,125);
+    ellipse(dist *step,height/2,radius[i],radius[i]);
+    float text_size = radius[i] *.05;
+    if(text_size > 1) {
+      fill(r.BLOOD);
+      textSize(text_size);
+      text("beat "+i, dist *step, height/3);
+    }
+  }
+}
+
+
+
+void show_spectrum() {
+  noStroke();
+
+  audio_buffer(RIGHT) ;
+  fill(r.WHITE);
+  show_beat_spectrum_level(Vec2(0), height/2);
+  fill(r.BLACK);
+  show_spectrum_level(Vec2(0),height/2); 
+
+  audio_buffer(LEFT);
+  fill(r.WHITE);
+  show_beat_spectrum_level(Vec2(0),-height/2);
+  fill(r.BLACK);
+  show_spectrum_level(Vec2(0),-height/2); 
+
+}
+
+void show_spectrum_level(Vec2 pos, int size) {
+  for(int i = 0; i < band_num(); i++) {
     float pos_x = i * band_size +pos.x;
     float pos_y = pos.y + abs(size) ;
     float size_x = band_size ;
-    float size_y = -(spectrum(i) *size) ;
+    float size_y = -(get_spectrum(i) *size) ;
     rect(pos_x, pos_y, size_x, size_y) ;
   } 
 }
 
-
-void show_beat(Vec2 pos, int size) {
-  for(int i = 0; i < num_bands() ; i++) {
+void show_beat_spectrum_level(Vec2 pos, int size) {
+  for(int i = 0; i < band_num() ; i++) {
     if(beat_band_is(i)) {
       float pos_x = i *band_size +pos.x;
       float pos_y = pos.y +abs(size);
@@ -197,15 +186,13 @@ void build_log_sound() {
 void log_sound(int log_sound_frame, boolean log_beat_only) {
   if(frameCount%log_sound_frame == 0) {
     String time = hour() +" "+ minute() +" "+ second() +" "+ frameCount ;
-    for(int i = 0 ; i < spectrum().length ; i++) {
+    for(int i = 0 ; i < get_spectrum().length ; i++) {
       if(log_beat_only) {
         if(beat_band_is(i)) {
-          // println(i, beat_is(i), get_beat_alert(i), spectrum(i)) ;
-          write_log_sound(time, i, beat_band_is(i), beat_section(i), get_beat_alert(i), spectrum(i)) ;
+          write_log_sound(time, i, beat_band_is(i), beat_section(i), get_beat(i), get_spectrum(i)) ;
         }
       } else {
-        // println(i, beat_is(i), get_beat_alert(i), spectrum(i)) ;
-        write_log_sound(time, i, beat_band_is(i), beat_section(i), get_beat_alert(i), spectrum(i)) ;
+        write_log_sound(time, i, beat_band_is(i), beat_section(i), get_beat(i), get_spectrum(i)) ;
       }     
     }
   }
