@@ -3,13 +3,9 @@ void settings() {
   size(100, 100);
 }
 
-
 int length_analyze = 512 ;
-// Beat [] beat = new Beat[4] ;
 float [] radius;
-
 void setup() {
-  
   build_log_sound() ;
   surface.setSize(length_analyze, length_analyze) ;
 
@@ -27,9 +23,6 @@ void setup() {
   float [] beat_part_threshold = {3.5,4.5,1.5,.6};
   // float [] beat_part_threshold = {6.5,4.5,1.5};
   //set_beat(beat_part_sensibility) ;
-
-
-  // class Beat
 
   iVec2 [] beat_in_out = new iVec2[beat_part_threshold.length];
   /*
@@ -54,7 +47,6 @@ void setup() {
 
 void draw() { 
   background_rope(r.BLOOD);
-  noStroke() ;
   update_spectrum();
 
   show_spectrum();
@@ -189,10 +181,10 @@ void log_sound(int log_sound_frame, boolean log_beat_only) {
     for(int i = 0 ; i < get_spectrum().length ; i++) {
       if(log_beat_only) {
         if(beat_band_is(i)) {
-          write_log_sound(time, i, beat_band_is(i), beat_section(i), get_beat(i), get_spectrum(i)) ;
+          write_log_sound(time, i, beat_band_is(i), get_beat_section(i), get_beat_threshold(i), get_spectrum(i)) ;
         }
       } else {
-        write_log_sound(time, i, beat_band_is(i), beat_section(i), get_beat(i), get_spectrum(i)) ;
+        write_log_sound(time, i, beat_band_is(i), get_beat_section(i), get_beat_threshold(i), get_spectrum(i)) ;
       }     
     }
   }
