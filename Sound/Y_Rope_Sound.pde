@@ -174,10 +174,8 @@ void update_spectrum() {
   fft.forward(source_buffer);
   for(int i = 0 ; i < band_num();i++) {
     fft.scaleBand(i,scale_spectrum);
-  }
-  
+  } 
 }
-
 
 float [] get_spectrum() {
   float [] f = new float[spectrum_bands] ;
@@ -337,15 +335,6 @@ boolean beat_band_is(int target_band, int target_beat) {
   }
 }
 
-/*
-float get_beat() {
-  float sum = 0;
-  for(int i = 0 ; i < beat_num() ; i++) {
-    sum += get_beat_threshold(i);
-  }
-  return sum;
-}
-*/
 
 float get_beat_threshold(int target_band) {
   float alert = Float.MAX_VALUE ;
