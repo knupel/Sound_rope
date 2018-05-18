@@ -1,7 +1,7 @@
 /**
 SOUND rope
 2017-2018
-v 1.1.2
+v 1.1.4
 */
 import ddf.minim.*;
 import ddf.minim.analysis.*;
@@ -9,14 +9,11 @@ Minim minim;
 AudioInput input;
 AudioBuffer source_buffer ;
 FFT fft;
-
 int bands_max;
-// boolean sound_rope_play_is;
 
 void set_sound(int max) {
   bands_max = max ;
   minim = new Minim(this);
-  //sound from outside
   input = minim.getLineIn(Minim.STEREO, bands_max);
 }
 
@@ -31,7 +28,7 @@ void set_sound(int max) {
 
 /**
 MISC
-v 0.1.0
+v 0.2.0
 */
 int target_sound = 1 ;
 float get_right(float scale) {
@@ -100,8 +97,9 @@ boolean sound_plays_is() {
 }
 
 
-
-
+/**
+set buffer
+*/
 int MIX = 41 ;
 void audio_buffer(int canal) {
   switch(canal) {
@@ -186,9 +184,9 @@ float [] get_spectrum() {
 }
 
 
-float get_spectrum(int target){
-  if(target < band_num()) {
-    return fft.getBand(target);
+float get_spectrum(int target_band){
+  if(target_band < band_num()) {
+    return fft.getBand(target_band);
   } else return Float.NaN; 
 }
 
@@ -227,16 +225,16 @@ float get_spectrum_sum() {
 
 /**
 BEAT 
-v 0.0.3
+v 0.1.1
 */
 /**
 beat method
-v 0.0.3
+v 0.0.5
 */
 int num_beat_section ;
 Beat beat_rope[] ;
 boolean beat_advance_is ;
-boolean [] beat_band_is ;
+boolean [][] beat_band_is ;
 /**
 setting
 */
@@ -249,11 +247,19 @@ void set_beat(float... threshold) {
   set_beat(in_out, threshold);
 }
 
-void set_beat(iVec2[] in_out,  float... threshold) {
+void set_beat(iVec2[] in_out, float... threshold) {
   beat_advance_is = true ;
-  beat_band_is = new boolean [spectrum_bands] ;
+  
   // beat_alert = new float[spectrum_bands] ;
   num_beat_section = in_out.length ;
+  beat_band_is = new boolean [num_beat_section][spectrum_bands];
+  // init var
+  for(int i = 0 ; i < beat_band_is.length ; i++) {
+    for(int k = 0 ; k < beat_band_is[0].length ; k++) {
+      beat_band_is[i][k] = false;
+    }
+  }
+
   beat_rope = new Beat[num_beat_section] ;
   // check the max value of beat analyze
   for(int i = 0 ; i< num_beat_section ; i++) {
@@ -278,57 +284,46 @@ void set_beat(iVec2[] in_out,  float... threshold) {
   // declare which band must be analyze when there is a beat detection
   for(int i = 0 ; i < beat_rope.length ; i++ ) {
     for(int k = beat_rope[i].in ; k < beat_rope[i].out ; k++) {
-      beat_band_is[k] = true ;
+      beat_band_is[i][k] = true ;
     }
   }
 }
 
 
-
-
-
-/**
-method
-*/
+// boolean beat is
 boolean beat_is() {
   boolean beat_is = false ;
-  for(int i = 0 ; i < spectrum_bands ; i++ ) {
-    if(beat_band_is(i)) {
-      beat_is = true ; 
-      break ;
-    }
-  }
-  return beat_is ;
-}
-
-boolean beat_is(int target_beat) {
-  boolean beat_is = false ;
-  if(target_beat < beat_rope.length) {
-    for(int i = beat_rope[target_beat].in ; i < beat_rope[target_beat].out ; i++) {
-      if(beat_band_is(i, target_beat)) {
+  for(int i = 0 ; i < beat_num() ; i++) {
+    for(int k = 0 ; k < spectrum_bands ; k++ ) {
+      if(beat_band_is(i,k)) {
         beat_is = true ; 
         break ;
       }
     }
-  } else {
-    printErrTempo(60,"method beat_is(",target_beat,") is out of the range, by default method return false",frameCount); 
   }
-  return beat_is ;
+  return beat_is; 
+}
+
+boolean beat_is(int beat_target) {
+  boolean beat_is = false ;
+  if(beat_target < beat_rope.length) {
+    for(int band_target = beat_rope[beat_target].in ; band_target < beat_rope[beat_target].out ; band_target++) {
+      if(beat_band_is(beat_target,band_target)) {
+        beat_is = true; 
+        break ;
+      }
+    }
+  } else {
+    printErrTempo(60,"method beat_is(",beat_target,") is out of the range, by default method return false",frameCount); 
+  }
+  return beat_is;
 }
 
 
 
 // beat band is
-boolean beat_band_is(int target_band) {
-  boolean beat_is = false ;
-  if(get_spectrum(target_band) > get_beat_threshold(target_band)) {
-    beat_is = true ;
-  }
-  return beat_is ;
-}
-
-boolean beat_band_is(int target_band, int target_beat) {
-  if(get_spectrum(target_band) > get_beat_threshold(target_band, target_beat)) {
+boolean beat_band_is(int beat_target, int band_target) {
+  if(get_spectrum(band_target) > get_beat_threshold(beat_target,band_target)) {
     return true ; 
   } else {
     return false ;
@@ -336,73 +331,46 @@ boolean beat_band_is(int target_band, int target_beat) {
 }
 
 
-float get_beat_threshold(int target_band) {
+// get bet threshold
+float get_beat_threshold(int beat_target, int band_target) {
   float alert = Float.MAX_VALUE ;
   // check if the target is on the beat range analyze
-  if(beat_advance_is && beat_band_is[target_band]) {
-    // advance
-    for(int i = 0 ; i < beat_rope.length ; i++) {
-      if(target_band > beat_rope[i].in && target_band < beat_rope[i].out) {
-        alert = beat_rope[i].get_threshold();
-        break ;
-      }
-    }
-  } else if(!beat_advance_is) { 
-    // classic
-    int section = get_beat_section(target_band);
-    if(beat_rope != null && section < beat_rope.length) {
-      alert = beat_rope[section].get_threshold();
-    } else {
-      printErrTempo(60, "method get_beat_threshold(): to use this method init the beat system");
-    }
-    
-  }
-  return alert;
-}
-
-
-float get_beat_threshold(int target_band, int target_beat) {
-  float alert = Float.MAX_VALUE ;
-  // check if the target is on the beat range analyze
-  if(beat_advance_is && beat_band_is[target_band]) {
-    // advance
-    alert = beat_rope[target_beat].get_threshold();
+  if(beat_advance_is && beat_band_is[beat_target][band_target]) {
+    alert = beat_rope[beat_target].get_threshold();
   } 
   return alert;
 }
 
-
-
-
-int get_beat_section(int target_band) {
+// get beat section
+int get_beat_section(int band_target) {
   int section = -1;
   for(int i = 0 ; i < beat_rope.length ;i++) {
-    if(target_band > beat_rope[i].in && target_band < beat_rope[i].out) {
+    if(band_target > beat_rope[i].in && band_target < beat_rope[i].out) {
       section = i ;
       break;
     }
   }
   if(section == -1) {
-    println("method get_beat_section(): No section match with the target",target_band,"the method return -1");
+    println("method get_beat_section(): No section match with the target",band_target,"the method return -1");
   }
   return section ;
 }
 
-int get_beat_in(int target_beat) {
-  if(target_beat < beat_rope.length) {
-    return beat_rope[target_beat].in ;
+int get_beat_in(int beat_target) {
+  if(beat_target < beat_rope.length) {
+    return beat_rope[beat_target].in ;
   } else {
-    printErr("method get_beat_in(): target",target_beat,"not found, method return -1");
+    printErr("method get_beat_in(): target",beat_target,"not found, method return -1");
     return -1;
   }
   
 }
 
-int get_beat_out(int target_beat) {
-  if(target_beat < beat_rope.length) {
-    return beat_rope[target_beat].out;
+int get_beat_out(int beat_target) {
+  if(beat_target < beat_rope.length) {
+    return beat_rope[beat_target].out;
   } else {
-    printErr("method get_beat_out(): target",target_beat,"not found, method return -1");
+    printErr("method get_beat_out(): target",beat_target,"not found, method return -1");
     return -1;
   }
 }

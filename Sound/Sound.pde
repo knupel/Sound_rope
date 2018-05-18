@@ -20,7 +20,7 @@ void setup() {
 
   // classic beat setting
   
-  float [] beat_part_threshold = {3.5,4.5,1.5,.6};
+  float [] beat_part_threshold = {7.5,6.5,1.5,.6};
   // float [] beat_part_threshold = {6.5,4.5,1.5};
   //set_beat(beat_part_sensibility) ;
 
@@ -129,15 +129,17 @@ void show_spectrum_level(Vec2 pos, int size) {
 }
 
 void show_beat_spectrum_level(Vec2 pos, int size) {
-  for(int i = 0; i < band_num() ; i++) {
-    if(beat_band_is(i)) {
-      float pos_x = i *band_size +pos.x;
-      float pos_y = pos.y +abs(size);
-      float size_x = band_size;
-      float size_y = -size;
-      rect (pos_x, pos_y, size_x, size_y);
+  for(int i = 0 ; i < beat_num() ; i++) {
+    for(int k = 0; k < band_num() ; k++) {
+      if(beat_band_is(i,k)) {
+        float pos_x = k *band_size +pos.x;
+        float pos_y = pos.y +abs(size);
+        float size_x = band_size;
+        float size_y = -size;
+        rect (pos_x, pos_y, size_x, size_y);
+      }
     }
-  }
+  }  
 }
 
 
@@ -178,23 +180,26 @@ void build_log_sound() {
 void log_sound(int log_sound_frame, boolean log_beat_only) {
   if(frameCount%log_sound_frame == 0) {
     String time = hour() +" "+ minute() +" "+ second() +" "+ frameCount ;
-    for(int i = 0 ; i < get_spectrum().length ; i++) {
-      if(log_beat_only) {
-        if(beat_band_is(i)) {
-          write_log_sound(time, i, beat_band_is(i), get_beat_section(i), get_beat_threshold(i), get_spectrum(i)) ;
-        }
-      } else {
-        write_log_sound(time, i, beat_band_is(i), get_beat_section(i), get_beat_threshold(i), get_spectrum(i)) ;
-      }     
+    for(int target_beat = 0 ; target_beat < beat_num() ;target_beat++) {
+      for(int target_band = 0 ; target_band < get_spectrum().length ; target_band++) {
+        if(log_beat_only) {
+          if(beat_band_is(target_beat,target_band)) {
+            write_log_sound(time,target_beat,target_band, beat_band_is(target_beat,target_band), get_beat_section(target_band), get_beat_threshold(target_beat,target_band), get_spectrum(target_band)) ;
+          }
+        } else {
+          write_log_sound(time,target_beat,target_band, beat_band_is(target_beat,target_band), get_beat_section(target_band), get_beat_threshold(target_beat,target_band), get_spectrum(target_band)) ;
+        }     
+      }
     }
   }
 }
 
 
-void write_log_sound(String time, int id, boolean beat_is, int section, float threshold, float spectrum) {
+void write_log_sound(String time, int id_beat, int id_band, boolean beat_is, int section, float threshold, float spectrum) {
   TableRow newRow = log_sound.addRow();
   newRow.setString("time", time);
-  newRow.setInt("band id", id);
+  newRow.setInt("beat id", id_beat);
+  newRow.setInt("band id", id_band);
   if(beat_is) {
     newRow.setString("beat", "true");
   } else {
