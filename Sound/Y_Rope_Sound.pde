@@ -1,7 +1,7 @@
 /**
 SOUND rope
 2017-2018
-v 1.1.6
+v 1.2.1
 */
 import ddf.minim.*;
 import ddf.minim.analysis.*;
@@ -501,6 +501,7 @@ boolean tempo_sound_is;
 void init_tempo(boolean advance_tempo) {
   tempo_sound_is = true;
   if(advance_tempo) {
+    printErrTempo(60,"method init_tempo(boolean advance_tempo) is not availble at this time try in an other life");
     if(beat_num() > 0) {
       tempo_rope_ref = new float[beat_num()];
       tempo_rope = new float[beat_num()];
@@ -571,6 +572,11 @@ void count_tempo() {
 
 int get_tempo() {
   return tempo_sound;
+}
+
+int get_tempo(int target_beat) {
+  printErrTempo(60,"method get_tempo(int target_beat) is not availble at this time try in an other life");
+  return 40;
 }
 
 String [] tempo_name = {"silenzio","largo","larghetto","adagio","andante","moderato","allegro","presto","prestissimo"};
