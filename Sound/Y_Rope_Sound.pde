@@ -1,7 +1,7 @@
 /**
 SOUND rope
 2017-2018
-v 1.1.4
+v 1.1.6
 */
 import ddf.minim.*;
 import ddf.minim.analysis.*;
@@ -11,10 +11,19 @@ AudioBuffer source_buffer ;
 FFT fft;
 int bands_max;
 
+/**
+main
+v 0.0.1
+*/
 void set_sound(int max) {
   bands_max = max ;
   minim = new Minim(this);
   input = minim.getLineIn(Minim.STEREO, bands_max);
+}
+
+void update_sound() {
+  if(spectrum_sound_is) update_spectrum();
+  if(tempo_sound_is) update_tempo();
 }
 
 
@@ -149,7 +158,9 @@ float[] spectrum  ;
 int spectrum_bands = 0 ;
 float band_size ;
 float scale_spectrum = .1 ;
+boolean spectrum_sound_is;
 void set_spectrum(int num, float scale) {
+  spectrum_sound_is = true;
   if(num > bands_max) {
     spectrum_bands = bands_max ;
   } else {
@@ -161,7 +172,7 @@ void set_spectrum(int num, float scale) {
   fft = new FFT(input.bufferSize(), input.sampleRate());
   fft.linAverages(spectrum_bands);
 
-  scale_spectrum = scale ;
+  scale_spectrum = scale;
 }
 
 void update_spectrum() {
@@ -176,7 +187,7 @@ void update_spectrum() {
 }
 
 float [] get_spectrum() {
-  float [] f = new float[spectrum_bands] ;
+  float [] f = new float[spectrum_bands];
   for(int i = 0 ; i < spectrum_bands ; i++) {
     f[i] = fft.getBand(i);
   }
@@ -184,9 +195,9 @@ float [] get_spectrum() {
 }
 
 
-float get_spectrum(int target_band){
-  if(target_band < band_num()) {
-    return fft.getBand(target_band);
+float get_spectrum(int band_target){
+  if(band_target < band_num()) {
+    return fft.getBand(band_target);
   } else return Float.NaN; 
 }
 
@@ -198,6 +209,15 @@ int band_num() {
 float get_spectrum_sum() {
   float result = 0 ;
   for (int i = 0 ; i < band_num() ; i++) {
+    result += get_spectrum(i);
+  }
+  return result ;
+}
+
+
+float get_spectrum_beat_sum(int beat_target) {
+  float result = 0 ;
+  for (int i = get_beat_in(beat_target) ; i < get_beat_out(beat_target) ; i++) {
     result += get_spectrum(i);
   }
   return result ;
@@ -474,23 +494,105 @@ class Beat {
 
 /**
 TEMPO
-v 0.2.0
+v 0.3.0
 */
-float [] tempo_rope, tempo_rope_ref ;
-void set_tempo() {
-  if(beat_num() > 0) {
-    tempo_rope_ref = new float[beat_num()];
-    tempo_rope = new float[beat_num()];
-    for(int i = 0 ; i < beat_num() ; i++) {
-      tempo_rope_ref[i] = 0;
-      tempo_rope[i] = 0;
+float [] tempo_rope, tempo_rope_ref;
+boolean tempo_sound_is;
+void init_tempo(boolean advance_tempo) {
+  tempo_sound_is = true;
+  if(advance_tempo) {
+    if(beat_num() > 0) {
+      tempo_rope_ref = new float[beat_num()];
+      tempo_rope = new float[beat_num()];
+      for(int i = 0 ; i < beat_num() ; i++) {
+        tempo_rope_ref[i] = 0;
+        tempo_rope[i] = 0;
+      }
+    } else {
+      printErr("method set_tempo(boolean true) must be used after set_beat() method");
     }
+  }  
+}
+
+
+int time_tempo_count;
+int sec_tempo_count;
+void update_tempo() {
+  if(second() != sec_tempo_count) {
+    time_tempo_count++;
+    sec_tempo_count = second();
+  }
+  compute_tempo();
+}
+
+
+
+int tempo_sound;
+int time_elapse = 0;
+boolean new_tempo_count = true;
+void compute_tempo() {
+  if(sound_plays_is()) {
+    int time = 4;
+    if(time_tempo_count%time == 0 && new_tempo_count) {
+      new_tempo_count = false;
+      time_elapse = 0;
+      tempo_sound = tempo_sound_in_progress;
+      if(tempo_sound < 40) tempo_sound = 40;
+      tempo_sound_in_progress = 0 ;
+    } 
+
+    if(time_tempo_count%time != 0) new_tempo_count = true;
+
+    time_elapse++;
+    count_tempo();
   } else {
-    printErr("method set_tempo() must be used after set_bet() method");
+    tempo_sound_in_progress = 0 ;
+    tempo_sound = 0 ;
   }
   
 }
 
+
+int tempo_sound_in_progress;
+float alert_tempo = 4.5;
+void count_tempo() {
+  float div_step = alert_tempo / get_spectrum().length ;
+  for(int i = 0 ; i < get_spectrum().length ; i++) {
+    // increase sensibility in the high band of the spectrum
+    float minus = ((i *div_step) *.8);
+    float final_alert_tempo = alert_tempo - minus;
+    if(get_spectrum(i) > final_alert_tempo) {
+      tempo_sound_in_progress++;
+      break;
+    }
+  }
+}
+
+
+int get_tempo() {
+  return tempo_sound;
+}
+
+String [] tempo_name = {"silenzio","largo","larghetto","adagio","andante","moderato","allegro","presto","prestissimo"};
+String get_tempo_name() {
+  if(tempo_sound <= 0) return tempo_name[0];
+  else if(tempo_sound > 0 && tempo_sound <= 60) return tempo_name[1];
+  else if(tempo_sound > 60 && tempo_sound <= 66) return tempo_name[2];
+  else if(tempo_sound > 66 && tempo_sound <= 76) return tempo_name[3];
+  else if(tempo_sound > 76 && tempo_sound <= 108) return tempo_name[4];
+  else if(tempo_sound > 108 && tempo_sound <= 120) return tempo_name[5];
+  else if(tempo_sound > 120 && tempo_sound <= 160) return tempo_name[6];
+  else if(tempo_sound > 160 && tempo_sound <= 200) return tempo_name[7];
+  else return tempo_name[7];
+}
+
+
+
+
+
+
+
+/*
 float get_tempo_ref() {
   // I remove the snare because is very bad information and slow down the the speed
   float ref = 0;
@@ -504,19 +606,33 @@ float get_tempo_ref() {
 
 
 
-float get_tempo_ref(int target) {
-  float value = 0;
+float get_tempo_ref(int beat_target) {
   float max = 1.;
   if(tempo_rope_ref != null) {
-    if(target < beat_num()) {
-      if (tempo_rope_ref[target] > max || get_spectrum_sum() < .03) {
-        tempo_rope_ref[target] = max;
-      } 
-    }  
-    return tempo_rope_ref[target];
-  } else return Float.NaN;
+    if(beat_target < beat_num()) {
+      // println(beat_target,tempo_rope_ref[beat_target],get_spectrum_sum(),get_spectrum_beat_sum(beat_target));
+      if (tempo_rope_ref[beat_target] > max || get_spectrum_beat_sum(beat_target) < .03) {
+        tempo_rope_ref[beat_target] = max;
+      } else {
+        // get_spectrum_beat_sum(beat_target)
 
+      }
+    }  
+    return tempo_rope_ref[beat_target];
+  } else {
+    printErrTempo(60,"method get_tempo_ref(): return Float.NaN, need to use method set_tempo()");
+    return Float.NaN;
+  }
 }
+*/
+
+
+
+
+
+
+
+
 
 
 

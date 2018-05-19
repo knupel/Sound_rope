@@ -41,14 +41,20 @@ void setup() {
 
   radius = new float[beat_part_threshold.length];
 
+  init_tempo(false);
+
 }      
 
 
 
-void draw() { 
-  background_rope(r.BLOOD);
-  update_spectrum();
+void draw() {
 
+
+  background_rope(r.BLOOD);
+
+
+  update_sound();
+  show_tempo();
   show_spectrum();
   show_beat();
   show_beat_range();
@@ -56,6 +62,14 @@ void draw() {
   int log_each_frame = 60;
   boolean log_on_beat_only = true;
   // log_sound(log_each_frame, log_on_beat_only) ;
+
+}
+
+
+void show_tempo() {
+  fill(r.WHITE);
+  textSize(24);
+  text("tempo: "+get_tempo_name()+" "+get_tempo(),width/2,50);
 
 }
 
@@ -92,7 +106,7 @@ void show_beat() {
     ellipse(dist *step,height/2,radius[i],radius[i]);
     float text_size = radius[i] *.05;
     if(text_size > 1) {
-      fill(r.BLOOD);
+      fill(r.WHITE);
       textSize(text_size);
       text("beat "+i, dist *step, height/3);
     }
