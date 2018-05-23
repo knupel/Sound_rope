@@ -1,7 +1,7 @@
 /**
 SOUND rope
 2017-2018
-v 1.2.1
+v 1.3.0
 */
 import ddf.minim.*;
 import ddf.minim.analysis.*;
@@ -494,84 +494,15 @@ class Beat {
 
 /**
 TEMPO
-v 0.3.0
+v 0.4.0
 */
-float [] tempo_rope, tempo_rope_ref;
-boolean tempo_sound_is;
-void init_tempo(boolean advance_tempo) {
-  tempo_sound_is = true;
-  if(advance_tempo) {
-    printErrTempo(60,"method init_tempo(boolean advance_tempo) is not availble at this time try in an other life");
-    if(beat_num() > 0) {
-      tempo_rope_ref = new float[beat_num()];
-      tempo_rope = new float[beat_num()];
-      for(int i = 0 ; i < beat_num() ; i++) {
-        tempo_rope_ref[i] = 0;
-        tempo_rope[i] = 0;
-      }
-    } else {
-      printErr("method set_tempo(boolean true) must be used after set_beat() method");
-    }
-  }  
-}
-
-
-int time_tempo_count;
-int sec_tempo_count;
-void update_tempo() {
-  if(second() != sec_tempo_count) {
-    time_tempo_count++;
-    sec_tempo_count = second();
-  }
-  compute_tempo();
-}
-
-
-
-int tempo_sound;
-int time_elapse = 0;
-boolean new_tempo_count = true;
-void compute_tempo() {
-  if(sound_plays_is()) {
-    int time = 4;
-    if(time_tempo_count%time == 0 && new_tempo_count) {
-      new_tempo_count = false;
-      time_elapse = 0;
-      tempo_sound = tempo_sound_in_progress;
-      if(tempo_sound < 40) tempo_sound = 40;
-      tempo_sound_in_progress = 0 ;
-    } 
-
-    if(time_tempo_count%time != 0) new_tempo_count = true;
-
-    time_elapse++;
-    count_tempo();
-  } else {
-    tempo_sound_in_progress = 0 ;
-    tempo_sound = 0 ;
-  }
-  
-}
-
-
-int tempo_sound_in_progress;
-float alert_tempo = 4.5;
-void count_tempo() {
-  float div_step = alert_tempo / get_spectrum().length ;
-  for(int i = 0 ; i < get_spectrum().length ; i++) {
-    // increase sensibility in the high band of the spectrum
-    float minus = ((i *div_step) *.8);
-    float final_alert_tempo = alert_tempo - minus;
-    if(get_spectrum(i) > final_alert_tempo) {
-      tempo_sound_in_progress++;
-      break;
-    }
-  }
-}
-
+/**
+master method
+*/
+String [] tempo_name = {"silenzio","largo","larghetto","adagio","andante","moderato","allegro","presto","prestissimo"};
 
 int get_tempo() {
-  return tempo_sound;
+  return tempo[0].get_tempo();
 }
 
 int get_tempo(int target_beat) {
@@ -579,58 +510,118 @@ int get_tempo(int target_beat) {
   return 40;
 }
 
-String [] tempo_name = {"silenzio","largo","larghetto","adagio","andante","moderato","allegro","presto","prestissimo"};
 String get_tempo_name() {
-  if(tempo_sound <= 0) return tempo_name[0];
-  else if(tempo_sound > 0 && tempo_sound <= 60) return tempo_name[1];
-  else if(tempo_sound > 60 && tempo_sound <= 66) return tempo_name[2];
-  else if(tempo_sound > 66 && tempo_sound <= 76) return tempo_name[3];
-  else if(tempo_sound > 76 && tempo_sound <= 108) return tempo_name[4];
-  else if(tempo_sound > 108 && tempo_sound <= 120) return tempo_name[5];
-  else if(tempo_sound > 120 && tempo_sound <= 160) return tempo_name[6];
-  else if(tempo_sound > 160 && tempo_sound <= 200) return tempo_name[7];
+  if(tempo[0].get_tempo() <= 0) return tempo_name[0];
+  else if(tempo[0].get_tempo() > 0 && tempo[0].get_tempo() <= 60) return tempo_name[1];
+  else if(tempo[0].get_tempo() > 60 && tempo[0].get_tempo() <= 66) return tempo_name[2];
+  else if(tempo[0].get_tempo() > 66 && tempo[0].get_tempo() <= 76) return tempo_name[3];
+  else if(tempo[0].get_tempo() > 76 && tempo[0].get_tempo() <= 108) return tempo_name[4];
+  else if(tempo[0].get_tempo() > 108 && tempo[0].get_tempo() <= 120) return tempo_name[5];
+  else if(tempo[0].get_tempo() > 120 && tempo[0].get_tempo() <= 160) return tempo_name[6];
+  else if(tempo[0].get_tempo() > 160 && tempo[0].get_tempo() <= 200) return tempo_name[7];
   else return tempo_name[7];
 }
 
-
-
-
-
-
-
-/*
-float get_tempo_ref() {
-  // I remove the snare because is very bad information and slow down the the speed
-  float ref = 0;
-  float sum = 0;
-  for(int i = 0 ; i < beat_num() ; i++) {
-    sum += get_tempo_ref(i);
+void update_tempo() {
+  for(int i = 0 ; i < tempo.length ; i++) {
+    tempo[i].update();
   }
-  float div = 1./beat_num();
-  return 1 -(sum *div);
 }
 
 
 
-float get_tempo_ref(int beat_target) {
-  float max = 1.;
-  if(tempo_rope_ref != null) {
-    if(beat_target < beat_num()) {
-      // println(beat_target,tempo_rope_ref[beat_target],get_spectrum_sum(),get_spectrum_beat_sum(beat_target));
-      if (tempo_rope_ref[beat_target] > max || get_spectrum_beat_sum(beat_target) < .03) {
-        tempo_rope_ref[beat_target] = max;
-      } else {
-        // get_spectrum_beat_sum(beat_target)
+Tempo [] tempo;
+boolean tempo_sound_is;
+void init_tempo(boolean advance_tempo) {
+  tempo_sound_is = true;
 
+  if(advance_tempo) {
+    printErrTempo(60,"method init_tempo(boolean advance_tempo) is not availble at this time try in an other life");
+    if(beat_num() > 0) {
+      tempo = new Tempo[beat_num()];
+      for(int i = 0 ; i < beat_num() ; i++) {
+        tempo[i] = new Tempo();
       }
-    }  
-    return tempo_rope_ref[beat_target];
+    } else {
+      printErr("method set_tempo(boolean true) must be used after set_beat() method");
+    }
   } else {
-    printErrTempo(60,"method get_tempo_ref(): return Float.NaN, need to use method set_tempo()");
-    return Float.NaN;
+    tempo = new Tempo[1];
+    tempo[0] = new Tempo();
+  }  
+}
+
+
+/**
+class tempo
+v 0.0.1
+*/
+class Tempo {
+  private int tempo;
+  private int progress;
+  private int time_tempo_count;
+  private int sec_tempo_count;
+  private float alert_tempo = 4.5;
+
+  private void update() {
+    if(second() != sec_tempo_count) {
+      time_tempo_count++;
+      sec_tempo_count = second();
+    }
+    compute_tempo();
+  }
+
+  private int time_elapse = 0;
+  private boolean new_tempo_count = true;
+  private void compute_tempo() {
+    if(sound_plays_is()) {
+      int time = 4;
+      if(time_tempo_count%time == 0 && new_tempo_count) {
+        new_tempo_count = false;
+        time_elapse = 0;
+        tempo = progress;
+        if(tempo < 40) tempo = 40;
+        progress = 0;
+      } 
+
+      if(time_tempo_count%time != 0) new_tempo_count = true;
+
+      time_elapse++;
+      count_tempo();
+    } else {
+      progress = 0 ;
+      tempo = 0 ;
+    } 
+  }
+  
+  private void count_tempo() {
+    float div_step = alert_tempo / get_spectrum().length ;
+    for(int i = 0 ; i < get_spectrum().length ; i++) {
+      // increase sensibility in the high band of the spectrum
+      float minus = ((i *div_step) *.8);
+      float final_alert_tempo = alert_tempo - minus;
+      if(get_spectrum(i) > final_alert_tempo) {
+        progress++;
+        break;
+      }
+    }
+  }
+
+  public int get_tempo() {
+    return tempo;
   }
 }
-*/
+
+
+
+
+
+
+
+
+
+
+
 
 
 
