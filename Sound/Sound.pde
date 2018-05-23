@@ -41,7 +41,7 @@ void setup() {
 
   radius = new float[beat_part_threshold.length];
 
-  init_tempo(false);
+  init_tempo(true);
 
 }      
 
@@ -54,10 +54,11 @@ void draw() {
 
 
   update_sound();
-  show_tempo();
   show_spectrum();
   show_beat();
   show_beat_range();
+  show_tempo();
+
 
   int log_each_frame = 60;
   boolean log_on_beat_only = true;
@@ -67,17 +68,28 @@ void draw() {
 
 
 void show_tempo() {
+  textAlign(LEFT);  
   fill(r.WHITE);
-  textSize(24);
-  text("tempo: "+get_tempo_name()+" "+get_tempo(),width/2,50);
-
+  int size = 14 ;
+  textSize(size);
+  int pos_x = width/6;
+  int pos_y = height/2 +(height/4);
+  // only one tempo is available init_tempo(false);
+  text("tempo global: "+get_tempo_name()+" "+get_tempo(),pos_x,pos_y);
+  // all beat have a tempo catchable init_tempo(true);
+  if(beat_num() > 1) {
+    for(int i = 0 ; i < beat_num();i++) {
+      int rank = i+1;
+      text("tempo "+i+": "+get_tempo_name()+" "+get_tempo(i),pos_x,pos_y +(rank*(size*1.3)));
+    }
+  } 
 }
 
 
 
 void show_beat_range() {
-  stroke(r.ORANGE);
-  strokeWeight(3);
+  stroke(r.WHITE);
+  strokeWeight(1);
   float step = length_analyze / band_num();
   for(int i = 1 ; i < beat_num() -1 ; i++) {
     int line_in_x = int(get_beat_in(i) *step);

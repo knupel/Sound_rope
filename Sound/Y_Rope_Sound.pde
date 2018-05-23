@@ -350,6 +350,10 @@ boolean beat_band_is(int beat_target, int band_target) {
   }
 }
 
+Beat get_beat(int beat_target) {
+  return beat_rope[beat_target];
+}
+
 
 // get bet threshold
 float get_beat_threshold(int beat_target, int band_target) {
@@ -500,14 +504,50 @@ v 0.4.0
 master method
 */
 String [] tempo_name = {"silenzio","largo","larghetto","adagio","andante","moderato","allegro","presto","prestissimo"};
+Tempo [] tempo;
+boolean tempo_sound_is;
+void init_tempo(boolean advance_tempo) {
+  tempo_sound_is = true;
+
+  if(advance_tempo) {
+    printErrTempo(60,"method init_tempo(boolean advance_tempo) is not availble at this time try in an other life");
+    if(beat_num() > 0) {
+      tempo = new Tempo[beat_num()];
+      for(int i = 0 ; i < beat_num() ; i++) {
+        tempo[i] = new Tempo(get_beat(i));
+      }
+    } else {
+      printErrTempo(60,"method set_tempo(boolean true) must be used after set_beat() method");
+    }
+  } else {
+    tempo = new Tempo[1];
+    tempo[0] = new Tempo();
+  }  
+}
+
+
+
+
 
 int get_tempo() {
-  return tempo[0].get_tempo();
+  if(tempo.length > 1) {
+    int sum = 0 ; 
+    for(int i = 0 ; i < tempo.length ; i++) {
+      sum += tempo[i].get_tempo();
+    }
+    return sum / tempo.length;
+  } else {
+    return tempo[0].get_tempo();
+  } 
 }
 
 int get_tempo(int target_beat) {
-  printErrTempo(60,"method get_tempo(int target_beat) is not availble at this time try in an other life");
-  return 40;
+  if(tempo.length > 1 && target_beat < tempo.length) {
+    return tempo[target_beat].get_tempo();
+  } else {
+    printErrTempo(60,"method get_tempo(int target_beat) targe_beat is out of beat num, instead the method use the global tempo");
+    return tempo[0].get_tempo();
+  } 
 }
 
 String get_tempo_name() {
@@ -530,30 +570,11 @@ void update_tempo() {
 
 
 
-Tempo [] tempo;
-boolean tempo_sound_is;
-void init_tempo(boolean advance_tempo) {
-  tempo_sound_is = true;
 
-  if(advance_tempo) {
-    printErrTempo(60,"method init_tempo(boolean advance_tempo) is not availble at this time try in an other life");
-    if(beat_num() > 0) {
-      tempo = new Tempo[beat_num()];
-      for(int i = 0 ; i < beat_num() ; i++) {
-        tempo[i] = new Tempo();
-      }
-    } else {
-      printErr("method set_tempo(boolean true) must be used after set_beat() method");
-    }
-  } else {
-    tempo = new Tempo[1];
-    tempo[0] = new Tempo();
-  }  
-}
 
 
 /**
-class tempo
+class Tempo
 v 0.0.1
 */
 class Tempo {
@@ -562,6 +583,17 @@ class Tempo {
   private int time_tempo_count;
   private int sec_tempo_count;
   private float alert_tempo = 4.5;
+  private int in, out;
+
+  public Tempo (Beat b) {
+    this.in = b.get_in();
+    this.out =  b.get_out();
+  }
+
+  public Tempo () {
+    this.in = 0 ;
+    this.out = get_spectrum().length;
+  }
 
   private void update() {
     if(second() != sec_tempo_count) {
@@ -596,11 +628,11 @@ class Tempo {
   
   private void count_tempo() {
     float div_step = alert_tempo / get_spectrum().length ;
-    for(int i = 0 ; i < get_spectrum().length ; i++) {
+    for(int target_band = in ; target_band < out ; target_band++) {
       // increase sensibility in the high band of the spectrum
-      float minus = ((i *div_step) *.8);
+      float minus = ((target_band *div_step) *.8);
       float final_alert_tempo = alert_tempo - minus;
-      if(get_spectrum(i) > final_alert_tempo) {
+      if(get_spectrum(target_band) > final_alert_tempo) {
         progress++;
         break;
       }
