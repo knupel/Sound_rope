@@ -91,10 +91,10 @@ float get_beat_alert(int target) ;
 boolean beat_band_is(int target_band) ;
 >return true is there is a beat on this band
 
-int get_beat_in(int which_beat) 
+int get_section_in(int which_beat) 
 >return the entry band of this beat
 
-int get_beat_out(int which_beat) {
+int get_section_out(int which_beat) {
 >return the exit band of this beat
 
 int beat_num()
