@@ -37,7 +37,13 @@ void setup() {
 
   radius = new float[beat_part_threshold.length];
 
-  init_tempo(true);
+  float [] tempo_threshold = new float[4];
+  tempo_threshold[0] = 4.5;
+  tempo_threshold[1] = 3.5;
+  tempo_threshold[2] = 2.5;
+  tempo_threshold[3] = .5;
+  set_tempo(tempo_threshold);
+  // set_tempo();
 }      
 
 
@@ -72,7 +78,7 @@ void show_tempo() {
   if(section_num() > 1) {
     for(int i = 0 ; i < section_num();i++) {
       int rank = i+1;
-      text("tempo "+i+": "+get_tempo_name()+" "+get_tempo(i),pos_x,pos_y +(rank*(size*1.3)));
+      text("Tempo "+i+" threshold "+ get_tempo_threshold(i)+" – " +get_tempo_name()+" "+get_tempo(i),pos_x,pos_y +(rank*(size*1.3)));
     }
   } 
 }
@@ -115,6 +121,22 @@ void show_beat() {
       fill(r.WHITE);
       textSize(text_size);
       text("beat "+i, dist *step, height/3);
+    }
+  }
+
+
+
+  textAlign(LEFT);  
+  fill(r.WHITE);
+  int size = 14 ;
+  textSize(size);
+  int pos_x = width/6;
+  int pos_y = height/6;
+
+  if(section_num() > 1) {
+    for(int i = 0 ; i < section_num();i++) {
+      int rank = i+1;
+      text("Beat "+i+" threshold "+ get_beat_threshold(i)+" : " +beat_is(i),pos_x,pos_y +(rank*(size*1.3)));
     }
   }
 }

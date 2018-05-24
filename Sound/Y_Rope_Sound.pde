@@ -9,16 +9,16 @@ Minim minim;
 AudioInput input;
 AudioBuffer source_buffer ;
 FFT fft;
-int bands_max;
+int analyze_length;
 
 /**
 main
 v 0.0.1
 */
 void set_sound(int max) {
-  bands_max = max ;
+  analyze_length = max ;
   minim = new Minim(this);
-  input = minim.getLineIn(Minim.STEREO, bands_max);
+  input = minim.getLineIn(Minim.STEREO, analyze_length);
 }
 
 void update_sound() {
@@ -161,13 +161,13 @@ float scale_spectrum = .1 ;
 boolean spectrum_sound_is;
 void set_spectrum(int num, float scale) {
   spectrum_sound_is = true;
-  if(num > bands_max) {
-    spectrum_bands = bands_max ;
+  if(num > analyze_length) {
+    spectrum_bands = analyze_length ;
   } else {
     spectrum_bands = num ;
   }
 
-  band_size = bands_max / spectrum_bands ;
+  band_size = analyze_length / spectrum_bands ;
   spectrum = new float [spectrum_bands] ;
   fft = new FFT(input.bufferSize(), input.sampleRate());
   fft.linAverages(spectrum_bands);
@@ -543,12 +543,17 @@ Section get_beat(int beat_target) {
 
 // get bet threshold
 float get_beat_threshold(int section_target, int band_target) {
-  float alert = Float.MAX_VALUE ;
+  float threshold = Float.MAX_VALUE ;
   // check if the target is on the beat range analyze
   if(beat_advance_is && beat_band_is[section_target][band_target]) {
-    alert = section_band[section_target].get_threshold();
+    threshold = section_band[section_target].get_threshold();
   } 
-  return alert;
+  return threshold;
+}
+
+
+float get_beat_threshold(int section_target) {
+  return section_band[section_target].get_threshold();
 }
 
 
@@ -594,23 +599,28 @@ master method
 String [] tempo_name = {"silenzio","largo","larghetto","adagio","andante","moderato","allegro","presto","prestissimo"};
 Tempo [] tempo;
 boolean tempo_sound_is;
-void init_tempo(boolean advance_tempo) {
-  tempo_sound_is = true;
 
-  if(advance_tempo) {
-    printErrTempo(60,"method init_tempo(boolean advance_tempo) is not availble at this time try in an other life");
-    if(section_num() > 0) {
+void set_tempo() {
+  set_tempo(null);
+}
+
+void set_tempo(float... threshold) {
+  tempo_sound_is = true;
+  if(threshold != null) {
+    // printErrTempo(60,"method set_tempo() is not availble at this time try in an other life");
+    if(section_num() > 0 && threshold.length <= section_num()) {
       tempo = new Tempo[section_num()];
       for(int i = 0 ; i < section_num() ; i++) {
         tempo[i] = new Tempo(get_beat(i));
+        tempo[i].set_threshold(threshold[i]);
       }
     } else {
-      printErrTempo(60,"method set_tempo(boolean true) must be used after set_beat() method");
+      printErrTempo(60,"method set_tempo(boolean true) must be used after set_section() method");
     }
   } else {
     tempo = new Tempo[1];
     tempo[0] = new Tempo();
-  }  
+  }
 }
 
 
@@ -626,11 +636,15 @@ int get_tempo() {
   } 
 }
 
-int get_tempo(int target_beat) {
-  if(tempo.length > 1 && target_beat < tempo.length) {
-    return tempo[target_beat].get_tempo();
+float get_tempo_threshold(int target_tempo) {
+  return tempo[target_tempo].get_threshold();
+}
+
+int get_tempo(int target_tempo) {
+  if(tempo.length > 1 && target_tempo < tempo.length) {
+    return tempo[target_tempo].get_tempo();
   } else {
-    printErrTempo(60,"method get_tempo(int target_beat) targe_beat is out of beat num, instead the method use the global tempo");
+    printErrTempo(60,"method get_tempo(int target_tempo): target_tempo",target_tempo," is out of tempo num, instead the method use the global tempo");
     return tempo[0].get_tempo();
   } 
 }
@@ -667,18 +681,21 @@ class Tempo {
   private int progress;
   private int time_tempo_count;
   private int sec_tempo_count;
-  private float alert_tempo = 4.5;
+  private float threshold;
   private int in, out;
-
-  public Tempo (Section s) {
-    this.in = s.get_in();
-    this.out =  s.get_out();
-  }
 
   public Tempo () {
     this.in = 0 ;
     this.out = get_spectrum().length;
+    set_threshold(4.5);
   }
+
+  public Tempo (Section s) {
+    this.in = s.get_in();
+    this.out =  s.get_out();
+    set_threshold(4.5);
+  }
+
 
   private void update() {
     if(second() != sec_tempo_count) {
@@ -712,17 +729,23 @@ class Tempo {
   }
   
   private void count_tempo() {
-    float div_step = alert_tempo / get_spectrum().length ;
     for(int target_band = in ; target_band < out ; target_band++) {
-      // increase sensibility in the high band of the spectrum
-      float minus = ((target_band *div_step) *.8);
-      float final_alert_tempo = alert_tempo - minus;
-      if(get_spectrum(target_band) > final_alert_tempo) {
+      if(get_spectrum(target_band) > threshold) {
         progress++;
         break;
       }
     }
   }
+
+
+  public void set_threshold(float threshold) {
+    this.threshold = threshold;
+  }
+
+  public float get_threshold() {
+    return threshold;
+  }
+
 
   public int get_tempo() {
     return tempo;
