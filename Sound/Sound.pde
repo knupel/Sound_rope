@@ -27,7 +27,12 @@ void setup() {
 
 
   int [] beat_section_id = new int[section_in_out.length] ;
-  float [] beat_part_threshold = {7.5,6.5,1.5,.6};
+  float [] beat_part_threshold = new float[section_in_out.length];
+  beat_part_threshold[0] = 7.5;
+  beat_part_threshold[1] = 6.5;
+  beat_part_threshold[2] = 1.5;
+  beat_part_threshold[3] = .6;
+
   beat_section_id[0] = 0;
   beat_section_id[1] = 1;
   beat_section_id[2] = 2;
@@ -37,7 +42,7 @@ void setup() {
 
   radius = new float[beat_part_threshold.length];
 
-  float [] tempo_threshold = new float[4];
+  float [] tempo_threshold = new float[section_in_out.length];
   tempo_threshold[0] = 4.5;
   tempo_threshold[1] = 3.5;
   tempo_threshold[2] = 2.5;
@@ -123,8 +128,6 @@ void show_beat() {
       text("beat "+i, dist *step, height/3);
     }
   }
-
-
 
   textAlign(LEFT);  
   fill(r.WHITE);
