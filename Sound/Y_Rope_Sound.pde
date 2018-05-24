@@ -1,7 +1,7 @@
 /**
 SOUND rope
 2017-2018
-v 1.3.1
+v 1.3.2
 */
 import ddf.minim.*;
 import ddf.minim.analysis.*;
@@ -591,13 +591,13 @@ float get_beat_threshold(int section_target) {
 
 /**
 TEMPO
-v 0.4.0
+v 0.4.1
 */
 /**
 master method
 */
 String [] tempo_name = {"silenzio","largo","larghetto","adagio","andante","moderato","allegro","presto","prestissimo"};
-Tempo [] tempo;
+Tempo [] tempo_sound;
 boolean tempo_sound_is;
 
 void set_tempo() {
@@ -609,61 +609,61 @@ void set_tempo(float... threshold) {
   if(threshold != null) {
     // printErrTempo(60,"method set_tempo() is not availble at this time try in an other life");
     if(section_num() > 0 && threshold.length <= section_num()) {
-      tempo = new Tempo[section_num()];
+      tempo_sound = new Tempo[section_num()];
       for(int i = 0 ; i < section_num() ; i++) {
-        tempo[i] = new Tempo(get_beat(i));
-        tempo[i].set_threshold(threshold[i]);
+        tempo_sound[i] = new Tempo(get_beat(i));
+        tempo_sound[i].set_threshold(threshold[i]);
       }
     } else {
       printErrTempo(60,"method set_tempo(boolean true) must be used after set_section() method");
     }
   } else {
-    tempo = new Tempo[1];
-    tempo[0] = new Tempo();
+    tempo_sound = new Tempo[1];
+    tempo_sound[0] = new Tempo();
   }
 }
 
 
 int get_tempo() {
-  if(tempo.length > 1) {
+  if(tempo_sound.length > 1) {
     int sum = 0 ; 
-    for(int i = 0 ; i < tempo.length ; i++) {
-      sum += tempo[i].get_tempo();
+    for(int i = 0 ; i < tempo_sound.length ; i++) {
+      sum += tempo_sound[i].get_tempo();
     }
-    return sum / tempo.length;
+    return sum / tempo_sound.length;
   } else {
-    return tempo[0].get_tempo();
+    return tempo_sound[0].get_tempo();
   } 
 }
 
 float get_tempo_threshold(int target_tempo) {
-  return tempo[target_tempo].get_threshold();
+  return tempo_sound[target_tempo].get_threshold();
 }
 
 int get_tempo(int target_tempo) {
-  if(tempo.length > 1 && target_tempo < tempo.length) {
-    return tempo[target_tempo].get_tempo();
+  if(tempo_sound.length > 1 && target_tempo < tempo_sound.length) {
+    return tempo_sound[target_tempo].get_tempo();
   } else {
     printErrTempo(60,"method get_tempo(int target_tempo): target_tempo",target_tempo," is out of tempo num, instead the method use the global tempo");
-    return tempo[0].get_tempo();
+    return tempo_sound[0].get_tempo();
   } 
 }
 
 String get_tempo_name() {
-  if(tempo[0].get_tempo() <= 0) return tempo_name[0];
-  else if(tempo[0].get_tempo() > 0 && tempo[0].get_tempo() <= 60) return tempo_name[1];
-  else if(tempo[0].get_tempo() > 60 && tempo[0].get_tempo() <= 66) return tempo_name[2];
-  else if(tempo[0].get_tempo() > 66 && tempo[0].get_tempo() <= 76) return tempo_name[3];
-  else if(tempo[0].get_tempo() > 76 && tempo[0].get_tempo() <= 108) return tempo_name[4];
-  else if(tempo[0].get_tempo() > 108 && tempo[0].get_tempo() <= 120) return tempo_name[5];
-  else if(tempo[0].get_tempo() > 120 && tempo[0].get_tempo() <= 160) return tempo_name[6];
-  else if(tempo[0].get_tempo() > 160 && tempo[0].get_tempo() <= 200) return tempo_name[7];
+  if(tempo_sound[0].get_tempo() <= 0) return tempo_name[0];
+  else if(tempo_sound[0].get_tempo() > 0 && tempo_sound[0].get_tempo() <= 60) return tempo_name[1];
+  else if(tempo_sound[0].get_tempo() > 60 && tempo_sound[0].get_tempo() <= 66) return tempo_name[2];
+  else if(tempo_sound[0].get_tempo() > 66 && tempo_sound[0].get_tempo() <= 76) return tempo_name[3];
+  else if(tempo_sound[0].get_tempo() > 76 && tempo_sound[0].get_tempo() <= 108) return tempo_name[4];
+  else if(tempo_sound[0].get_tempo() > 108 && tempo_sound[0].get_tempo() <= 120) return tempo_name[5];
+  else if(tempo_sound[0].get_tempo() > 120 && tempo_sound[0].get_tempo() <= 160) return tempo_name[6];
+  else if(tempo_sound[0].get_tempo() > 160 && tempo_sound[0].get_tempo() <= 200) return tempo_name[7];
   else return tempo_name[7];
 }
 
 void update_tempo() {
-  for(int i = 0 ; i < tempo.length ; i++) {
-    tempo[i].update();
+  for(int i = 0 ; i < tempo_sound.length ; i++) {
+    tempo_sound[i].update();
   }
 }
 
