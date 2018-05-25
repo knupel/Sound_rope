@@ -1,15 +1,23 @@
 /**
-SOUND rope
-2017-2018
-v 1.3.2
+SOUNDA Rope
+for SOUNDA > SOUND-Analyze
+v 1.4.2
+* Copyleft (c) 2017-2018
+* Stan le Punk > http://stanlepunk.xyz/
+* @author Stan le Punk
+* @see https://github.com/StanLepunK/Sound_rope
+
+* Class Sounda use Minim library
+* more information about this library 
+* @author Damien Quartz
+* @see https://github.com/ddf/Minim
 */
 
 
 
 /**
 Class Sounda
-2018-2018
-v 0.0.1
+v 0.0.3
 */
 public class Sounda {
   private int analyze_length;
@@ -112,7 +120,7 @@ public class Sounda {
   }
 
 
-  public boolean sound_plays_is() {
+  public boolean sound_is() {
     if(get_time_track() > .2 ) return true ; else return false;
   }
 
@@ -829,7 +837,7 @@ public class Sounda {
     private int time_elapse = 0;
     private boolean new_tempo_count = true;
     private void compute_tempo() {
-      if(sound_plays_is()) {
+      if(sound_is()) {
         int time = 4;
         if(time_tempo_count%time == 0 && new_tempo_count) {
           new_tempo_count = false;
