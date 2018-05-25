@@ -3,12 +3,7 @@ SOUND rope
 2017-2018
 v 1.3.2
 */
-import ddf.minim.*;
-import ddf.minim.analysis.*;
-Minim minim;
-AudioInput input;
-AudioBuffer source_buffer ;
-FFT fft;
+
 
 
 /**
@@ -18,6 +13,13 @@ v 0.0.1
 */
 public class Sounda {
   private int analyze_length;
+  
+  import ddf.minim.*;
+  import ddf.minim.analysis.*;
+  Minim minim;
+  AudioInput input;
+  AudioBuffer source_buffer;
+  FFT fft;
 
   public Sounda(int analyze_length) {
     this.analyze_length = analyze_length;
@@ -31,6 +33,14 @@ public class Sounda {
   public void update() {
     if(spectrum_is) update_spectrum();
     if(tempo_is) update_tempo();
+  }
+  
+  /**
+  stop minim
+  */
+  public void stop() {
+    input.close() ;
+    minim.stop() ;
   }
 
   /**
@@ -872,14 +882,7 @@ public class Sounda {
 
 
 
-/**
-STOP
-*/
-void stop() {
-  input.close() ;
-  minim.stop() ;
-  super.stop() ;
-}
+
 
 
 

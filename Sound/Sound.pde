@@ -1,3 +1,11 @@
+/*
+import ddf.minim.*;
+import ddf.minim.analysis.*;
+*/
+
+
+
+
 
 void settings() {
   size(100, 100);
@@ -17,6 +25,10 @@ void draw() {
   sound_system_draw();
 
 }
+
+
+
+
 
 
 

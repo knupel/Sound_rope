@@ -1,6 +1,17 @@
 Sounda sounda ;
-float [] radius;
+/**
+STOP
+*/
+void stop() {
+  sounda.stop();
+  super.stop();
+}
 
+
+/**
+setup
+*/
+float [] radius;
 void sound_system_setup() {
 	build_log_sound() ;
 
