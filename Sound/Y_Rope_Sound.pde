@@ -19,7 +19,7 @@ v 1.4.2
 Class Sounda
 v 0.0.3
 */
-public class Sounda {
+public class Sounda implements Rope_Constants {
   private int analyze_length;
   
   import ddf.minim.*;
@@ -55,32 +55,62 @@ public class Sounda {
   MISC
   v 0.2.0
   */
-  int target_sound = 1 ;
-  public float get_right(float scale) {
-    return input.right.get(target_sound) *scale; 
-  }
-
-  public float get_left(float scale) {
-    return input.left.get(target_sound) *scale; 
-  }
-
-  public float get_mix(float scale) {
-    return input.mix.get(target_sound) *scale; 
-  }
-
+  // int target_sound = 1 ;
+  
   public float get_right() {
-    return input.right.get(target_sound); 
+    float sum = 0 ; 
+    for(int i = 0 ; i < get_buffer_size() ; i++) {
+      sum += get_right(i);
+    }
+    return sum / get_buffer_size(); 
   }
 
   public float get_left() {
-    return input.left.get(target_sound); 
+    float sum = 0 ; 
+    for(int i = 0 ; i < get_buffer_size() ; i++) {
+      sum += get_left(i);
+    }
+    return sum / get_buffer_size(); 
   }
 
   public float get_mix() {
-    return input.mix.get(target_sound); 
+    float sum = 0 ; 
+    for(int i = 0 ; i < get_buffer_size() ; i++) {
+      sum += get_mix(i);
+    }
+    return sum / get_buffer_size(); 
+  }
+  
+
+  public float get_right(int target_sample) {
+    if(target_sample < get_buffer_size()) {
+       return input.right.get(target_sample);
+    } else {
+      printErrTempo(60, "method get_right("+target_sample+"): no target match in buffer, instead target 0 is use");
+      return input.right.get(0);
+    }
+    
   }
 
-  public int get_analyze() {
+  public float get_left(int target_sample) {
+    if(target_sample < get_buffer_size()) {
+      return input.left.get(target_sample); 
+    } else {
+      printErrTempo(60, "method get_left("+target_sample+"): no target match in buffer, instead target 0 is use");
+      return input.left.get(0);
+    }
+  }
+
+  public float get_mix(int target_sample) {
+    if(target_sample < get_buffer_size()) {
+      return input.mix.get(target_sample);
+    } else {
+      printErrTempo(60, "method get_mix("+target_sample+"): no target match in buffer, instead target 0 is use");
+      return input.mix.get(0);
+    }
+  }
+
+  public int get_buffer_size() {
     return analyze_length;
   }
 
@@ -128,7 +158,6 @@ public class Sounda {
   /**
   set buffer
   */
-  int MIX = 41 ;
   void audio_buffer(int canal) {
     switch(canal) {
       case RIGHT :

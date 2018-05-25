@@ -14,7 +14,7 @@ void settings() {
 
 void setup() {
   sound_system_setup();
-  surface.setSize(sounda.get_analyze(), sounda.get_analyze()) ;
+  surface.setSize(sounda.get_buffer_size(), sounda.get_buffer_size());
   background(0);
 }      
 

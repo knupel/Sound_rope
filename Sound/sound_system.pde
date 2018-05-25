@@ -114,7 +114,7 @@ void show_tempo() {
 void show_beat_range() {
   stroke(r.WHITE);
   strokeWeight(1);
-  float step = sounda.get_analyze() / sounda.band_num();
+  float step = sounda.get_buffer_size() / sounda.band_num();
   for(int i = 1 ; i < sounda.section_num() -1 ; i++) {
     int line_in_x = int(sounda.get_section_in(i) *step);
     line(line_in_x, 0, line_in_x, height) ;
