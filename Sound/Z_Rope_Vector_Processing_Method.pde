@@ -1,7 +1,7 @@
 /**
 ROPE METHOD
 v 1.3.2.0
-* Copyleft (c) 2014-2017 
+* Copyleft (c) 2014-2017
 * Stan le Punk > http://stanlepunk.xyz/
 Processing and Vec, iVec and bVec method
 the idea here is create method directly insprating from Processing to simplify the coder life
@@ -434,7 +434,7 @@ void text(String s, iVec pos) {
   } else if(pos instanceof iVec2) {
     Vec3 temp_pos = Vec3(pos.x, pos.y, pos.z);
     text(s, temp_pos);
-  }  
+  }
 }
 
 void text(char c, iVec pos) {
@@ -445,7 +445,7 @@ void text(char c, iVec pos) {
   } else if(pos instanceof iVec2) {
     Vec3 temp_pos = Vec3(pos.x, pos.y, pos.z);
     text(c, temp_pos);
-  }  
+  }
 }
 
 void text(int num, iVec pos) {
@@ -456,7 +456,7 @@ void text(int num, iVec pos) {
   } else if(pos instanceof iVec2) {
     Vec3 temp_pos = Vec3(pos.x, pos.y, pos.z);
     text(num, temp_pos);
-  }  
+  }
 }
 
 void text(float num, iVec pos) {
@@ -467,7 +467,7 @@ void text(float num, iVec pos) {
   } else if(pos instanceof iVec2) {
     Vec3 temp_pos = Vec3(pos.x, pos.y, pos.z);
     text(num, temp_pos);
-  }  
+  }
 }
 
 
@@ -627,7 +627,7 @@ void start_matrix_3D(iVec pos, iVec3 dir_cart) {
   } else if(pos instanceof iVec3) {
     Vec3 temp_pos = Vec3(pos.x, pos.y, pos.z);
     start_matrix_3D(temp_pos, temp_dir_cart);
-  } 
+  }
 }
 
 void start_matrix_3D(iVec pos, iVec2 dir_polar) {
@@ -664,7 +664,7 @@ void start_matrix() {
 
 
 /**
-Matrix 
+Matrix
 deprecated
 */
 void matrix_3D_start(Vec3 pos, Vec3 dir_cart) {

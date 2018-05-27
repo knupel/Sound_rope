@@ -1,5 +1,5 @@
 /**
-ROPE - Romanesco processing environment – 
+ROPE - Romanesco processing environment –
 * Copyleft (c) 2014-2018
 * Stan le Punk > http://stanlepunk.xyz/
 ROPE core
@@ -15,7 +15,7 @@ import java.util.Random;
 import java.awt.image.BufferedImage;
 
 import java.awt.Color;
-import java.awt.Font; 
+import java.awt.Font;
 import java.awt.image.BufferedImage ;
 import java.awt.FontMetrics;
 
@@ -134,5 +134,3 @@ public class ROPE_color implements Rope_Constants {
 		return component;
 	}
 }
-
-

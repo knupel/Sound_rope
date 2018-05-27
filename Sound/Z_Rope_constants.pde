@@ -1,5 +1,5 @@
 /**
-ROPE - Romanesco processing environment – 
+ROPE - Romanesco processing environment –
 * Copyleft (c) 2014-2018
 * Stan le Punk > http://stanlepunk.xyz/
 CONSTANTS ROPE
@@ -49,7 +49,7 @@ public interface Rope_Constants {
 	*/
 	static final int PIXEL = 800;
 	static final int STAR = 810;
-  
+
   /**
   COLOUR
   */
@@ -59,11 +59,11 @@ public interface Rope_Constants {
 	static final int BLANC = -1;
 	// static final int GRAY = 4050 ; // this already existe
 	// static final int GRAY_MEDIUM = -8618884;
-	
+
 	// GRAY_1 > HSB,1,1,1 > color(0,0,.1);
 	static final int GRAY_1 = -15132391;
 	static final int GRIS_1 = -15132391;
-	// GRAY_2 > HSB,1,1,1 > color(0,0,.2);	
+	// GRAY_2 > HSB,1,1,1 > color(0,0,.2);
 	static final int GRAY_2 = -13421773;
 	static final int GRIS_2 = -13421773;
 	// GRAY_3 > HSB,1,1,1 > color(0,0,.3);
@@ -96,10 +96,10 @@ public interface Rope_Constants {
 	static final int ROUGE = -65536;
 	// BLOOD > HSB,1,1,1 > color(0,1,.75);
 	static final int BLOOD = -4259840;
-	static final int SANG = -4259840; 
+	static final int SANG = -4259840;
 	// CARMINE > HSB,1,1,1 > color(0,1,.55);
 	static final int CARMINE = -7602176;
-	static final int CARMIN = -7602176; 
+	static final int CARMIN = -7602176;
 	// ORANGE > HSB,1,1,1 > color(.08,1,1);
 	static final int ORANGE = -34304;
 	// OR > HSB,1,1,1 > color(0.12 1.0 1.0);
@@ -115,7 +115,7 @@ public interface Rope_Constants {
 	static public int CYAN = -16711681;
 	// BLUE > HSB,1,1,1 > color(.6503,1,1);
 	static final int BLUE = -16770561;
-	static final int BLEU = -16770561;  
+	static final int BLEU = -16770561;
   // MAGENTA > HSB,1,1,1 > color(.8333,1,1);
 	static public int MAGENTA = -65281;
   // PINK > HSB,1,1,1 > color(.86,.65,1);
@@ -123,7 +123,7 @@ public interface Rope_Constants {
 	static public int ROSE = -42524;
 	// PURPLE > HSB,1,1,1 > color(.7496,1,1);
 	static public int PURPLE = -8453889;
-	static public int VIOLET = -8453889;  
+	static public int VIOLET = -8453889;
   /**
   String Constants
   */
@@ -147,16 +147,3 @@ public interface Rope_Constants {
   static final String TRIG_3 = "POW_SIN_PI" ;
   static final String TRIG_4 = "SIN_TAN_POW_SIN" ;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-

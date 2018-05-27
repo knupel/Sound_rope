@@ -36,7 +36,7 @@ void sound_system_setup() {
   beat_section_id[1] = 1;
   beat_section_id[2] = 2;
   beat_section_id[3] = 3;
-  
+
   float [] beat_part_threshold = new float[section_in_out.length];
   beat_part_threshold[0] = 7.5;
   beat_part_threshold[1] = 6.5;
@@ -90,7 +90,7 @@ void sound_system_draw() {
 
 
 void show_tempo() {
-  textAlign(LEFT);  
+  textAlign(LEFT);
   fill(r.WHITE);
   int size = 14 ;
   textSize(size);
@@ -104,7 +104,7 @@ void show_tempo() {
       int rank = i+1;
       text("Tempo "+i+" threshold "+ sounda.get_tempo_threshold(i)+" – " +sounda.get_tempo_name(i)+" "+sounda.get_tempo(i),pos_x,pos_y +(rank*(size*1.3)));
     }
-  } 
+  }
 }
 
 
@@ -114,7 +114,7 @@ void show_tempo() {
 void show_beat_range() {
   stroke(r.WHITE);
   strokeWeight(1);
-  float step = sounda.get_buffer_size() / sounda.band_num();
+  float step = sounda.buffer_size() / sounda.band_num();
   for(int i = 1 ; i < sounda.section_num() -1 ; i++) {
     int line_in_x = int(sounda.get_section_in(i) *step);
     line(line_in_x, 0, line_in_x, height) ;
@@ -134,7 +134,7 @@ void show_beat() {
     radius[i] *= .95;
   }
   float dist = width /5;
-  textAlign(CENTER);  
+  textAlign(CENTER);
   float min_text_size = 1.;
   for(int i = 0 ; i < radius.length ;i++) {
     int step = (i+1);
@@ -148,7 +148,7 @@ void show_beat() {
     }
   }
 
-  textAlign(LEFT);  
+  textAlign(LEFT);
   fill(r.WHITE);
   int size = 14 ;
   textSize(size);
@@ -172,7 +172,7 @@ void show_spectrum() {
   fill(r.WHITE);
   show_beat_spectrum_level(Vec2(0), height/2);
   fill(r.BLACK);
-  show_spectrum_level(Vec2(0),height/2); 
+  show_spectrum_level(Vec2(0),height/2);
 
   sounda.audio_buffer(LEFT);
   fill(r.WHITE);
@@ -181,7 +181,7 @@ void show_spectrum() {
   show_spectrum_level(Vec2(0),-height/2);
 
 
-  textAlign(LEFT);  
+  textAlign(LEFT);
   fill(r.WHITE);
   int size = 14 ;
   textSize(size);
@@ -201,7 +201,7 @@ void show_spectrum_level(Vec2 pos, int size) {
     float size_x = band_width ;
     float size_y = -(sounda.get_spectrum(i) *size) ;
     rect(pos_x, pos_y, size_x, size_y) ;
-  } 
+  }
 }
 
 void show_beat_spectrum_level(Vec2 pos, int size) {
@@ -216,7 +216,7 @@ void show_beat_spectrum_level(Vec2 pos, int size) {
         rect (pos_x, pos_y, size_x, size_y);
       }
     }
-  }  
+  }
 }
 
 
@@ -263,7 +263,7 @@ void log_sound(int log_sound_frame, boolean log_beat_only) {
           }
         } else {
           write_log_sound(time,target_beat,target_band, sounda.beat_band_is(target_beat,target_band), sounda.get_section(target_band), sounda.get_beat_threshold(target_beat,target_band), sounda.get_spectrum(target_band)) ;
-        }     
+        }
       }
     }
   }

@@ -8,7 +8,7 @@ v 1.4.2
 * @see https://github.com/StanLepunK/Sound_rope
 
 * Class Sounda use Minim library
-* more information about this library 
+* more information about this library
 * @author Damien Quartz
 * @see https://github.com/ddf/Minim
 */
@@ -21,7 +21,7 @@ v 0.0.3
 */
 public class Sounda implements Rope_Constants {
   private int analyze_length;
-  
+
   import ddf.minim.*;
   import ddf.minim.analysis.*;
   Minim minim;
@@ -42,7 +42,7 @@ public class Sounda implements Rope_Constants {
     if(spectrum_is) update_spectrum();
     if(tempo_is) update_tempo();
   }
-  
+
   /**
   stop minim
   */
@@ -56,45 +56,45 @@ public class Sounda implements Rope_Constants {
   v 0.2.0
   */
   // int target_sound = 1 ;
-  
+
   public float get_right() {
-    float sum = 0 ; 
-    for(int i = 0 ; i < get_buffer_size() ; i++) {
+    float sum = 0 ;
+    for(int i = 0 ; i < buffer_size() ; i++) {
       sum += get_right(i);
     }
-    return sum / get_buffer_size(); 
+    return sum / buffer_size();
   }
 
   public float get_left() {
-    float sum = 0 ; 
-    for(int i = 0 ; i < get_buffer_size() ; i++) {
+    float sum = 0 ;
+    for(int i = 0 ; i < buffer_size() ; i++) {
       sum += get_left(i);
     }
-    return sum / get_buffer_size(); 
+    return sum / buffer_size();
   }
 
   public float get_mix() {
-    float sum = 0 ; 
-    for(int i = 0 ; i < get_buffer_size() ; i++) {
+    float sum = 0 ;
+    for(int i = 0 ; i < buffer_size() ; i++) {
       sum += get_mix(i);
     }
-    return sum / get_buffer_size(); 
+    return sum / buffer_size();
   }
-  
+
 
   public float get_right(int target_sample) {
-    if(target_sample < get_buffer_size()) {
+    if(target_sample < buffer_size()) {
        return input.right.get(target_sample);
     } else {
       printErrTempo(60, "method get_right("+target_sample+"): no target match in buffer, instead target 0 is use");
       return input.right.get(0);
     }
-    
+
   }
 
   public float get_left(int target_sample) {
-    if(target_sample < get_buffer_size()) {
-      return input.left.get(target_sample); 
+    if(target_sample < buffer_size()) {
+      return input.left.get(target_sample);
     } else {
       printErrTempo(60, "method get_left("+target_sample+"): no target match in buffer, instead target 0 is use");
       return input.left.get(0);
@@ -102,7 +102,7 @@ public class Sounda implements Rope_Constants {
   }
 
   public float get_mix(int target_sample) {
-    if(target_sample < get_buffer_size()) {
+    if(target_sample < buffer_size()) {
       return input.mix.get(target_sample);
     } else {
       printErrTempo(60, "method get_mix("+target_sample+"): no target match in buffer, instead target 0 is use");
@@ -110,7 +110,7 @@ public class Sounda implements Rope_Constants {
     }
   }
 
-  public int get_buffer_size() {
+  public int buffer_size() {
     return analyze_length;
   }
 
@@ -146,7 +146,7 @@ public class Sounda implements Rope_Constants {
     }
 
     result = round(result *10.0f) /10.0f ;
-    return result; 
+    return result;
   }
 
 
@@ -207,7 +207,7 @@ public class Sounda implements Rope_Constants {
     fft.forward(source_buffer);
     for(int i = 0 ; i < band_num();i++) {
       fft.scaleBand(i,scale_spectrum);
-    } 
+    }
   }
 
   public float [] get_spectrum() {
@@ -222,7 +222,7 @@ public class Sounda implements Rope_Constants {
   public float get_spectrum(int band_target){
     if(band_target < band_num()) {
       return fft.getBand(band_target);
-    } else return Float.NaN; 
+    } else return Float.NaN;
   }
 
   public int band_num() {
@@ -328,7 +328,7 @@ public class Sounda implements Rope_Constants {
 
 
   /**
-  BEAT 
+  BEAT
   v 0.1.1
   */
   /**
@@ -381,7 +381,7 @@ public class Sounda implements Rope_Constants {
     } else {
       printErr("method set_beat(): there is no section initialized, use method set_section(), before set_beat() advance mode");
     }
-    
+
   }
 
   // boolean beat is
@@ -390,12 +390,12 @@ public class Sounda implements Rope_Constants {
     for(int i = 0 ; i < section_num() ; i++) {
       for(int k = 0 ; k < spectrum_bands ; k++ ) {
         if(beat_band_is(i,k)) {
-          beat_is = true ; 
+          beat_is = true ;
           break ;
         }
       }
     }
-    return beat_is; 
+    return beat_is;
   }
 
   public boolean beat_is(int beat_target) {
@@ -403,12 +403,12 @@ public class Sounda implements Rope_Constants {
     if(beat_target < section_band.length) {
       for(int band_target = section_band[beat_target].in ; band_target < section_band[beat_target].out ; band_target++) {
         if(beat_band_is(beat_target,band_target)) {
-          beat_is = true; 
+          beat_is = true;
           break ;
         }
       }
     } else {
-      printErrTempo(60,"method beat_is(",beat_target,") is out of the range, by default method return false",frameCount); 
+      printErrTempo(60,"method beat_is(",beat_target,") is out of the range, by default method return false",frameCount);
     }
     return beat_is;
   }
@@ -418,7 +418,7 @@ public class Sounda implements Rope_Constants {
   // beat band is
   public boolean beat_band_is(int beat_target, int band_target) {
     if(get_spectrum(band_target) > get_beat_threshold(beat_target,band_target)) {
-      return true ; 
+      return true ;
     } else {
       return false ;
     }
@@ -435,7 +435,7 @@ public class Sounda implements Rope_Constants {
     // check if the target is on the beat range analyze
     if(beat_advance_is && beat_band_is[section_target][band_target]) {
       threshold = section_band[section_target].get_threshold();
-    } 
+    }
     return threshold;
   }
 
@@ -483,14 +483,14 @@ public class Sounda implements Rope_Constants {
 
   public int get_tempo() {
     if(tempo.length > 1) {
-      int sum = 0 ; 
+      int sum = 0 ;
       for(int i = 0 ; i < tempo.length ; i++) {
         sum += tempo[i].get_tempo();
       }
       return sum / tempo.length;
     } else {
       return tempo[0].get_tempo();
-    } 
+    }
   }
 
   public float get_tempo_threshold(int target_tempo) {
@@ -503,7 +503,7 @@ public class Sounda implements Rope_Constants {
     } else {
       printErrTempo(60,"method get_tempo(int target_tempo): target_tempo",target_tempo," is out of tempo num, instead the method use the global tempo");
       return tempo[0].get_tempo();
-    } 
+    }
   }
 
   public String get_tempo_name() {
@@ -570,9 +570,9 @@ public class Sounda implements Rope_Constants {
         range_y = range[1];
         range_z = range[2];
         range_a = range[3];
-      } 
+      }
     }
-    
+
     // spectrum part
     int x = 0;
     int y = 0;
@@ -624,12 +624,12 @@ public class Sounda implements Rope_Constants {
           norm_a = 1 -get_spectrum(where +offset_1);
           if(norm_a < 0) norm_a = 0;
         }
-        
+
         if(range_is) {
           norm_x = map(norm_x, 0,1, range_x.x, range_x.y) ;
           norm_a = map(norm_a, 0,1, range_a.x, range_a.y) ;
         }
-        
+
         x = int(norm_x *g.colorModeX);
         y = int(norm_x *g.colorModeY);
         z = int(norm_x *g.colorModeZ);
@@ -798,7 +798,7 @@ public class Sounda implements Rope_Constants {
       }
       return beat_is ;
     }
-    
+
     // set
     public void set_threshold(float threshold) {
       this.threshold = threshold;
@@ -874,7 +874,7 @@ public class Sounda implements Rope_Constants {
           tempo = progress;
           if(tempo < 40) tempo = 40;
           progress = 0;
-        } 
+        }
 
         if(time_tempo_count%time != 0) new_tempo_count = true;
 
@@ -883,9 +883,9 @@ public class Sounda implements Rope_Constants {
       } else {
         progress = 0 ;
         tempo = 0 ;
-      } 
+      }
     }
-    
+
     private void count_tempo() {
       for(int target_band = in ; target_band < out ; target_band++) {
         if(get_spectrum(target_band) > threshold) {
@@ -910,233 +910,3 @@ public class Sounda implements Rope_Constants {
     }
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
