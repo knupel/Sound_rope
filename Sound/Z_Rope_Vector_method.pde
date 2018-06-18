@@ -43,7 +43,7 @@ iVec3 iadd(iVec3 a, iVec3 b) {
   }
 }
 
-iVec4 iadd(iVec4 a, iVec4 b) {
+iVec4 iadd(iVec4 a, iVec4 b) {  
   if(a == null || b == null) {
     return null ;
   } else {
@@ -63,7 +63,7 @@ iVec3 iadd(iVec3 a, int arg) {
   return iadd(a,iVec3(arg,arg,arg));
 }
 
-iVec4 iadd(iVec4 a, int arg) {
+iVec4 iadd(iVec4 a, int arg) {  
   return iadd(a,iVec4(arg,arg,arg,arg));
 }
 
@@ -118,7 +118,7 @@ iVec3 imult(iVec3 a, int arg) {
   return imult(a,iVec3(arg,arg,arg));
 }
 
-iVec4 imult(iVec4 a, int arg) {
+iVec4 imult(iVec4 a, int arg) {  
   return imult(a,iVec4(arg,arg,arg,arg));
 }
 
@@ -171,7 +171,7 @@ iVec3 idiv(iVec3 a, int arg) {
   return idiv(a,iVec3(arg,arg,arg));
 }
 
-iVec4 idiv(iVec4 a, int arg) {
+iVec4 idiv(iVec4 a, int arg) {  
   return idiv(a,iVec4(arg,arg,arg,arg));
 }
 
@@ -225,7 +225,7 @@ iVec3 isub(iVec3 a, int arg) {
   return isub(a,iVec3(arg,arg,arg));
 }
 
-iVec4 isub(iVec4 a, int arg) {
+iVec4 isub(iVec4 a, int arg) {  
   return isub(a,iVec4(arg,arg,arg,arg));
 }
 
@@ -297,7 +297,7 @@ Vec3 add(Vec3 a, Vec3 b) {
   }
 }
 
-Vec4 add(Vec4 a, Vec4 b) {
+Vec4 add(Vec4 a, Vec4 b) {  
   if(a == null || b == null) {
     return null ;
   } else {
@@ -319,7 +319,7 @@ Vec3 add(iVec3 a, iVec3 b) {
   return add(Vec3(a),Vec3(b));
 }
 
-Vec4 add(iVec4 a, iVec4 b) {
+Vec4 add(iVec4 a, iVec4 b) {  
   return add(Vec4(a),Vec4(b));
 }
 /**
@@ -333,7 +333,7 @@ Vec3 add(Vec3 a, float arg) {
   return add(a,Vec3(arg,arg,arg));
 }
 
-Vec4 add(Vec4 a, float arg) {
+Vec4 add(Vec4 a, float arg) {  
   return add(a,Vec4(arg,arg,arg,arg));
 }
 /**
@@ -348,7 +348,7 @@ Vec3 add(iVec3 a, float arg) {
   return add(Vec3(a),Vec3(arg,arg,arg));
 }
 
-Vec4 add(iVec4 a, float arg) {
+Vec4 add(iVec4 a, float arg) {  
   return add(Vec4(a),Vec4(arg,arg,arg,arg));
 }
 
@@ -405,7 +405,7 @@ Vec3 mult(iVec3 a, iVec3 b) {
   return mult(Vec3(a),Vec3(b));
 }
 
-Vec4 mult(iVec4 a, iVec4 b) {
+Vec4 mult(iVec4 a, iVec4 b) {  
   return mult(Vec4(a),Vec4(b));
 }
 
@@ -420,7 +420,7 @@ Vec3 mult(Vec3 a, float arg) {
   return mult(a,Vec3(arg,arg,arg));
 }
 
-Vec4 mult(Vec4 a, float arg) {
+Vec4 mult(Vec4 a, float arg) {  
   return mult(a,Vec4(arg,arg,arg,arg));
 }
 /**
@@ -434,7 +434,7 @@ Vec3 mult(iVec3 a, float arg) {
   return mult(Vec3(a),Vec3(arg,arg,arg));
 }
 
-Vec4 mult(iVec4 a, float arg) {
+Vec4 mult(iVec4 a, float arg) {  
   return mult(Vec4(a),Vec4(arg,arg,arg,arg));
 }
 
@@ -491,7 +491,7 @@ Vec3 div(iVec3 a, iVec3 b) {
   return div(Vec3(a),Vec3(b));
 }
 
-Vec4 div(iVec4 a, iVec4 b) {
+Vec4 div(iVec4 a, iVec4 b) {  
   return div(Vec4(a),Vec4(b));
 }
 /**
@@ -505,7 +505,7 @@ Vec3 div(Vec3 a, float arg) {
   return div(a,Vec3(arg,arg,arg));
 }
 
-Vec4 div(Vec4 a, float arg) {
+Vec4 div(Vec4 a, float arg) {  
   return div(a,Vec4(arg,arg,arg,arg));
 }
 /**
@@ -519,7 +519,7 @@ Vec3 div(iVec3 a, float arg) {
   return div(Vec3(a),Vec3(arg,arg,arg));
 }
 
-Vec4 div(iVec4 a, float arg) {
+Vec4 div(iVec4 a, float arg) {  
   return div(Vec4(a),Vec4(arg,arg,arg,arg));
 }
 
@@ -574,7 +574,7 @@ Vec3 sub(iVec3 a, iVec3 b) {
   return sub(Vec3(a),Vec3(b));
 }
 
-Vec4 sub(iVec4 a, iVec4 b) {
+Vec4 sub(iVec4 a, iVec4 b) {  
   return sub(Vec4(a),Vec4(b));
 }
 /**
@@ -588,7 +588,7 @@ Vec3 sub(Vec3 a, float arg) {
   return sub(a,Vec3(arg,arg,arg));
 }
 
-Vec4 sub(Vec4 a, float arg) {
+Vec4 sub(Vec4 a, float arg) {  
   return sub(a,Vec4(arg,arg,arg,arg));
 }
 /**
@@ -602,7 +602,7 @@ Vec3 sub(iVec3 a, float arg) {
   return sub(Vec3(a),Vec3(arg,arg,arg));
 }
 
-Vec4 sub(iVec4 a, float arg) {
+Vec4 sub(iVec4 a, float arg) {  
   return sub(Vec4(a),Vec4(arg,arg,arg,arg));
 }
 
@@ -641,7 +641,7 @@ Vec3 cross(Vec3 v1, Vec3 v2, Vec3 target) {
       target.set(crossX, crossY, crossZ);
     }
     return target ;
-  }
+  }  
 }
 
 
@@ -727,19 +727,19 @@ boolean compare(Vec3 a, Vec3 b) {
 boolean compare(Vec4 a, Vec4 b) {
   if(a != null && b != null ) {
     if((a.x == b.x) && (a.y == b.y) && (a.z == b.z) && (a.w == b.w)) {
-            return true ;
+            return true ; 
     } else {
       return false ;
     }
   } else {
     return false ;
-  }
+  } 
 }
 
 
-/**
-* compare if the first vector is in the area of the second vector,
-* the area of the second vector is define by a Vec area,
+/** 
+* compare if the first vector is in the area of the second vector, 
+* the area of the second vector is define by a Vec area, 
 * that give the possibility of different size for each component
 * @return boolean
 */
@@ -767,11 +767,11 @@ boolean compare(Vec3 a, Vec3 b, Vec3 area) {
 
 boolean compare(Vec4 a, Vec4 b, Vec4 area) {
   if(a != null && b != null && area != null ) {
-    if(    (a.x >= b.x -area.x && a.x <= b.x +area.x)
-        && (a.y >= b.y -area.y && a.y <= b.y +area.y)
-        && (a.z >= b.z -area.z && a.z <= b.z +area.z)
+    if(    (a.x >= b.x -area.x && a.x <= b.x +area.x) 
+        && (a.y >= b.y -area.y && a.y <= b.y +area.y) 
+        && (a.z >= b.z -area.z && a.z <= b.z +area.z) 
         && (a.w >= b.w -area.w && a.w <= b.w +area.w)) {
-            return true ;
+            return true ; 
     } else {
       return false ;
     }
@@ -888,7 +888,7 @@ float dist(Vec2 a, Vec2 b) {
     float dy = a.y - b.y;
     return (float) Math.sqrt(dx*dx + dy*dy);
   } else return Float.NaN ;
-
+    
 }
 float dist(Vec3 a, Vec3 b) {
   if(a != null && b != null) {
@@ -983,7 +983,7 @@ Vec2 barycenter(Vec2... v) {
   return sum.div(div_num) ;
 }
 
-
+ 
 Vec3 barycenter(Vec3... v) {
   int div_num = v.length ;
   Vec3 sum = Vec3() ;
@@ -1171,7 +1171,7 @@ bVec2 bVec2(boolean b) {
   return new bVec2(b,b);
 }
 
-bVec2 bVec2(boolean x, boolean y) {
+bVec2 bVec2(boolean x, boolean y) { 
   return new bVec2(x,y) ;
 }
 
@@ -1207,7 +1207,7 @@ bVec3 bVec3(boolean b) {
   return new bVec3(b,b,b);
 }
 
-bVec3 bVec3(boolean x, boolean y, boolean z) {
+bVec3 bVec3(boolean x, boolean y, boolean z) { 
   return new bVec3(x,y,z) ;
 }
 
@@ -1245,7 +1245,7 @@ bVec4 bVec4(boolean b) {
   return new bVec4(b,b,b,b);
 }
 
-bVec4 bVec4(boolean x, boolean y, boolean z, boolean w) {
+bVec4 bVec4(boolean x, boolean y, boolean z, boolean w) { 
   return new bVec4(x,y,z,w) ;
 }
 
@@ -1285,7 +1285,7 @@ bVec5 bVec5(boolean b) {
   return new bVec5(b,b,b,b,b);
 }
 
-bVec5 bVec5(boolean a, boolean b, boolean c, boolean d, boolean e) {
+bVec5 bVec5(boolean a, boolean b, boolean c, boolean d, boolean e) { 
   return new bVec5(a,b,c,d,e) ;
 }
 
@@ -1327,7 +1327,7 @@ bVec6 bVec6(boolean b) {
   return new bVec6(b,b,b,b,b,b);
 }
 
-bVec6 bVec6(boolean a, boolean b, boolean c, boolean d, boolean e, boolean f) {
+bVec6 bVec6(boolean a, boolean b, boolean c, boolean d, boolean e, boolean f) { 
   return new bVec6(a,b,c,d,e,f) ;
 }
 
@@ -1398,7 +1398,7 @@ iVec2 iVec2(int v) {
   return new iVec2(v,v);
 }
 
-iVec2 iVec2(int x, int y) {
+iVec2 iVec2(int x, int y) { 
   return new iVec2(x,y) ;
 }
 
@@ -1434,7 +1434,7 @@ iVec3 iVec3(int v) {
   return new iVec3(v,v,v);
 }
 
-iVec3 iVec3(int x, int y, int z) {
+iVec3 iVec3(int x, int y, int z) { 
   return new iVec3(x,y,z) ;
 }
 
@@ -1472,7 +1472,7 @@ iVec4 iVec4(int v) {
   return new iVec4(v,v,v,v);
 }
 
-iVec4 iVec4(int x, int y, int z, int w) {
+iVec4 iVec4(int x, int y, int z, int w) { 
   return new iVec4(x,y,z,w) ;
 }
 
@@ -1512,7 +1512,7 @@ iVec5 iVec5(int v) {
   return new iVec5(v,v,v,v,v);
 }
 
-iVec5 iVec5(int a, int b, int c, int d, int e) {
+iVec5 iVec5(int a, int b, int c, int d, int e) { 
   return new iVec5(a,b,c,d,e) ;
 }
 
@@ -1554,7 +1554,7 @@ iVec6 iVec6(int v) {
   return new iVec6(v,v,v,v,v,v);
 }
 
-iVec6 iVec6(int a, int b, int c, int d, int e, int f) {
+iVec6 iVec6(int a, int b, int c, int d, int e, int f) { 
   return new iVec6(a,b,c,d,e,f) ;
 }
 
@@ -1621,7 +1621,7 @@ Vec2 Vec2() {
   return new Vec2(0,0) ;
 }
 
-Vec2 Vec2(float x, float y) {
+Vec2 Vec2(float x, float y) { 
   return new Vec2(x,y) ;
 }
 
@@ -1679,11 +1679,11 @@ Vec2 Vec2(iVec p) {
 }
 
 
-Vec2 Vec2(String s, int x, int y) {
+Vec2 Vec2(String s, int x, int y) { 
   return new Vec2(s,x,y);
 }
 
-Vec2 Vec2(String s, int a, int b, int c, int d) {
+Vec2 Vec2(String s, int a, int b, int c, int d) { 
   return new Vec2(s,a,b,c,d);
 }
 
@@ -1759,11 +1759,11 @@ Vec3 Vec3(iVec p) {
 
 
 
-Vec3 Vec3(String s, int x, int y, int z) {
+Vec3 Vec3(String s, int x, int y, int z) { 
   return new Vec3(s,x,y,z);
 }
 
-Vec3 Vec3(String s, int a, int b, int c, int d, int e, int f) {
+Vec3 Vec3(String s, int a, int b, int c, int d, int e, int f) { 
   return new Vec3(s,a,b,c,d,e,f);
 }
 
@@ -1843,11 +1843,11 @@ Vec4 Vec4(iVec p) {
 
 
 
-Vec4 Vec4(String s, int x, int y, int z, int w) {
+Vec4 Vec4(String s, int x, int y, int z, int w) { 
   return new Vec4(s,x,y,z,w);
 }
 
-Vec4 Vec4(String s, int a, int b, int c, int d, int e, int f, int g, int h) {
+Vec4 Vec4(String s, int a, int b, int c, int d, int e, int f, int g, int h) { 
   return new Vec4(s,a,b,c,d,e,f,g,h);
 }
 
@@ -1930,11 +1930,11 @@ Vec5 Vec5(iVec p) {
 }
 
 
-Vec5 Vec5(String s, int a, int b, int c, int d, int e) {
+Vec5 Vec5(String s, int a, int b, int c, int d, int e) { 
   return new Vec5(s,a,b,c,d,e);
 }
 
-Vec5 Vec5(String s, int a, int b, int c, int d, int e, int f, int g, int h, int i, int j) {
+Vec5 Vec5(String s, int a, int b, int c, int d, int e, int f, int g, int h, int i, int j) { 
   return new Vec5(s,a,b,c,d,e,f,g,h,i,j);
 }
 
@@ -2022,14 +2022,24 @@ Vec6 Vec6(iVec p) {
 
 
 
-Vec6 Vec6(String s, int a, int b, int c, int d, int e, int f) {
+Vec6 Vec6(String s, int a, int b, int c, int d, int e, int f) { 
   return new Vec6(s,a,b,c,d,e,f);
 }
 
-Vec6 Vec6(String s, int a, int b, int c, int d, int e, int f, int g, int h, int i, int j, int k, int l) {
+Vec6 Vec6(String s, int a, int b, int c, int d, int e, int f, int g, int h, int i, int j, int k, int l) { 
   return new Vec6(s,a,b,c,d,e,f,g,h,i,j,k,l);
 }
 
 Vec6 Vec6(String s, int v) {
   return new Vec6(s,v);
 }
+
+
+
+
+
+
+
+
+
+

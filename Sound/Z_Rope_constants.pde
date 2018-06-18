@@ -1,9 +1,9 @@
 /**
-ROPE - Romanesco processing environment –
+ROPE - Romanesco processing environment – 
 * Copyleft (c) 2014-2018
 * Stan le Punk > http://stanlepunk.xyz/
 CONSTANTS ROPE
-v 0.1.3.6
+v 0.1.3.8
 Processing 3.3.7
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Rope
@@ -49,7 +49,7 @@ public interface Rope_Constants {
 	*/
 	static final int PIXEL = 800;
 	static final int STAR = 810;
-
+  
   /**
   COLOUR
   */
@@ -59,11 +59,11 @@ public interface Rope_Constants {
 	static final int BLANC = -1;
 	// static final int GRAY = 4050 ; // this already existe
 	// static final int GRAY_MEDIUM = -8618884;
-
-	// GRAY_1 > HSB,1,1,1 > color(0,0,.1);
+	
+	// GRAY_1 > HSB,1,1,1 > color(0,0,.1); > cloase to BLACK
 	static final int GRAY_1 = -15132391;
 	static final int GRIS_1 = -15132391;
-	// GRAY_2 > HSB,1,1,1 > color(0,0,.2);
+	// GRAY_2 > HSB,1,1,1 > color(0,0,.2);	
 	static final int GRAY_2 = -13421773;
 	static final int GRIS_2 = -13421773;
 	// GRAY_3 > HSB,1,1,1 > color(0,0,.3);
@@ -87,19 +87,23 @@ public interface Rope_Constants {
 	// GRAY_8 > HSB,1,1,1 > color(0,0,.8);
 	static final int GRAY_8 = -3355444;
 	static final int GRIS_8 = -3355444;
-	// GRAY_9 > HSB,1,1,1 > color(0,0,.9);
+	// GRAY_9 > HSB,1,1,1 > color(0,0,.9); > cloase to WHITE
 	static final int GRAY_9 = -1710619;
 	static final int GRIS_9 = -1710619;
-
+  
+  /**
+  color guide
+  https://fr.wikipedia.org/wiki/Liste_de_noms_de_couleur
+  */
   // RED > HSB,1,1,1 > color(0,1,1);
 	static final int RED = -65536;
 	static final int ROUGE = -65536;
 	// BLOOD > HSB,1,1,1 > color(0,1,.75);
 	static final int BLOOD = -4259840;
-	static final int SANG = -4259840;
+	static final int SANG = -4259840; 
 	// CARMINE > HSB,1,1,1 > color(0,1,.55);
 	static final int CARMINE = -7602176;
-	static final int CARMIN = -7602176;
+	static final int CARMIN = -7602176; 
 	// ORANGE > HSB,1,1,1 > color(.08,1,1);
 	static final int ORANGE = -34304;
 	// OR > HSB,1,1,1 > color(0.12 1.0 1.0);
@@ -108,14 +112,17 @@ public interface Rope_Constants {
   // YELLOW > HSB,1,1,1 > color(0.166 1.0 1.0);
   static public int YELLOW = -256;
   static public int JAUNE = -256;
-  // GREEN > HSB,1,1,1 > color(0.333 1.0 1.0);
+  // BOUTEILLE / BOTTLE > HSB,1,1,1 > color(0.33333334 0.9150943 0.41568628);
+	static final int BOUTEILLE = -16160247;
+	static final int BOTTLE = -16160247;
+	// GREEN > HSB,1,1,1 > color(0.333 1.0 1.0);
 	static final int GREEN = -16711936;
 	static final int VERT = -16711936;
   // CYAN > HSB,1,1,1 > color(0.5 1.0 1.0);
 	static public int CYAN = -16711681;
 	// BLUE > HSB,1,1,1 > color(.6503,1,1);
 	static final int BLUE = -16770561;
-	static final int BLEU = -16770561;
+	static final int BLEU = -16770561;  
   // MAGENTA > HSB,1,1,1 > color(.8333,1,1);
 	static public int MAGENTA = -65281;
   // PINK > HSB,1,1,1 > color(.86,.65,1);
@@ -123,7 +130,7 @@ public interface Rope_Constants {
 	static public int ROSE = -42524;
 	// PURPLE > HSB,1,1,1 > color(.7496,1,1);
 	static public int PURPLE = -8453889;
-	static public int VIOLET = -8453889;
+	static public int VIOLET = -8453889;  
   /**
   String Constants
   */
@@ -147,3 +154,16 @@ public interface Rope_Constants {
   static final String TRIG_3 = "POW_SIN_PI" ;
   static final String TRIG_4 = "SIN_TAN_POW_SIN" ;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
