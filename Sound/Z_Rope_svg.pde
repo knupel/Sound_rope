@@ -2,7 +2,7 @@
 ROPE SVG
 v 1.2.9
 * Copyleft (c) 2014-2018
-Rope – Romanesco Processing Environment –
+Rope – Romanesco Processing Environment – 
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/SVG_Vertex-Processing
   2016-2018
@@ -21,8 +21,8 @@ class ROPE_svg {
   private String saved_path_bricks_svg = "" ;
 
   private boolean position_center = false ;
-
-  private boolean bool_scale_translation ;
+  
+  private boolean bool_scale_translation ; 
   private boolean bool_pos, bool_jitter_svg, bool_scale_svg ;
   private boolean keep_change ;
 
@@ -52,7 +52,7 @@ class ROPE_svg {
 
 
 
-  /**
+  /**  
   CONSTRUCTOR
 
   */
@@ -73,10 +73,10 @@ class ROPE_svg {
 
 
 
+  
 
-
-
-
+  
+  
 
 
 
@@ -106,14 +106,14 @@ class ROPE_svg {
 
   public void build() {
     build(path, saved_path_bricks_svg) ;
-  }
+  } 
 
 
 
 
 
 
-
+  
   /**
   METHOD to draw all the SVG
   */
@@ -122,7 +122,7 @@ class ROPE_svg {
     draw_SVG (pos, scale_svg, jitter_svg) ;
     change_boolean_to_false() ;
   }
-
+  
   public void draw(int ID) {
     reset() ;
     draw_SVG (pos, scale_svg, jitter_svg, ID) ;
@@ -136,7 +136,7 @@ class ROPE_svg {
     if(bool_scale_translation) {
       start_matrix() ;
       Vec3 translation = Vec3() ;
-      translation = scale_translation(scale_svg, layer_or_group_name);
+      translation = scale_translation(scale_svg, layer_or_group_name); 
       translate(translation) ;
     }
     draw_SVG (pos, scale_svg, jitter_svg, layer_or_group_name) ;
@@ -194,7 +194,7 @@ class ROPE_svg {
   }
 
 
-
+  
   /**
   TEMPORARY CHANGE
   This change don't modify the original coord of point
@@ -276,7 +276,7 @@ class ROPE_svg {
 
 
   /**
-  JITEER
+  JITEER 
   */
   public void jitter(float x) {
     bool_jitter_svg = true ;
@@ -304,10 +304,10 @@ class ROPE_svg {
     }
   }
 
-
-
-
-  /*
+  
+  
+  
+  /* 
   method start() & end() use in correlation with reset for the change like jitter, pos, scale...
   when the svg is using in split mode with name or ID param
   */
@@ -351,7 +351,7 @@ class ROPE_svg {
     float normalize_alpha = (a / g.colorModeA) ;
     this.fill_factor(1, 1, 1, normalize_alpha) ;
   }
-
+  
   /**
   fill
   */
@@ -361,7 +361,7 @@ class ROPE_svg {
     display_fill_custom = true ;
     fill_custom.set(0) ;
   }
-
+  
   public void fill(int c) {
     display_fill_original = false ;
     display_fill_custom = true;
@@ -386,7 +386,7 @@ class ROPE_svg {
     display_fill_custom = true ;
     fill_custom.set(x, y, z, g.colorModeA) ;
   }
-
+  
   public void fill(float x, float y, float z, float a) {
     display_fill_original = false ;
     display_fill_custom = true ;
@@ -416,7 +416,7 @@ class ROPE_svg {
     thickness_custom = 0 ;
     stroke_custom.set(0) ;
   }
-
+  
   public void stroke(int c) {
     display_stroke_original = false ;
     display_stroke_custom = true;
@@ -490,7 +490,7 @@ class ROPE_svg {
     display_stroke_original = stroke ;
     display_thickness_original = stroke ;
   }
-
+  
 
   /**
   fill factor
@@ -539,23 +539,23 @@ class ROPE_svg {
         for(Text t : list_text_SVG) {
           if(t.ID == b.ID) t.add_value(value) ;
         }
-      }
-    }
+      } 
+    } 
   }
-
+  
 
   /**
   SVG info
   */
 
-
+  
   /**
-   return quantity of brick
+   return quantity of brick 
   */
   public int num_brick() {
     return list_brick_SVG.size() ;
   }
-
+  
 
   /**
   list
@@ -587,12 +587,12 @@ class ROPE_svg {
         }
       } else if(b.kind == "rect") {
         for(Rectangle r : list_rectangle_SVG) {
-          if(r.ID == b.ID) {
+          if(r.ID == b.ID) { 
             p[0] = r.pos ;
             return p ;
           }
         }
-      }
+      } 
     } else return p ;
     return p ;
   }
@@ -662,8 +662,8 @@ class ROPE_svg {
 
 
 
-
-
+  
+  
 
 
 
@@ -673,48 +673,48 @@ class ROPE_svg {
   */
   public float width() {
     if(shape_SVG != null) {
-      return shape_SVG.width ;
+      return shape_SVG.width ; 
     } else {
       return 0 ;
     }
   }
   public float height() {
-    if(shape_SVG != null) {
-      return shape_SVG.height ;
+    if(shape_SVG != null) { 
+      return shape_SVG.height ; 
     } else {
       return 0 ;
     }
   }
-
+  
   public Vec2 canvas() {
     if(shape_SVG != null) {
-      return Vec2(shape_SVG.width, shape_SVG.height) ;
-    } else {
+      return Vec2(shape_SVG.width, shape_SVG.height) ; 
+    } else { 
       return Vec2() ;
     }
   }
-
-
-
-
-
+  
+  
+  
+  
+  
   /**
   Canvas brick SVG
   */
   public float width_brick(int target) {
     if(list_brick_SVG.size() > 0 && target <list_brick_SVG.size()) {
       Brick_SVG b_svg = list_brick_SVG.get(target) ;
-      return b_svg.width ;
+      return b_svg.width ; 
     } else return 0 ;
   }
 
   public float height_brick(int target) {
     if(list_brick_SVG.size() > 0 && target <list_brick_SVG.size()) {
       Brick_SVG b_svg = list_brick_SVG.get(target) ;
-      return b_svg.height ;
+      return b_svg.height ; 
     } else return 0 ;
   }
-
+  
   public Vec2 canvas_brick(int target) {
     if(list_brick_SVG.size() > 0 && target <list_brick_SVG.size()) {
       Brick_SVG b_svg = list_brick_SVG.get(target) ;
@@ -745,6 +745,7 @@ class ROPE_svg {
 
 
   */
+  
 
 
 
@@ -752,27 +753,26 @@ class ROPE_svg {
 
 
 
+  
+  
+  
+  
+  
+  
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
+  
   /**
   PRIVATE METHOD
 
@@ -801,7 +801,7 @@ class ROPE_svg {
       stroke_factor(1,1,1,1) ;
     }
   }
-
+  
 
 
   private void change_boolean_to_false() {
@@ -820,8 +820,8 @@ class ROPE_svg {
       draw_final(pos_, scale_, jitter_, b) ;
     }
   }
-
-
+ 
+  
   /**
   Draw shape by ID
   */
@@ -832,8 +832,8 @@ class ROPE_svg {
       draw_final(pos_, scale_, jitter_, b) ;
     }
   }
-
-
+   
+  
   /**
   Draw shape by name
   */
@@ -878,20 +878,20 @@ class ROPE_svg {
   // super local
   private  void aspect_original(Brick_SVG b, float scale_thickness) {
     if(display_fill_original) {
-      b.aspect_fill(fill_factor) ;
+      b.aspect_fill(fill_factor) ; 
     } else {
       p5.noFill() ;
     }
     if(display_stroke_original && display_thickness_original) {
-      b.aspect_stroke(scale_thickness,stroke_factor) ;
-    } else {
+      b.aspect_stroke(scale_thickness,stroke_factor) ; 
+    } else { 
       p5.noStroke() ;
     }
   }
 
   private  void aspect_custom() {
     if(fill_custom.a > 0 && display_fill_custom && !display_fill_original) {
-      p5.fill(fill_custom.r *fill_factor.x, fill_custom.g *fill_factor.y, fill_custom.b *fill_factor.y, fill_custom.a *fill_factor.w) ;
+      p5.fill(fill_custom.r *fill_factor.x, fill_custom.g *fill_factor.y, fill_custom.b *fill_factor.y, fill_custom.a *fill_factor.w) ; 
     }
     if(display_stroke_custom && !display_stroke_original) {
       if(stroke_custom.a > 0 || thickness_custom > 0 ) {
@@ -899,7 +899,7 @@ class ROPE_svg {
         p5.strokeWeight(thickness_custom) ;
       }
     }
-
+    
     if(!display_fill_original && !display_fill_custom) {
       p5.noFill() ;
     }
@@ -910,8 +910,8 @@ class ROPE_svg {
 
 
 
-
-
+  
+  
 
 
 
@@ -1022,7 +1022,7 @@ class ROPE_svg {
       return null pointer exception with type 'text'
       println(children) ;
       */
-
+      
       Brick_SVG b = (Brick_SVG) list.get(i) ;
       if(b.kind == "polygon" || b.kind == "path" || b.kind == "polyline")  vertex_count(children[0], mother.getName(), b.ID) ;
       if(b.kind == "line")  line_count(b.xml_brick, mother.getName(), b.ID) ;
@@ -1031,13 +1031,13 @@ class ROPE_svg {
       else if(b.kind == "text") text_count(b.xml_brick,  b.ID) ;
     }
   }
-
+  
   /**
   TEXT
   */
   // list of group SVG
   ArrayList<Text> list_text_SVG = new ArrayList<Text>() ;
-
+      
   //
   private void text_count(XML xml_shape, int ID) {
     Vec6 matrix = matrix_vec(xml_shape) ;
@@ -1049,7 +1049,7 @@ class ROPE_svg {
 
 
 
-
+  
 
   /**
   Main method to draw text
@@ -1059,17 +1059,17 @@ class ROPE_svg {
     // the order of operation is very weird, because is not a same for the build_vertex()
     if(position_center) {
       Vec3 center_pos = Vec3(canvas().x,canvas().y, 0) ;
-      center_pos.mult(.5) ;
+      center_pos.mult(.5) ; 
       temp_pos.sub(center_pos) ;
     }
     if(!scale.compare(Vec3(1))) {
-      temp_pos.mult(scale) ;
+      temp_pos.mult(scale) ; 
     }
     if(!pos.compare(Vec3())) {
       temp_pos.add(pos) ;
     }
 
-
+    
     if(check_matrix(t.matrix)) {
       start_matrix() ;
       matrix(t.matrix, temp_pos) ;
@@ -1107,11 +1107,11 @@ class ROPE_svg {
     float y_a = xml_shape.getChild(0).getFloat("y1") ;
     float x_b = xml_shape.getChild(0).getFloat("x2") ;
     float y_b = xml_shape.getChild(0).getFloat("y2") ;
-
+  
     Line l = new Line(x_a, y_a, x_b, y_b, ID) ;
     list_line_SVG.add(l) ;
   }
-
+  
 
   /**
   Main method to draw ellipse
@@ -1120,23 +1120,23 @@ class ROPE_svg {
     Vec3 temp_pos_a = Vec3(l.pos_a.x, l.pos_a.y,0)  ;
     Vec3 temp_pos_b = Vec3(l.pos_b.x, l.pos_b.y,0)  ;
 
-
+  
     // the order of operation is very weird, because is not a same for the build_vertex()
     if(position_center) {
       Vec3 center_pos = Vec3(canvas().x,canvas().y, 0) ;
-      center_pos.mult(.5) ;
+      center_pos.mult(.5) ; 
       temp_pos_a.sub(center_pos) ;
       temp_pos_b.sub(center_pos) ;
     }
     if(!scale.compare(Vec3(1))) {
-      temp_pos_a.mult(scale) ;
-      temp_pos_b.mult(scale) ;
+      temp_pos_a.mult(scale) ; 
+      temp_pos_b.mult(scale) ; 
     }
     if(!pos.compare(Vec3())) {
       temp_pos_a.add(pos) ;
       temp_pos_b.add(pos) ;
     }
-
+  
     line(temp_pos_a.mult(scale), temp_pos_b.mult(scale)) ;
   }
   /**
@@ -1163,11 +1163,11 @@ class ROPE_svg {
     float cx = xml_shape.getChild(0).getFloat("cx") ;
     float cy = xml_shape.getChild(0).getFloat("cy") ;
     if(r > 0 ) rx = ry = r ;
-
+  
     Ellipse e = new Ellipse(matrix, cx, cy, rx, ry, ID) ;
     list_ellipse_SVG.add(e) ;
   }
-
+  
 
   /**
   Main method to draw ellipse
@@ -1175,16 +1175,16 @@ class ROPE_svg {
   void build_ellipse(Vec3 pos, Vec3 scale, Vec3 jitter, Ellipse e) {
     Vec3 temp_pos = Vec3(e.pos.x, e.pos.y,0)  ;
 
-
+  
     // the order of operation is very weird, because is not a same for the build_vertex()
     if(position_center) {
       Vec3 center_pos = Vec3(canvas().x,canvas().y, 0) ;
-      center_pos.mult(.5) ;
+      center_pos.mult(.5) ; 
       temp_pos.sub(center_pos) ;
     }
-    if(!scale.compare(Vec3(1))) temp_pos.mult(scale) ;
+    if(!scale.compare(Vec3(1))) temp_pos.mult(scale) ; 
     if(!pos.compare(Vec3())) temp_pos.add(pos) ;
-
+  
     Vec2 temp_size = e.size.copy() ;
 
     if(check_matrix(e.matrix)) {
@@ -1197,12 +1197,12 @@ class ROPE_svg {
       ellipse(temp_pos, temp_size.mult(scale.x, scale.y)) ;
     }
 
-
+    
   }
   /**
   END CIRCLE & ELLIPSE
   */
-
+  
 
 
 
@@ -1211,34 +1211,34 @@ class ROPE_svg {
   */
   // list of group SVG
   private ArrayList<Rectangle> list_rectangle_SVG = new ArrayList<Rectangle>() ;
-
+  
   private void rectangle_count(XML xml_shape, int ID) {
     Vec6 matrix = matrix_vec(xml_shape) ;
     float x = xml_shape.getChild(0).getFloat("x") ;
     float y = xml_shape.getChild(0).getFloat("y") ;
     float width_rect = xml_shape.getChild(0).getFloat("width") ;
     float height_rect = xml_shape.getChild(0).getFloat("height") ;
-
+  
     Rectangle r = new Rectangle(matrix, x, y, width_rect, height_rect, ID) ;
     list_rectangle_SVG.add(r) ;
   }
-
+  
   /**
   Main method to draw ellipse
   */
-
+  
   private void build_rectangle(Vec3 pos, Vec3 scale, Vec3 jitter, Rectangle r) {
     Vec3 temp_pos = Vec3(r.pos.x, r.pos.y,0)  ;
-
+  
     // the order of operation is very weird, because is not a same for the build_vertex()
     if(position_center) {
       Vec3 center_pos = Vec3(canvas().x,canvas().y, 0) ;
-      center_pos.mult(.5) ;
+      center_pos.mult(.5) ; 
       temp_pos.sub(center_pos) ;
     }
-    if(!scale.compare(Vec3(1))) temp_pos.mult(scale) ;
+    if(!scale.compare(Vec3(1))) temp_pos.mult(scale) ; 
     if(!pos.compare(Vec3())) temp_pos.add(pos) ;
-
+  
     Vec2 temp_size = r.size.copy() ;
 
     if(check_matrix(r.matrix)) {
@@ -1261,9 +1261,9 @@ class ROPE_svg {
   /**
   END RECTANGLE
   */
+  
 
-
-
+  
 
 
 
@@ -1289,14 +1289,14 @@ class ROPE_svg {
   private Vec3 [] vert ;
   private int [] vertex_code ;
   private int code_vertex_count ;
-
+  
   private void vertex_count(PShape geom_shape, String geom_name, int ID) {
     int num = geom_shape.getVertexCount() ;
     vertex_code = new int[num] ;
     vert = new Vec3[num] ;
     vertex_code = geom_shape.getVertexCodes() ;
     code_vertex_count = geom_shape.getVertexCodeCount() ;
-
+    
     Vertices v = new Vertices(code_vertex_count, num, geom_shape, geom_name, ID) ;
     v.build_vertices_3D(geom_shape) ;
     list_vertice_SVG.add(v) ;
@@ -1304,8 +1304,8 @@ class ROPE_svg {
   /**
   END VERTEX
   */
-
-
+ 
+  
 
 
 
@@ -1320,15 +1320,15 @@ class ROPE_svg {
 
   private void build_path(Vec3 pos, Vec3 scale, Vec3 jitter, Vertices v) {
     Vec3 center_pos = Vec3(canvas().x,canvas().y,0) ;
-    center_pos.mult(.5) ;
-    if(!scale.compare(Vec3(1))) center_pos.mult(scale) ;
-
+    center_pos.mult(.5) ; 
+    if(!scale.compare(Vec3(1))) center_pos.mult(scale) ; 
+  
     if (v.vert == null) return;
-
+  
     boolean insideContour = false;
     beginShape();
     // for the simple vertex
-    if (v.code_vertex_count == 0) {
+    if (v.code_vertex_count == 0) {  
       for (int i = 0; i <  v.vert.length; i++) {
         Vec3 temp_pos_a = v.vert[i].copy() ;
         //
@@ -1346,11 +1346,11 @@ class ROPE_svg {
         vertex(temp_pos_a);
       }
     // for the complex draw vertex, with bezier, curve...
-    } else {
+    } else {  
       int index = 0;
       for (int j = 0; j < v.code_vertex_count; j++) {
         Vec3 temp_pos_a , temp_pos_b, temp_pos_c ;
-
+  
         switch (v.vertex_code[j]) {
           //----------
           case VERTEX:
@@ -1498,8 +1498,8 @@ class ROPE_svg {
 
 
 
-  /**
-  MATRIX
+  /** 
+  MATRIX 
   transformation
 
   */
@@ -1541,7 +1541,7 @@ class ROPE_svg {
       float c = matrix.c ;
       float d = matrix.d ;
       if(a == 1 && b == 0 && c == 0 && d == 1) {
-        return false ;
+        return false ; 
       } else return true ;
     } else return false ;
   }
@@ -1553,7 +1553,7 @@ class ROPE_svg {
     float b = matrix.b ;
     float c = matrix.c ;
     float d = matrix.d ;
-    // about matrix
+    // about matrix 
     // http://stackoverflow.com/questions/4361242/extract-rotation-scale-values-from-2d-transformation-matrix
     boolean matrix_bool = false ;
     boolean rotate_bool = false ;
@@ -1602,7 +1602,7 @@ class ROPE_svg {
     matrix case
     */
     if(matrix_bool) {
-      float angle = atan(-matrix.b / matrix.a) ;
+      float angle = atan(-matrix.b / matrix.a) ; 
 
       // rotate
       if(rotate_bool && !scale_bool && !skew_bool) {
@@ -1639,18 +1639,18 @@ class ROPE_svg {
         float sx_2 = -c / sin(angle) ;
         float sy_1 = b / sin(angle) ;
         float sy_2 = d / cos(angle) ;
-
+        
         translate(pos) ;
         rotate(-angle) ;
         scale(sx_1, sy_2) ;
       }
-
+      
       // SKEW
-      // skew / shear is rotate/scale and skew in same time
+      // skew / shear is rotate/scale and skew in same time 
       // skew take the lead on every thing, I believe but not sure
-
+      
       // this alpgorithm is not really good, very approximative :(
-
+      
       if(skew_bool && !rotate_bool && !scale_bool) {
         // calcule the angle for skew-scaling
         // scale
@@ -1664,7 +1664,7 @@ class ROPE_svg {
         shearX(c) ;
         shearY(b) ;
         scale(sx_1, sy_2) ;
-
+        
       }
     }
   }
@@ -1700,18 +1700,18 @@ class ROPE_svg {
 
   /**
   EXTRACT POINT
-
+  
   */
-
+  
   private void extract(Vertices v) {
     if (v.vert == null) return;
-    if (v.code_vertex_count == 0) {
+    if (v.code_vertex_count == 0) {  
       for (int i = 0; i <  v.vert.length; i++) {
         Vec3 temp_pos_a = v.vert[i].copy() ;
         vertex(temp_pos_a);
       }
     // for the complex draw vertex, with bezier, curve...
-    } else {
+    } else {  
       int index = 0;
       for (int j = 0; j < v.code_vertex_count; j++) {
         Vec3 temp_pos_a , temp_pos_b, temp_pos_c ;
@@ -1775,7 +1775,7 @@ class ROPE_svg {
       return list ;
     }
   }
-
+  
   public String [] kind_brick_SVG (ArrayList<Brick_SVG> list_brick) {
     String [] list ;
     if(list_brick.size() > 0 ) {
@@ -1791,7 +1791,7 @@ class ROPE_svg {
       return list ;
     }
   }
-
+  
   public String [] family_brick_SVG (ArrayList<Brick_SVG> list_brick) {
     String [] list ;
     if(list_brick.size() > 0 ) {
@@ -1811,6 +1811,9 @@ class ROPE_svg {
   END INFO
 
   */
+  
+
+  
 
 
 
@@ -1829,11 +1832,8 @@ class ROPE_svg {
 
 
 
-
-
-
-
-
+  
+  
   /**
   ANALYZE
 
@@ -1854,7 +1854,7 @@ class ROPE_svg {
 
 
     */
-
+    
     /**
 
 
@@ -1894,7 +1894,7 @@ class ROPE_svg {
       st[st.length -1] = st[st.length -1].replaceAll("</style>","") ;
     }
   }
-
+  
   private void save_brick_SVG() {
     /* here in the future :
     Save name of SVG, width, height and other global properties
@@ -1905,9 +1905,9 @@ class ROPE_svg {
     }
   }
 
-
-
-
+  
+  
+  
   // Local method
   int rank_analyze = 0 ;
   private void deep_analyze_SVG(String header, boolean style, XML target, String ancestral_name, String opacity_group) {
@@ -1923,12 +1923,12 @@ class ROPE_svg {
 
     // build brick XML
     for(int i = 0 ; i < children_xml.length ; i++) {
-      if( children_str[i].equals("rect")
-          || children_str[i].equals("line")
-          || children_str[i].equals("polyline")
-          || children_str[i].equals("circle")
-          || children_str[i].equals("ellipse")
-          || children_str[i].equals("polygon")
+      if( children_str[i].equals("rect") 
+          || children_str[i].equals("line") 
+          || children_str[i].equals("polyline") 
+          || children_str[i].equals("circle") 
+          || children_str[i].equals("ellipse") 
+          || children_str[i].equals("polygon") 
           || children_str[i].equals("path")
           || children_str[i].equals("text")
           ) {
@@ -1939,12 +1939,12 @@ class ROPE_svg {
         String new_name = ancestral_name + children_xml[i].getString("id") ;
         if(!style) if(opacity_group == null || opacity_group == "none")  opacity_group = children_xml[i].getString("opacity") ;
         deep_analyze_SVG(header, style, children_xml[i], new_name, opacity_group) ;
-      }
+      } 
     }
   }
-
-
-
+  
+  
+  
   private void add_brick_SVG(String header, boolean style, XML target_brick, String ancestral_name, String opacity_group) {
     String name = target_brick.getName() ;
     if( name != null && ( name.equals("rect")
@@ -1959,13 +1959,13 @@ class ROPE_svg {
       catch_brick_shape(header, style, target_brick, ancestral_name, opacity_group) ;
     }
   }
-
+    
 
 
 
 
   /**
-  CATCH INFO
+  CATCH INFO 
   */
   private String catch_header_SVG(XML target) {
     String s = "" ;
@@ -1974,8 +1974,8 @@ class ROPE_svg {
     s = "<"+part[1] ;
     return s ;
   }
-
-
+  
+  
   private void catch_brick_shape(String header, boolean style, XML target, String ancestral_name, String opacity_group) {
     Brick_SVG new_brick = new Brick_SVG(header, style, target, ID_brick, ancestral_name, opacity_group) ;
     list_brick_SVG.add(new_brick) ;
@@ -1983,13 +1983,13 @@ class ROPE_svg {
   }
   /**
   CHECK INFO
-  */
+  */  
   private boolean check_kind_SVG(XML target_brick) {
     String kind_name = target_brick.getName() ;
     if(kind_name.equals("path")
-       || kind_name.equals("rect")
-       || kind_name.equals("line")
-       || kind_name.equals("polyline")
+       || kind_name.equals("rect") 
+       || kind_name.equals("line") 
+       || kind_name.equals("polyline") 
        || kind_name.equals("polygon")
        || kind_name.equals("circle")
        || kind_name.equals("ellipse")
@@ -2029,6 +2029,8 @@ class ROPE_svg {
   END ANALYZE
 
   */
+  
+  
 
 
 
@@ -2059,9 +2061,7 @@ class ROPE_svg {
 
 
 
-
-
-
+  
   /**
   PRIVATE CLASS
 
@@ -2104,7 +2104,7 @@ class ROPE_svg {
     private boolean noStroke, noFill ;
 
     // str
-    private String fill_str = null;
+    private String fill_str = null;        
     private String stroke_str = null ;
     private String stroke_mitterlimit_str = null ;
     private String strokeWeight_str = null ;
@@ -2120,20 +2120,20 @@ class ROPE_svg {
     private XML xml_brick ;
     private boolean style ;
     private String built_svg_file = "" ;
-
+   
     Brick_SVG(String header, boolean style, XML brick, int ID, String ancestral_name, String str_opacity_group) {
       this.style = style ;
       this.ID = ID ;
       built_svg_file = header + brick.toString() + "</svg>" ;
       xml_brick = parseXML(built_svg_file) ;
-
+  
       brick_name = get_name(brick) ;
       family_name = ancestral_name + "_" + get_name(xml_brick) ;
       this.kind = get_kind_SVG(xml_brick) ;
       if(str_opacity_group != "none" && str_opacity_group != null) opacity_group = Float.valueOf(str_opacity_group.trim()).floatValue(); else opacity_group = 1. ;
       set_aspect(brick) ;
     }
-
+  
     String get_name(XML target) {
       String name = "no name" ;
       if(target.getString("id") != null) name = target.getString("id") ;
@@ -2152,7 +2152,7 @@ class ROPE_svg {
         // old data from illustrator CS
         catch_attribut(target) ;
       }
-
+      
 
 
       // give attribut
@@ -2174,7 +2174,7 @@ class ROPE_svg {
 
       // fill
       if(fill_str == null) {
-        fill = #000000 ;
+        fill = #000000 ; 
       } else if(fill_str.contains("none")) {
         noFill = true ;
       } else {
@@ -2184,7 +2184,7 @@ class ROPE_svg {
       }
       // stroke
       if(stroke_str == null) {
-        stroke = MAX_INT ;
+        stroke = MAX_INT ; 
       } else if(stroke_str.contains("none")) {
         noStroke = true ;
       } else {
@@ -2193,13 +2193,13 @@ class ROPE_svg {
         stroke = unhex(stroke_temp) ;
       }
       // strokeWeight
-      if(strokeWeight_str == null  || strokeWeight_str.contains("none")) strokeWeight = 1. ;
+      if(strokeWeight_str == null  || strokeWeight_str.contains("none")) strokeWeight = 1. ; 
       else strokeWeight = Float.valueOf(strokeWeight_str.trim()).floatValue();
       // stroke mitter
-      if(stroke_mitterlimit_str == null  || stroke_mitterlimit_str.contains("none")) strokeMitterlimit = 10 ;
+      if(stroke_mitterlimit_str == null  || stroke_mitterlimit_str.contains("none")) strokeMitterlimit = 10 ; 
       else strokeMitterlimit = Float.valueOf(stroke_mitterlimit_str.trim()).floatValue();
       // opacity
-      if(opacity_str == null || opacity_str.contains("none")) opacity = 1. ;
+      if(opacity_str == null || opacity_str.contains("none")) opacity = 1. ; 
       else opacity = Float.valueOf(opacity_str.trim()).floatValue();
       if(opacity == 1. && opacity_group != 1.) opacity = opacity_group ;
     }
@@ -2210,7 +2210,7 @@ class ROPE_svg {
     //
     // catch attribut classic SVG version 1
     private void catch_attribut(XML target) {
-      fill_str =  target.getString("fill") ;
+      fill_str =  target.getString("fill") ;        
       stroke_str =  target.getString("stroke") ;
       stroke_mitterlimit_str =  target.getString("stroke-mitterimit") ;
       strokeWeight_str =  target.getString("stroke-width") ;
@@ -2232,7 +2232,7 @@ class ROPE_svg {
       if(id.length > 1) {
         for(int i = 0 ; i < id.length ;i++) {
           if(id[i].contains(" ")) id[i] = id[i].replaceAll(" ", "") ;
-          if(i != 0) {
+          if(i != 0) { 
             int which_style = Integer.parseInt(id[i]) ;
             String my_style = st[which_style] ;
             if(my_style.contains("}") ) {
@@ -2290,8 +2290,8 @@ class ROPE_svg {
         if(font_str.contains("'")) {
           font_str = font_str.replaceAll("'","") ;
         }
-      }
-
+      } 
+      
       // split size and unit type for font
       if(font_size_str != null) {
         if(font_size_str.endsWith("pt")) {
@@ -2319,9 +2319,9 @@ class ROPE_svg {
       }
     }
 
-
-
-
+    
+    
+    
     private void aspect_fill(Vec4 factor) {
       // HSB mmode
       if(noFill) {
@@ -2351,7 +2351,7 @@ class ROPE_svg {
             p5.noStroke() ;
           } else {
             p5.strokeWeight(thickness) ;
-            p5.stroke(hue(stroke) *factor.x, saturation(stroke) *factor.y, brightness(stroke) *factor.z, opacity *g.colorModeA *factor.w) ;
+            p5.stroke(hue(stroke) *factor.x, saturation(stroke) *factor.y, brightness(stroke) *factor.z, opacity *g.colorModeA *factor.w) ; 
           }
         // RGB mmode
         } else if( g.colorMode == 1 ) {
@@ -2359,13 +2359,13 @@ class ROPE_svg {
             p5.noStroke() ;
           } else {
             p5.strokeWeight(thickness) ;
-            p5.stroke(red(stroke) *factor.x, green(stroke) *factor.y, blue(stroke) *factor.z, opacity *g.colorModeA *factor.w) ;
+            p5.stroke(red(stroke) *factor.x, green(stroke) *factor.y, blue(stroke) *factor.z, opacity *g.colorModeA *factor.w) ; 
           }
         }
       }
     }
   }
-
+  
 
 
 
@@ -2393,7 +2393,7 @@ class ROPE_svg {
     Vec6 matrix ;
     int ID ;
     String sentence = null ;
-
+  
     Text(Vec6 matrix, String sentence, int ID) {
       this.ID = ID ;
       this.pos = Vec3(matrix.e, matrix.f,0) ;
@@ -2401,7 +2401,7 @@ class ROPE_svg {
 
       this.sentence = sentence ;
     }
-
+    
     void add_value(Vec3... value) {
       pos.add(value[0]) ;
     }
@@ -2414,13 +2414,13 @@ class ROPE_svg {
     String shape_name ;
     Vec3 pos_a, pos_b ;
     int ID ;
-
+  
     Line(float x_a, float y_a,  float x_b, float y_b, int ID) {
       this.ID = ID ;
       this.pos_a = Vec3(x_a, y_a,0) ;
       this.pos_b = Vec3(x_b, y_b,0) ;
     }
-
+    
     void add_value(Vec3... value) {
       pos_a.add(value[0]) ;
       pos_b.add(value[0]) ;
@@ -2429,8 +2429,8 @@ class ROPE_svg {
 
 
 
-
-
+    
+  
   /**
   class to build all specific group
   */
@@ -2442,27 +2442,27 @@ class ROPE_svg {
     int code_vertex_count ;
     int num ;
     int ID ;
-
+    
     Vertices(int code_vertex_count, int num, PShape p, String mother_name, int ID) {
       this.ID = ID ;
       this.num = num ;
       // not sur we need this shape_name !
       this.shape_name = mother_name + "<>" +p.getName() ;
-
+  
       this.code_vertex_count = code_vertex_count ;
-
+      
       vert = new Vec3[num] ;
       vertex_code = new int[num] ;
       vertex_code = p.getVertexCodes() ;
       size = Vec2(p.width, p.height);
     }
-
+    
     void build_vertices_3D(PShape path) {
       for(int i = 0 ; i < num ; i++) {
         vert[i] = Vec3(path.getVertex(i)) ;
       }
     }
-
+    
     Vec3 [] vertices() {
       return vert ;
     }
@@ -2491,14 +2491,14 @@ class ROPE_svg {
     Vec2 size ;
     Vec6 matrix ;
     int ID ;
-
+  
     Ellipse(Vec6 matrix, float cx, float cy,  float rx, float ry, int ID) {
       this.matrix = matrix ;
       this.ID = ID ;
       this.pos = Vec3(cx, cy,0) ;
       this.size = Vec2(rx, ry).mult(2) ;
     }
-
+    
     void add_value(Vec3... value) {
       pos.add(value[0]) ;
     }
@@ -2513,14 +2513,14 @@ class ROPE_svg {
     Vec2 size ;
     Vec6 matrix ;
     int ID ;
-
+  
     Rectangle(Vec6 matrix, float x, float y,  float width_rect, float height_rect, int ID) {
       this.matrix = matrix ;
       this.ID = ID ;
       this.pos = Vec3(x, y,0) ;
       this.size = Vec2(width_rect, height_rect) ;
     }
-
+    
     void add_value(Vec3... value) {
       pos.add(value[0]) ;
     }

@@ -29,6 +29,7 @@ public class Sounda implements Rope_Constants {
   AudioBuffer source_buffer;
   FFT fft;
 
+
   public Sounda(int analyze_length) {
     this.analyze_length = analyze_length;
     minim = new Minim(this);
@@ -166,7 +167,7 @@ public class Sounda implements Rope_Constants {
       case LEFT :
         source_buffer = input.left ;
         break ;
-      case 41 :
+      case MIX :
         source_buffer = input.mix ;
         break ;
       default :
@@ -325,6 +326,263 @@ public class Sounda implements Rope_Constants {
     }
   }
 
+  
+
+
+
+
+
+
+  /**
+  TRANSIENT DETECTION
+  v 0.0.1
+  */
+  /**
+  transient method
+  v 0.0.1
+  */
+  boolean transient_advance_is ;
+  boolean [][] transient_band_is ;
+ 
+  // setting
+  public void set_transient(Vec2... threshold) {
+    iVec2 [] in_out = new iVec2[threshold.length];
+    int part = spectrum_bands / in_out.length;
+    for(int i = 0 ; i < in_out.length ; i++) {
+      in_out[i] = iVec2(i*part,(i+1)*part);
+    }
+    set_section(in_out);
+    int [] id_transient_section = new int [threshold.length];
+    for(int i = 0 ; i < id_transient_section.length ; i++) {
+      id_transient_section[i]=i;
+    }
+    set_transient(id_transient_section, threshold);
+  }
+
+
+  public void set_transient(int[] target_transient_section, Vec2... threshold) {
+    if(section_band != null) {
+      transient_advance_is = true ;
+      transient_band_is = new boolean [target_transient_section.length][spectrum_bands];
+      // init var
+      for(int i = 0 ; i < transient_band_is.length ; i++) {
+        if(target_transient_section[i] < section_num()) {
+          int target_section = target_transient_section[i];
+          section_band[target_section].set_threshold_transient(threshold[i]);
+
+        } else {
+          printErr("method set_beat(): int target_beat_section",target_transient_section[i],"is out of the num os section available");
+        }
+        for(int k = 0 ; k < transient_band_is[0].length ; k++) {
+          transient_band_is[i][k] = false;
+        }
+      }
+      // declare which band must be analyze when there is a beat detection
+      for(int i = 0 ; i < section_band.length ; i++ ) {
+        for(int k = section_band[i].in ; k < section_band[i].out ; k++) {
+          transient_band_is[i][k] = true ;
+        }
+      }
+    } else {
+      printErr("method set_transient(): there is no section initialized, use method set_section(), before set_transient() advance mode");
+    }
+  }
+
+  // boolean beat is
+  public boolean transient_is() {
+    boolean transient_is = false ;
+    for(int i = 0 ; i < section_num() ; i++) {
+      if(transient_is(i)) {
+        transient_is = true;
+        break;
+      }
+    }
+    return transient_is;
+  }
+  
+
+  
+
+  public boolean transient_is(int section_target) {
+    boolean transient_event_is = false;
+    float smooth_low_pass = mouseX/10;
+    float ratio_log = 1 +(mouseY/10);;
+    
+    float smooth_slow = mouseX/10;
+    float smooth_fast = smooth_slow *10;
+    float threshold_1 = .1;
+    float threshold_2 = .5;
+    printTempo(60,"ratio log:",ratio_log,frameCount);
+    printTempo(60,"smooth low pass:",smooth_low_pass,frameCount);
+    printTempo(60,"smoothslow:",smooth_slow,frameCount);
+    printTempo(60,"smooth_fast:",smooth_fast,frameCount);
+
+    
+
+    if(section_target < section_band.length) {
+      // set the value must be analyze
+      float step_by_band = buffer_size() / band_num();
+      int in = floor(section_band[section_target].in *step_by_band);
+      int out = floor(section_band[section_target].out *step_by_band);
+      int num_band = out - in ;
+      float [] pow_value = new float[num_band];
+      float [] low_pass_value_fast = new float[num_band];
+      float [] low_pass_value_slow = new float[num_band];
+      float [] diff_value = new float[num_band];
+      float [] log_value = new float[num_band];
+      boolean [] transient_is = new boolean[num_band];
+      float [] raw_value = new float[num_band];
+
+      for(int index = in ; index < out ; index++) {
+        int index_value = index - in ;
+        raw_value[index_value] = source_buffer.get(index);
+      }
+
+      low_pass(smooth_low_pass,in,out);
+      // here pass the first filtering value from first low pass
+      for(int i = 0 ; i  < pow_value.length ; i++) {
+        pow_value[i] = low_pass_value[i];
+        pow_value[i] = pow(pow_value[i],2);
+      }
+      // new low pass quick
+      float ref_fast = pow_value[0];
+      smoothing_fast = abs(smooth_fast)+1;
+      for(int i = 0 ; i  < low_pass_value_fast.length ; i++) {
+        float current_value = pow_value[i];
+        ref_fast += (current_value - ref_fast) / smoothing_fast;
+        low_pass_value_fast[i] = ref_fast;
+      }
+
+      // new low pass slow
+      float ref_slow = pow_value[0];
+      smoothing_slow = abs(smooth_slow)+1;
+      // pass second thread value: first low pass and pow treatment
+      for(int i = 0 ; i  < low_pass_value_slow.length ; i++) {
+        float current_value = pow_value[i];
+        ref_slow += (current_value - ref_slow) / smoothing_slow;
+        low_pass_value_slow[i] = ref_slow;
+      }
+
+      // difference between quick and fast low pass
+      for(int i = 0 ; i  < diff_value.length ; i++) {
+        // diff_value[i] = low_pass_value_slow[i] - low_pass_value_fast[i];
+        diff_value[i] = low_pass_value_fast[i] - low_pass_value_slow[i];
+      }
+
+      // difference between quick and fast low pass 
+      ratio_log = 1 +(mouseY/10);
+      for(int i = 0 ; i  < log_value.length ; i++) {
+        log_value[i] = log(1+(ratio_log*diff_value[i]));
+      }
+      
+      // transiente detection and hysteresie
+      for(int i = 0 ; i  < log_value.length ; i++) {
+        transient_is[i] = false;
+        float value = log_value[i];
+        if(value > threshold_2 && !transient_is[i]) {
+          value = 1;
+          transient_is[i] = true;
+        } else if(value < threshold_1 && transient_is[i]) {
+          value = 0;
+          transient_is[i] = false;
+        }
+      }
+      
+      for(int i = 0 ; i < transient_is.length ; i++) {
+        if(transient_is[i]) {
+          transient_event_is = true;
+          break ;
+        }
+      }
+
+      // display just for devellopement
+      boolean dev = true ;
+      if(dev) {
+        float factor =height/6;
+        int num = 8;
+        int step = height / num;
+        int [] pos_y = new int[num] ;
+        for(int i = 0 ; i < num ; i++) {
+          pos_y[i] = step *(i +1); 
+        }
+        for(int i = 0 ; i < transient_is.length ;i++) {
+        // no filter
+          int x = i +in;
+          // println(x,i,in,transient_is.length);
+          int y = int(raw_value[i] *factor) + pos_y[0];
+          set(x, y,r.YELLOW);
+          // low pass filter
+          y = int(low_pass_value[i] *factor) + pos_y[1];
+          set(x, y,r.YELLOW);
+          // transient work
+          // show pow value
+          y = int(pow_value[i] *factor) + pos_y[2];
+          set(x, y,r.YELLOW);
+
+          // show low pass quick
+          y = int(low_pass_value_fast[i] *factor) + pos_y[3];
+          set(x, y,r.YELLOW);
+
+          // show low pass slow
+          y = int(low_pass_value_slow[i] *factor) + pos_y[4];
+          set(x, y,r.YELLOW);
+
+          // diff between fast and slow
+          y = int(diff_value[i] *factor) + pos_y[5];
+          set(x, y,r.YELLOW);
+
+           // log value + 1
+          y = int(log_value[i] *factor) + pos_y[6];
+          set(x, y,r.YELLOW);
+        }
+      }
+      // end display dev   
+    } else {
+      printErrTempo(60,"method transient_is(section",section_target,") is out of the range, by default method return false",frameCount);
+    }
+    return transient_event_is;
+  }
+
+  float [] low_pass_value;
+  private void low_pass(float smooth, int in, int out) {
+    float smoothing;
+    int length = out -in ;
+    low_pass_value = new float[length];
+  
+    float ref = source_buffer.get(0);
+    smoothing = abs(smooth)+1;
+    // println("smooth", smoothing);
+    for(int index = in ; index < out ; index++) {
+      float current_value = source_buffer.get(index);
+      int index_low_pass = index - in ;
+      ref += (current_value - ref) / smoothing; 
+      low_pass_value[index_low_pass] = ref;
+    }
+  }
+  
+
+  Section get_transient(int transient_target) {
+    return section_band[transient_target];
+  }
+
+
+  // get bet threshold
+  public Vec2 get_transient_threshold(int section_target, int band_target) {
+    Vec2 threshold = Vec2(Float.MAX_VALUE) ;
+    // check if the target is on the beat range analyze
+    if(transient_advance_is && transient_band_is[section_target][band_target]) {
+      threshold = section_band[section_target].get_threshold_transient().copy();
+    }
+    return threshold;
+  }
+
+
+  public Vec2 get_transient_threshold(int section_target) {
+    return section_band[section_target].get_threshold_transient();
+  }
+
+
+
 
 
   /**
@@ -337,9 +595,8 @@ public class Sounda implements Rope_Constants {
   */
   boolean beat_advance_is ;
   boolean [][] beat_band_is ;
-  /**
-  setting
-  */
+ 
+  // setting
   public void set_beat(float... threshold) {
     iVec2 [] in_out = new iVec2[threshold.length];
     int part = spectrum_bands / in_out.length;
@@ -363,7 +620,7 @@ public class Sounda implements Rope_Constants {
       for(int i = 0 ; i < beat_band_is.length ; i++) {
         if(target_beat_section[i] < section_num()) {
           int target_section = target_beat_section[i];
-          section_band[target_section].set_threshold(threshold[i]);
+          section_band[target_section].set_threshold_beat(threshold[i]);
 
         } else {
           printErr("method set_beat(): int target_beat_section",target_beat_section[i],"is out of the num os section available");
@@ -381,7 +638,6 @@ public class Sounda implements Rope_Constants {
     } else {
       printErr("method set_beat(): there is no section initialized, use method set_section(), before set_beat() advance mode");
     }
-
   }
 
   // boolean beat is
@@ -434,15 +690,22 @@ public class Sounda implements Rope_Constants {
     float threshold = Float.MAX_VALUE ;
     // check if the target is on the beat range analyze
     if(beat_advance_is && beat_band_is[section_target][band_target]) {
-      threshold = section_band[section_target].get_threshold();
+      threshold = section_band[section_target].get_threshold_beat();
     }
     return threshold;
   }
 
 
   public float get_beat_threshold(int section_target) {
-    return section_band[section_target].get_threshold();
+    return section_band[section_target].get_threshold_beat();
   }
+
+
+
+
+
+
+
 
 
 
@@ -468,7 +731,8 @@ public class Sounda implements Rope_Constants {
       if(section_num() > 0 && threshold.length <= section_num()) {
         tempo = new Tempo[section_num()];
         for(int i = 0 ; i < section_num() ; i++) {
-          tempo[i] = new Tempo(get_beat(i));
+          //tempo[i] = new Tempo(get_beat(i));
+          tempo[i] = new Tempo(get_transient(i));
           tempo[i].set_threshold(threshold[i]);
         }
       } else {
@@ -529,7 +793,296 @@ public class Sounda implements Rope_Constants {
   }
 
 
+
+
+
+
   /**
+  Private class
+  */
+  /**
+  class Section
+  v 0.3.0
+  */
+
+  protected class Section {
+    Vec2 threshold_transient = Vec2(0,1);
+    float threshold_beat = 1;
+    int in ;
+    int out ;
+    int [] band;
+
+    public Section() {
+      band = new int[get_spectrum().length];
+      this.in = 0;
+      this.out = band.length;
+    }
+
+    public Section(int in, int out) {
+      band = new int[out -in +1];
+      this.in = in;
+      this.out = out;
+    }
+
+
+    public Section(int in, int out, Vec2 threshold_transient) {
+      band = new int[out -in +1];
+      this.in = in;
+      this.out = out;
+      this.threshold_transient = threshold_transient.copy();
+    }
+
+    public Section(int in, int out, float threshold_beat) {
+      band = new int[out -in +1];
+      this.in = in;
+      this.out = out;
+      this.threshold_beat = threshold_beat;
+    }
+     
+    /**
+
+     no method for transient ?
+
+
+     */
+    public boolean beat_is() {
+      boolean beat_is = false ;
+      int max = out ;
+      if(out >= spectrum_bands) {
+        max = spectrum_bands -1;
+      }
+
+      for(int i = in ; i <= max ; i++) {
+        if(get_spectrum(i) > threshold_beat) {
+          beat_is = true ;
+          break ;
+        }
+      }
+      return beat_is ;
+    }
+
+    // set 
+    public void set_threshold_transient(Vec2 threshold_transient) {
+      this.threshold_transient = threshold_transient;
+    }
+
+    public void set_threshold_beat(float threshold_beat) {
+      this.threshold_beat = threshold_beat;
+    }
+
+    public void set_in(int in) {
+      band = new int[out -in +1];
+      this.in = in;
+    }
+
+    public void set_out(int out) {
+      band = new int[out -in +1];
+      this.out = out;
+    }
+
+    // get
+    public Vec2 get_threshold_transient() {
+      return threshold_transient;
+    }
+
+    public float get_threshold_beat() {
+      return threshold_beat;
+    }
+
+    public int get_in() {
+      return in ;
+    }
+
+    public int get_out() {
+      return out ;
+    }
+  }
+  
+  /**
+  Private class
+  */
+  /**
+  class Section
+  v 0.2.0
+  */
+  /*
+  class Section {
+    float threshold = 1;
+    int in ;
+    int out ;
+    int [] beat_band;
+
+    public Section() {
+      beat_band = new int[get_spectrum().length];
+      this.in = 0;
+      this.out = beat_band.length;
+    }
+
+    public Section(int in, int out) {
+      beat_band = new int[out -in +1];
+      this.in = in;
+      this.out = out;
+    }
+
+
+    public Section(int in, int out, float threshold) {
+      beat_band = new int[out -in +1];
+      this.in = in;
+      this.out = out;
+      this.threshold = threshold;
+    }
+
+    public boolean beat_is() {
+      boolean beat_is = false ;
+      int max = out ;
+      if(out >= spectrum_bands) {
+        max = spectrum_bands -1;
+      }
+
+      for(int i = in ; i <= max ; i++) {
+        if(get_spectrum(i) > threshold) {
+          beat_is = true ;
+          break ;
+        }
+      }
+      return beat_is ;
+    }
+
+    // set
+    public void set_threshold(float threshold) {
+      this.threshold = threshold;
+    }
+
+    public void set_in(int in) {
+      beat_band = new int[out -in +1];
+      this.in = in;
+    }
+
+    public void set_out(int out) {
+      beat_band = new int[out -in +1];
+      this.out = out;
+    }
+
+    // get
+    public float get_threshold() {
+      return threshold;
+    }
+
+    public int get_in() {
+      return in ;
+    }
+
+    public int get_out() {
+      return out ;
+    }
+  }
+  */
+
+
+
+  /**
+  class Tempo
+  v 0.0.1
+  */
+  class Tempo {
+    private int tempo;
+    private int progress;
+    private int time_tempo_count;
+    private int sec_tempo_count;
+    private float threshold;
+    private int in, out;
+
+    public Tempo () {
+      this.in = 0 ;
+      this.out = get_spectrum().length;
+      set_threshold(4.5);
+    }
+
+    public Tempo (Section s) {
+      this.in = s.get_in();
+      this.out =  s.get_out();
+      set_threshold(4.5);
+    }
+
+
+    private void update() {
+      if(second() != sec_tempo_count) {
+        time_tempo_count++;
+        sec_tempo_count = second();
+      }
+      compute_tempo();
+    }
+
+    private int time_elapse = 0;
+    private boolean new_tempo_count = true;
+    private void compute_tempo() {
+      if(sound_is()) {
+        int time = 4;
+        if(time_tempo_count%time == 0 && new_tempo_count) {
+          new_tempo_count = false;
+          time_elapse = 0;
+          tempo = progress;
+          if(tempo < 40) tempo = 40;
+          progress = 0;
+        }
+
+        if(time_tempo_count%time != 0) new_tempo_count = true;
+
+        time_elapse++;
+        count_tempo();
+      } else {
+        progress = 0 ;
+        tempo = 0 ;
+      }
+    }
+
+    private void count_tempo() {
+      for(int target_band = in ; target_band < out ; target_band++) {
+        if(get_spectrum(target_band) > threshold) {
+          progress++;
+          break;
+        }
+      }
+    }
+
+
+    public void set_threshold(float threshold) {
+      this.threshold = threshold;
+    }
+
+    public float get_threshold() {
+      return threshold;
+    }
+
+
+    public int get_tempo() {
+      return tempo;
+    }
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
   color spectrum
   v 0.1.0
   */
@@ -747,166 +1300,4 @@ public class Sounda implements Rope_Constants {
     return iVec5(w,r,g,b,a);
   }
 
-
-
-
-  /**
-  Private class
-  */
-  /**
-  class Section
-  v 0.1.0
-  */
-  class Section {
-    float threshold = 1;
-    int in ;
-    int out ;
-    int [] beat_band;
-
-    public Section() {
-      beat_band = new int[get_spectrum().length];
-      this.in = 0;
-      this.out = beat_band.length;
-    }
-
-    public Section(int in, int out) {
-      beat_band = new int[out -in +1];
-      this.in = in;
-      this.out = out;
-    }
-
-
-    public Section(int in, int out, float threshold) {
-      beat_band = new int[out -in +1];
-      this.in = in;
-      this.out = out;
-      this.threshold = threshold;
-    }
-
-    public boolean beat_is() {
-      boolean beat_is = false ;
-      int max = out ;
-      if(out >= spectrum_bands) {
-        max = spectrum_bands -1;
-      }
-
-      for(int i = in ; i <= max ; i++) {
-        if(get_spectrum(i) > threshold) {
-          beat_is = true ;
-          break ;
-        }
-      }
-      return beat_is ;
-    }
-
-    // set
-    public void set_threshold(float threshold) {
-      this.threshold = threshold;
-    }
-
-    public void set_in(int in) {
-      beat_band = new int[out -in +1];
-      this.in = in;
-    }
-
-    public void set_out(int out) {
-      beat_band = new int[out -in +1];
-      this.out = out;
-    }
-
-    // get
-    public float get_threshold() {
-      return threshold;
-    }
-
-    public int get_in() {
-      return in ;
-    }
-
-    public int get_out() {
-      return out ;
-    }
-  }
-
-
-
-  /**
-  class Tempo
-  v 0.0.1
-  */
-  class Tempo {
-    private int tempo;
-    private int progress;
-    private int time_tempo_count;
-    private int sec_tempo_count;
-    private float threshold;
-    private int in, out;
-
-    public Tempo () {
-      this.in = 0 ;
-      this.out = get_spectrum().length;
-      set_threshold(4.5);
-    }
-
-    public Tempo (Section s) {
-      this.in = s.get_in();
-      this.out =  s.get_out();
-      set_threshold(4.5);
-    }
-
-
-    private void update() {
-      if(second() != sec_tempo_count) {
-        time_tempo_count++;
-        sec_tempo_count = second();
-      }
-      compute_tempo();
-    }
-
-    private int time_elapse = 0;
-    private boolean new_tempo_count = true;
-    private void compute_tempo() {
-      if(sound_is()) {
-        int time = 4;
-        if(time_tempo_count%time == 0 && new_tempo_count) {
-          new_tempo_count = false;
-          time_elapse = 0;
-          tempo = progress;
-          if(tempo < 40) tempo = 40;
-          progress = 0;
-        }
-
-        if(time_tempo_count%time != 0) new_tempo_count = true;
-
-        time_elapse++;
-        count_tempo();
-      } else {
-        progress = 0 ;
-        tempo = 0 ;
-      }
-    }
-
-    private void count_tempo() {
-      for(int target_band = in ; target_band < out ; target_band++) {
-        if(get_spectrum(target_band) > threshold) {
-          progress++;
-          break;
-        }
-      }
-    }
-
-
-    public void set_threshold(float threshold) {
-      this.threshold = threshold;
-    }
-
-    public float get_threshold() {
-      return threshold;
-    }
-
-
-    public int get_tempo() {
-      return tempo;
-    }
-  }
 }

@@ -1,7 +1,7 @@
 /**
 ROPE SCIENCE
 v 0.2.3
-* Copyleft (c) 2014-2018
+* Copyleft (c) 2014-2018 
 * Stan le Punk > http://stanlepunk.xyz/
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Rope
@@ -30,7 +30,7 @@ public double g_force(double dist, double m_1, double m_2) {
 
 
 /**
-Math rope
+Math rope 
 v 1.8.17
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Math_rope
@@ -79,13 +79,13 @@ boolean inside(Vec pos, Vec size, Vec2 target_pos) {
 boolean inside(Vec pos, Vec size, Vec2 target_pos, int type) {
   if(type == ELLIPSE) {
     // this part can be improve to check the 'x' and the 'y'
-    if (dist(Vec2(pos.x,pos.y), target_pos) < size.x *.5) return true ;
+    if (dist(Vec2(pos.x,pos.y), target_pos) < size.x *.5) return true ; 
     else return false ;
   } else {
-    if(target_pos.x > pos.x && target_pos.x < pos.x +size.x &&
-       target_pos.y > pos.y && target_pos.y < pos.y +size.y) return true ;
+    if(target_pos.x > pos.x && target_pos.x < pos.x +size.x && 
+       target_pos.y > pos.y && target_pos.y < pos.y +size.y) return true ; 
       else return false ;
-  }
+  } 
 }
 
 
@@ -140,9 +140,9 @@ float angle(Vec2 v) {
 
 
 
+  
 
-
-/*
+/* 
 return a vector info : radius,longitude, latitude
 @return Vec3
 */
@@ -170,13 +170,13 @@ return the position of point on Sphere, with longitude and latitude
 Vec3 to_cartesian_3D(Vec2 pos, Vec2 range, float sizeField)  {
   // vertical plan position
   float verticalY = to_cartesian_2D(pos.y, Vec2(0,range.y), Vec2(0,TAU), sizeField).x ;
-  float verticalZ = to_cartesian_2D(pos.y, Vec2(0,range.y), Vec2(0,TAU), sizeField).y ;
+  float verticalZ = to_cartesian_2D(pos.y, Vec2(0,range.y), Vec2(0,TAU), sizeField).y ; 
   Vec3 posVertical = new Vec3(0, verticalY, verticalZ) ;
   // horizontal plan position
-  float horizontalX = to_cartesian_2D(pos.x, Vec2(0,range.x), Vec2(0,TAU), sizeField).x ;
+  float horizontalX = to_cartesian_2D(pos.x, Vec2(0,range.x), Vec2(0,TAU), sizeField).x ; 
   float horizontalZ = to_cartesian_2D(pos.x, Vec2(0,range.x), Vec2(0,TAU), sizeField).y  ;
   Vec3 posHorizontal = new Vec3(horizontalX, 0, horizontalZ) ;
-
+  
   return projection(middle(posVertical, posHorizontal), sizeField) ;
 }
 
@@ -188,11 +188,11 @@ Vec3 to_cartesian_3D(float latitude, float longitude) {
 // main method
 Vec3 to_cartesian_3D(float latitude, float longitude,  float radius) {
   // https://en.wikipedia.org/wiki/List_of_common_coordinate_transformations
-
+  
 
   /*
   //  Must be improve is not really good in the border versus direct polar rotation with the matrix
-  */
+  */ 
   float theta = longitude%TAU ;
   float phi = latitude%PI ;
 
@@ -215,7 +215,7 @@ Vec3 to_cartesian_3D(float longitude, float latitude, float radius) {
 
 //Step 1 : translate the mouse position x and y  on the sphere, we must do that separately
 /*
-@ return Vec2
+@ return Vec2 
 return linear value on the circle perimeter
 */
 Vec2 to_cartesian_2D (float posMouse, Vec2 range, Vec2 targetRadian, float distance) {
@@ -286,7 +286,7 @@ Vec3 projection(Vec3 direction, Vec3 origin, float radius) {
 
 
 /**
-look at
+look at 
 before target direction
 v 0.0.2
 */
@@ -340,10 +340,10 @@ Vec3 distribution_cartesian_fibonacci_sphere(int n, int num, float step, float r
     float y  = (n *offset) -1 + (offset / 2.) ;
     float r = sqrt(1 - pow(y,2)) ;
     float phi = ((n +root)%num) * step ;
-
+    
     float x = cos(phi) *r ;
     float z = sin(phi) *r ;
-
+    
     return Vec3(x,y,z) ;
   } else return Vec3() ;
 }
@@ -361,7 +361,7 @@ Vec2 distribution_polar_fibonacci_sphere(int n, int num, float step) {
     float longitude = r.PHI *TAU *n;
     longitude /= step ;
     // like a normalization of the result ?
-    longitude -= floor(longitude);
+    longitude -= floor(longitude); 
     longitude *= TAU;
     if (longitude > PI)  longitude -= TAU;
     // Convert dome height (which is proportional to surface area) to latitude
@@ -464,7 +464,7 @@ void chromatic_circle(PVector pos, int d) {
   int numPoints = ceil(perimeter_disc( radius)) ;
   for(int i=0; i < numPoints; i++) {
       //circle
-      float stepAngle = map(i, 0, numPoints, 0, 2*PI) ;
+      float stepAngle = map(i, 0, numPoints, 0, 2*PI) ; 
       float angle =  2*PI - stepAngle;
       //color
       color c = color (i, 100,100) ;
@@ -481,7 +481,7 @@ void circle(color c, PVector pos, int d) {
   int radius = ceil(radius_from_circle_surface(surface)) ;
   int numPoints = ceil(perimeter_disc(radius)) ;
   for(int i=0; i < numPoints; i++) {
-      float stepAngle = map(i, 0, numPoints, 0, 2*PI) ;
+      float stepAngle = map(i, 0, numPoints, 0, 2*PI) ; 
       float angle =  2*PI - stepAngle;
       set(int(projection(angle, radius).x + pos.x) , int(projection(angle, radius).y + pos.y), c);
   }
@@ -493,7 +493,7 @@ void circle(color c, PVector pos, int d, int num) {
 
   int radius = ceil(radius_from_circle_surface(surface)) ;
   for(int i=0; i < num; i++) {
-      float stepAngle = map(i, 0, num, 0, 2*PI) ;
+      float stepAngle = map(i, 0, num, 0, 2*PI) ; 
       float angle =  2*PI - stepAngle;
       set(int(projection(angle, radius).x + pos.x) , int(projection(angle, radius).y + pos.y), c);
   }
@@ -511,7 +511,7 @@ void circle(PVector pos, int d, int num, PVector size, String shape) {
 
   int radius = ceil(radius_from_circle_surface(surface)) ;
   for(int i=0; i < num; i++) {
-    float stepAngle = map(i, 0, num, 0, 2*PI) ;
+    float stepAngle = map(i, 0, num, 0, 2*PI) ; 
     float angle =  2*PI - stepAngle;
     PVector newPos = new PVector(projection(angle, radius).x + pos.x, projection(angle, radius).y + pos.y) ;
     if(whichShape == 0 ) point(newPos.x, newPos.y) ;
@@ -537,15 +537,15 @@ void circle(PVector pos, int d, int num, PVector size, String shape) {
 // summits around the circle
 PVector [] circle (PVector pos, int d, int num) {
   PVector [] p = new PVector [num] ;
-  int surface = d*d ;
+  int surface = d*d ; 
   int radius = ceil(radius_from_circle_surface(surface)) ;
-
+  
   // choice your starting point
   float startingAnglePos = PI*.5;
   if(num == 4) startingAnglePos = PI*.25;
-
+  
   for( int i=0 ; i < num ; i++) {
-    float stepAngle = map(i, 0, num, 0, TAU) ;
+    float stepAngle = map(i, 0, num, 0, TAU) ; 
     float angle =  TAU - stepAngle -startingAnglePos;
     p[i] = new PVector(projection(angle, radius).x +pos.x,projection(angle, radius).y + pos.y) ;
   }
@@ -554,23 +554,23 @@ PVector [] circle (PVector pos, int d, int num) {
 
 PVector [] circle (PVector pos, int d, int num, float jitter) {
   PVector [] p = new PVector [num] ;
-  int surface = d*d ;
+  int surface = d*d ; 
   int radius = ceil(radius_from_circle_surface(surface)) ;
-
+  
   // choice your starting point
   float startingAnglePos = PI*.5;
   if(num == 4) startingAnglePos = PI*.25;
-
+  
   float angleCorrection ; // this correction is cosmetic, when we'he a pair beam this one is stable for your eyes :)
   for( int i=0 ; i < num ; i++) {
     int beam = num /2 ;
     if ( beam%2 == 0 ) angleCorrection = PI / num ; else angleCorrection = 0.0 ;
     if ( num%2 == 0 ) jitter *= -1 ; else jitter *= 1 ; // the beam have two points at the top and each one must go to the opposate...
-
+    
     float stepAngle = map(i, 0, num, 0, TAU) ;
     float jitterAngle = map(jitter, -1, 1, -PI/num, PI/num) ;
     float angle =  TAU -stepAngle +jitterAngle +angleCorrection -startingAnglePos;
-
+    
     p[i] = new PVector(projection(angle, radius).x +pos.x, projection(angle, radius).y +pos.y) ;
   }
   return p ;
@@ -678,7 +678,7 @@ void draw_primitive (float radius, Vec3 [] pts) {
 void draw_primitive (Vec3 pos, Vec2 dir, float radius, Vec3 [] pts) {
   // special one because we have direction for the polygone, so we must use the matrix system until have a good algorithm for the cartesian direction
   if(renderer_P3D()) {
-    start_matrix_3D(pos, dir) ;
+    start_matrix_3D(pos, dir) ; 
   } else {
     start_matrix_2D(Vec2(pos.x, pos.y), 0) ;
   }
@@ -701,17 +701,17 @@ void draw_primitive (Vec3 pos, float radius, Vec3 [] pts) {
         } else {
           vertex(pts[i]) ;
         }
-      // 2D
+      // 2D  
       } else {
         if ( pts.length <= 2 && pts.length > 1 ) {
-
+          
           if (i < pts.length -1) {
             // >>>>>>>>>>>>>here we make an exception in the structure code for the pts[i+1] because this one haven't make .mult() and .add() method to the final position
             Vec2 point_b = new Vec2(pts[i+1].x, pts[i+1].y) ;
             point_b.mult(radius).add(Vec2(pos.x, pos.y)) ;
             line(pts[i].x,pts[i].y, point_b.x, point_b.y) ;
 
-          }
+          } 
         } else {
           vertex(pts[i].x, pts[i].y) ;
         }
@@ -767,10 +767,10 @@ Vec3 [] polygon_2D (int num, float new_orientation) {
   if(num == 4) startingAnglePos = PI*.25 +new_orientation;
   // calcul the position of each summit, step by step
   for( int i=0 ; i < num ; i++) {
-    float stepAngle = map(i, 0, num, 0, TAU) ;
+    float stepAngle = map(i, 0, num, 0, TAU) ; 
     float orientation = TAU -stepAngle -startingAnglePos ;
     Vec2 temp_orientation_xy = to_cartesian_2D(orientation) ;
-
+    
     float x = temp_orientation_xy.x  ;
     float y = temp_orientation_xy.y  ;
     float z = 0 ;
@@ -819,7 +819,7 @@ Vec3 [] polygon_3D (Vec3 pos, float radius, int num, float new_orientation, Vec3
 
   // init Vec3 p
   for(int i = 0 ; i < num_temp ; i++) p[i] = Vec3() ;
-
+  
   // create normal direction for the point
   float theta, delta;
   delta = TAU / num;
@@ -996,14 +996,14 @@ POLYDRON
   All Polyhedrons can use "POINT" and "LINE" display mode.
   except the "TETRAHEDRON" who can also use "VERTEX" display mode.
   */
-
+  
 // MAIN VOID to create polyhedron
 void polyhedron(String whichPolyhedron, String whichStyleToDraw, int size) {
   //This is where the actual defining of the polyhedrons takes place
 
-
+   
   listPVectorPolyhedron.clear(); //clear out whatever verts are currently defined
-
+  
   if(whichPolyhedron.equals("TETRAHEDRON")) tetrahedron_poly(size) ;
   if(whichPolyhedron.equals("CUBE")) cube(size) ;
   if(whichPolyhedron.equals("OCTOHEDRON")) octohedron(size) ;
@@ -1017,13 +1017,13 @@ void polyhedron(String whichPolyhedron, String whichStyleToDraw, int size) {
   if(whichPolyhedron.equals("TRUNCATED DODECAHEDRON"))truncated_dodecahedron(size) ;
   if(whichPolyhedron.equals("TRUNCATED ICOSAHEDRON"))truncated_icosahedron(size) ;
   if(whichPolyhedron.equals("TRUNCATED CUBOCTAHEDRON"))truncated_cuboctahedron(size) ;
-
+  
   if(whichPolyhedron.equals("RHOMBIC CUBOCTAHEDRON"))rhombic_cuboctahedron(size) ;
   if(whichPolyhedron.equals("RHOMBIC DODECAHEDRON"))rhombic_dodecahedron(size) ;
   if(whichPolyhedron.equals("RHOMBIC TRIACONTAHEDRON"))rhombic_triacontahedron(size) ;
   if(whichPolyhedron.equals("RHOMBIC COSI DODECAHEDRON SMALL"))rhombic_cosi_dodecahedron_small(size) ;
   if(whichPolyhedron.equals("RHOMBIC COSI DODECAHEDRON GREAT"))rhombic_cosi_dodecahedron_great(size) ;
-
+  
   // which method to draw
   if(whichStyleToDraw.equals("LINE")) drawLinePolyhedron(whichPolyhedron) ;
   if(whichStyleToDraw.equals("POINT")) drawPointPolyhedron(whichPolyhedron) ;
@@ -1034,7 +1034,7 @@ void polyhedron(String whichPolyhedron, String whichStyleToDraw, int size) {
 
 
 
-// POLYHEDRON DETAIL
+// POLYHEDRON DETAIL 
 ////////////
 //set up initial polyhedron
 float factorSizePolyhedron ;
@@ -1098,7 +1098,7 @@ void cuboctahedron(int size) {
 // TRUNCATED
 void truncated_cube(int size) {
   addPermutations(r.ROOT2-1,1,1);
-  edgeLengthOfPolyhedron = 2*(r.ROOT2-1);
+  edgeLengthOfPolyhedron = 2*(r.ROOT2-1);     
   factorSizePolyhedron = size /2.1;
 }
 
@@ -1232,7 +1232,7 @@ void drawVertexPolyhedron(String polyhedronName) {
       v1 = new PVector(v1.x *factorSizePolyhedron, v1.y *factorSizePolyhedron, v1.z *factorSizePolyhedron) ;
       v2 = new PVector(v2.x *factorSizePolyhedron, v2.y *factorSizePolyhedron, v2.z *factorSizePolyhedron) ;
       v3 = new PVector(v3.x *factorSizePolyhedron, v3.y *factorSizePolyhedron, v3.z *factorSizePolyhedron) ;
-
+      
       // drawing
       beginShape() ;
       vertex(v1.x, v1.y, v1.z) ;
@@ -1262,7 +1262,7 @@ void drawVertexPolyhedron(String polyhedronName) {
 }
 // END of EASY METHOD and DIRECT METHOD
 
-
+ 
 
 
 
@@ -1285,7 +1285,7 @@ boolean isEdge(int vID1, int vID2, ArrayList listPoint) {
 // ADD POINTS for built POLYHEDRON
 /////////////////////////////////
 
-
+ 
 void addPermutations(float x, float y, float z) {
   //adds vertices for all three permutations of x, y, and z
   addVerts(x, y, z);
@@ -1294,17 +1294,17 @@ void addPermutations(float x, float y, float z) {
 }
 
 
-
+ 
 void addVerts(float x, float y, float z) {
   //adds the requested vert and all "mirrored" verts
   listPVectorPolyhedron.add (new PVector(x, y, z));
   // z
-  if (z != 0.0) listPVectorPolyhedron.add (new PVector(x, y, -z));
+  if (z != 0.0) listPVectorPolyhedron.add (new PVector(x, y, -z)); 
   // y
   if (y != 0.0) {
     listPVectorPolyhedron.add (new PVector(x, -y, z));
     if (z != 0.0) listPVectorPolyhedron.add (new PVector(x, -y, -z));
-  }
+  } 
   // x
   if (x != 0.0) {
     listPVectorPolyhedron.add (new PVector(-x, y, z));

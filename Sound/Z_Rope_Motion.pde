@@ -1,10 +1,10 @@
 /**
-ROPE - Romanesco processing environment –
-* Copyleft (c) 2014-2017
+ROPE - Romanesco processing environment – 
+* Copyleft (c) 2014-2017 
 * Stan le Punk > http://stanlepunk.xyz/
 Rope Motion  2015 – 2017
 v 1.1.0
-Rope – Romanesco Processing Environment –
+Rope – Romanesco Processing Environment – 
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Rope
 */
@@ -49,7 +49,7 @@ Vec3 follow(Vec3 target, float speed) {
 
 
 /**
-Class Motion
+Class Motion 
 v 1.0.7.2
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Motion
@@ -68,7 +68,7 @@ class Motion {
   Vec3 dir  ;
   int tempo = 0 ;
   private boolean tempo_is = false ;
-
+  
   // constructor
   Motion() {
   }
@@ -169,7 +169,7 @@ class Motion {
       if(vel > 0) vel = 0 ;
     }
   }
-
+  
   // acceleration
   public void acceleration() {
     if(vel > 0) {
@@ -190,7 +190,7 @@ class Motion {
 
 
   /**
-  leading
+  leading 
   v 0.0.3
   */
   public Vec2 leading(Vec2 leading_pos, Vec2 exec_pos) {
@@ -255,7 +255,7 @@ class Motion {
           vel = max_vel ;
         }
       }
-
+      
 
       if(abs(vel) >= max_vel || !acc_is) {
         apply_acc = false ;
@@ -283,9 +283,9 @@ class Motion {
     if(tempo != 0) {
       if(frameCount%tempo == 0) {
         for_dir.set(leading_pos) ;
-      }
+      } 
     }
-
+    
     //
     return vel_vec3 ;
   }
@@ -293,7 +293,7 @@ class Motion {
   end leading
   */
 
-
+  
 }
 
 
@@ -316,9 +316,9 @@ class Path extends Motion {
   // Vec3 origin, target ;
   // speed ratio to adjust the speed xy according to position target
   Vec3 ratio  ;
-  //keypoint
+  //keypoint 
   Vec3 pos ;
-
+  
 
   // find a good keypoint in the ArrayList
   int n = 0 ;
@@ -338,7 +338,7 @@ class Path extends Motion {
     this.vel = abs(vel) ;
    }
 
-
+  
 
   // next
   public void previous() {
@@ -413,64 +413,64 @@ class Path extends Motion {
       }
       ratio.x = speed_ratio.x / speed_ratio.y ;
       ratio.y = speed_ratio.y / speed_ratio.x ;
-      if(abs(ratio.x) > abs(ratio.y) ) {
-        ratio.x = 1.0 ; ratio.y = abs(ratio.y) ;
-      } else {
-        ratio.x = abs(ratio.x) ; ratio.y = 1.0 ;
+      if(abs(ratio.x) > abs(ratio.y) ) { 
+        ratio.x = 1.0 ; ratio.y = abs(ratio.y) ; 
+      } else { 
+        ratio.x = abs(ratio.x) ; ratio.y = 1.0 ; 
       }
-
+      
       // Give the good direction to the translation
       if (speed_ratio.x == 0) {
         pos.x += 0 ;
         if (origin.y - target.y < 0 )  {
-          pos.y += vel ;
+          pos.y += vel ; 
         } else {
           pos.y -= vel ;
         }
-      }
+      } 
       if (speed_ratio.y == 0) {
         pos.y += 0 ;
         if (origin.x - target.x < 0 ) {
-          pos.x += vel ;
+          pos.x += vel ; 
         } else {
           pos.x -= vel ;
-        }
+        }     
       }
 
       if (speed_ratio.x != 0 && speed_ratio.y != 0  )  {
         if (origin.x - target.x < 0 ) {
-          pos.x += (vel *ratio.x) ;
+          pos.x += (vel *ratio.x) ; 
         } else {
           pos.x -= (vel *ratio.x) ;
         }
         if (origin.y - target.y < 0 ) {
-          pos.y += (vel *ratio.y) ;
+          pos.y += (vel *ratio.y) ; 
         } else {
           pos.y -= (vel *ratio.y) ;
         }
       }
     } else {
-      n++ ;
+      n++ ; 
       m++ ;
     }
-    //change to the next keypoint
-    if (target.equals(pos)) {
-      m++ ;
-      n++ ;
+    //change to the next keypoint 
+    if (target.equals(pos)) {  
+      m++ ; 
+      n++ ; 
     }
-
-    if (n != path.size() && m == 1) {
-      m = 1 ;
-      n = 0 ;
+    
+    if (n != path.size() && m == 1) { 
+      m = 1 ; 
+      n = 0 ; 
     }
-
-    if (m == path.size()) {
-      m = 0 ;
+    
+    if (m == path.size()) { 
+      m = 0 ; 
     }
-
-    if (n == path.size()) {
-      n = 0 ;
-    }
+    
+    if (n == path.size()) { 
+      n = 0 ; 
+    } 
   }
 
 
@@ -501,7 +501,7 @@ class Path extends Motion {
   ArrayList<Vec3> path_ArrayList() {
     return path ;
   }
-
+  
 
   // add point to the list to make the path
   void add(Vec coord) {

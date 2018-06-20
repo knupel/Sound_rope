@@ -1,7 +1,7 @@
 /**
 ROPE VECTOR
-v 2.7.0
-* Copyleft (c) 2014-2018
+v 2.8.0
+* Copyleft (c) 2014-2018 
 * Stan le Punk > http://stanlepunk.xyz/
 Rope – Romanesco Processing Environment: 2015–2018
 * @author Stan le Punk
@@ -30,7 +30,7 @@ abstract class bVec implements Rope_Constants {
   bVec(int num) {
     this.num = num ;
   }
-
+  
   /**
   * @return the number of componenets
   */
@@ -80,7 +80,7 @@ class bVec2 extends bVec {
     super(2);
     set(v);
   }
-
+  
   public bVec2 set(boolean arg){
     set(arg,arg);
     return this;
@@ -99,7 +99,7 @@ class bVec2 extends bVec {
     }
   }
 
-  /**
+  /** 
   * master method set
   * @return bVec
   */
@@ -128,7 +128,7 @@ class bVec3 extends bVec {
     super(3);
     set(v);
   }
-
+  
   public bVec3 set(boolean b){
     set(b,b,b);
     return this;
@@ -147,7 +147,7 @@ class bVec3 extends bVec {
     }
   }
 
-  /**
+  /** 
   * master method set
   * @return bVec
   */
@@ -177,7 +177,7 @@ class bVec4 extends bVec {
     super(4);
     set(v);
   }
-
+  
   public bVec4 set(boolean b){
     set(b,b,b,b);
     return this;
@@ -196,7 +196,7 @@ class bVec4 extends bVec {
     }
   }
 
-  /**
+  /** 
   * master method set
   * @return bVec
   */
@@ -228,7 +228,7 @@ class bVec5 extends bVec {
     super(5);
     set(v);
   }
-
+  
   public bVec5 set(boolean b){
     set(b,b,b,b,b);
     return this;
@@ -247,7 +247,7 @@ class bVec5 extends bVec {
     }
   }
 
-  /**
+  /** 
   * master method set
   * @return bVec
   */
@@ -280,7 +280,7 @@ class bVec6 extends bVec {
     super(6);
     set(v);
   }
-
+  
   public bVec6 set(boolean b){
     set(b,b,b,b,b,b);
     return this;
@@ -299,7 +299,7 @@ class bVec6 extends bVec {
     }
   }
 
-  /**
+  /** 
   * master method set
   * @return bVec
   */
@@ -391,7 +391,7 @@ class iVec2 extends iVec {
     super(2);
     set(v);
   }
-
+  
 
 
   public iVec2 set(int arg){
@@ -465,8 +465,8 @@ class iVec2 extends iVec {
   v 0.0.1
   */
   iVec2 mult(int m_x, int m_y) {
-    x *= m_x;
-    y *= m_y;
+    x *= m_x; 
+    y *= m_y; 
     set(x,y);
     return this;
   }
@@ -481,38 +481,38 @@ class iVec2 extends iVec {
     } else return null;
   }
 
-
+   
   /**
   Division
   v 0.0.1
   */
   /**
-  * divide Vector by a int value
+  * divide Vector by a int value 
   */
   iVec2 div(int d_x, int d_y) {
-    if(d_x != 0) x /= d_x;
-    if(d_y != 0) y /= d_y;
+    if(d_x != 0) x /= d_x; 
+    if(d_y != 0) y /= d_y; 
     set(x,y);
     return this;
   }
   iVec2 div(int d) {
     return div(d,d);
   }
-
+  
 
   iVec2 div(iVec v) {
     if(v != null) {
       return div(v.x,v.y);
     } else return null;
   }
-
-
+  
+  
   /**
   Addition
   v 0.0.1
   */
-  /**
-  * add float value
+  /** 
+  * add float value 
   */
   iVec2 add(int a_x,int a_y) {
     x += a_x;
@@ -536,8 +536,8 @@ class iVec2 extends iVec {
   /**
   Substraction
   */
-  /**
-  * sub float value
+  /** 
+  * sub float value 
   */
   iVec2 sub(int a_x,int a_y) {
     x -= a_x;
@@ -564,20 +564,20 @@ class iVec2 extends iVec {
   boolean equals(iVec2 target) {
     if(target != null ) {
       if((x == target.x) && (y == target.y)) {
-        return true;
+        return true; 
       } else return false;
     } else return false;
   }
 
   boolean equals(int target) {
-    if((x == target) && (y == target))
-    return true;
+    if((x == target) && (y == target)) 
+    return true; 
     else return false;
   }
-
+  
   boolean equals(int tx, int ty) {
-    if((x == tx) && (y == ty))
-    return true;
+    if((x == tx) && (y == ty)) 
+    return true; 
     else return false;
   }
 
@@ -619,7 +619,7 @@ class iVec3 extends iVec {
     super(3);
     set(v);
   }
-
+  
 
   public void set(int arg){
     set(arg,arg, arg);
@@ -707,11 +707,11 @@ class iVec3 extends iVec {
   */
     /**
   * multiply Vector by int value
-  * @return iVec3
+  * @return iVec3 
   */
   iVec3 mult(int m_x, int m_y, int m_z) {
-    x *= m_x;
-    y *= m_y;
+    x *= m_x; 
+    y *= m_y; 
     z *= m_z;
     set(x,y,z) ;
     return this ;
@@ -726,39 +726,39 @@ class iVec3 extends iVec {
       return mult(v.x,v.y,v.z);
     } else return null ;
   }
-
+   
   /**
   Division
   v 0.0.2
   */
   /**
   * divide Vector by int value
-  * @return iVec3
+  * @return iVec3 
   */
   iVec3 div(int d_x, int d_y, int d_z) {
-    if(d_x != 0) x /= d_x;
-    if(d_y != 0) y /= d_y;
-    if(d_z != 0) z /= d_z;
+    if(d_x != 0) x /= d_x; 
+    if(d_y != 0) y /= d_y; 
+    if(d_z != 0) z /= d_z; 
     set(x,y,z);
     return this;
   }
   iVec3 div(int d) {
     return div(d,d,d);
   }
-
+  
   iVec3 div(iVec v) {
     if(v != null) {
       return div(v.x,v.y,v.z);
     } else return null;
   }
-
-
+  
+  
   /**
   Addition
   v 0.0.1
   */
-  /**
-  * add int value
+  /** 
+  * add int value 
   */
   iVec3 add(int a_x,int a_y,int a_z) {
     x += a_x;
@@ -783,8 +783,8 @@ class iVec3 extends iVec {
   Substraction
   v 0.0.1
   */
-  /**
-  * sub int value
+  /** 
+  * sub int value 
   */
   iVec3 sub(int a_x,int a_y,int a_z) {
     x -= a_x;
@@ -810,20 +810,20 @@ class iVec3 extends iVec {
   boolean equals(iVec3 target) {
     if(target != null ) {
       if((x == target.x) && (y == target.y) && (z == target.z)) {
-        return true;
+        return true; 
       } else return false;
     } else return false;
   }
 
   boolean equals(int target) {
-    if((x == target) && (y == target) && (z == target))
-    return true;
+    if((x == target) && (y == target) && (z == target)) 
+    return true; 
     else return false;
   }
-
+  
   boolean equals(int tx, int ty, int tz) {
-    if((x == tx) && (y == ty) && (z == tz))
-    return true;
+    if((x == tx) && (y == ty) && (z == tz)) 
+    return true; 
     else return false;
   }
 
@@ -848,7 +848,7 @@ class iVec3 extends iVec {
 }
 
 
-
+  
 
 /**
 iVec4
@@ -975,19 +975,19 @@ class iVec4 extends iVec {
       return mult(v.x,v.y,v.z,v.w);
     } else return null ;
   }
-
+   
   /**
   Division
   v 0.0.2
   */
   /**
   * @return Vec
-  * divide Vector by a float value
+  * divide Vector by a float value 
   */
   iVec4 div(int d_x, int d_y, int d_z, int d_w) {
-    if(d_x != 0) x /= d_x;
-    if(d_y != 0) y /= d_y;
-    if(d_z != 0) z /= d_z;
+    if(d_x != 0) x /= d_x; 
+    if(d_y != 0) y /= d_y; 
+    if(d_z != 0) z /= d_z; 
     if(d_w != 0) w /= d_w;
     set(x,y,z,w);
     return this;
@@ -995,20 +995,20 @@ class iVec4 extends iVec {
   iVec4 div(int d) {
     return div(d,d,d,d);
   }
-
+  
   iVec4 div(iVec v) {
     if(v != null) {
       return div(v.x,v.y,v.z,v.w);
     } else return null;
   }
-
-
+  
+  
   /**
   Addition
   v 0.0.1
   */
-  /*
-  * add float value
+  /* 
+  * add float value 
   */
   iVec4 add(int a_x,int a_y,int a_z,int a_w) {
     x += a_x;
@@ -1034,14 +1034,14 @@ class iVec4 extends iVec {
   Substraction
   v 0.0.1
   */
-  /*
-  * sub float value
+  /* 
+  * sub float value 
   */
   iVec4 sub(int a_x,int a_y,int a_z, int a_w) {
     x -= a_x;
     y -= a_y;
     z -= a_z;
-    w -= a_w;
+    w -= a_w; 
     set(x,y,z,w);
     return this;
   }
@@ -1062,20 +1062,20 @@ class iVec4 extends iVec {
   boolean equals(iVec4 target) {
     if(target != null ) {
       if((x == target.x) && (y == target.y) && (z == target.z) && (w == target.w)) {
-        return true;
+        return true; 
       } else return false;
     } else return false;
   }
 
   boolean equals(int target) {
-    if((x == target) && (y == target) && (z == target) && (w == target))
-    return true;
+    if((x == target) && (y == target) && (z == target) && (w == target)) 
+    return true; 
     else return false;
   }
-
+  
   boolean equals(int tx, int ty, int tz, int tw) {
-    if((x == tx) && (y == ty) && (z == tz) && (w == tw))
-    return true;
+    if((x == tx) && (y == ty) && (z == tz) && (w == tw)) 
+    return true; 
     else return false;
   }
 
@@ -1110,7 +1110,7 @@ class iVec5 extends iVec {
   iVec5(iVec v) {
     super(5) ;
     set(v);
-  }
+  } 
 
   public void set(int arg){
     set(arg,arg,arg,arg,arg);
@@ -1205,7 +1205,7 @@ class iVec6 extends iVec {
     super(6) ;
     set(v);
   }
-
+  
   public void set(int arg){
     set(arg,arg,arg,arg,arg,arg);
   }
@@ -1323,8 +1323,8 @@ class iVec6 extends iVec {
 
 /**
 Vec class
-v 1.15.0
-2015-2017
+v 1.16.0
+2015-2018
 Vector with a float precision
 
 */
@@ -1396,7 +1396,7 @@ public class Vec2 extends Vec {
       println("the key word for the random is not available use the String 'RANDOM' or 'RANDOM ZERO' ") ;
     }
   }
-
+  
   public Vec2(String key_random, int r1, int r2) {
     super(2) ;
     if(key_random.equals(RANDOM)) {
@@ -1517,16 +1517,16 @@ public class Vec2 extends Vec {
   */
   float sum() {
     return x+y;
-  }
-
+  } 
+   
   /**
   multiplication
   */
   /**
-  * multiply Vector by different float value
+  * multiply Vector by different float value 
   */
   Vec2 mult(float m_x, float m_y) {
-    x *= m_x ;
+    x *= m_x ; 
     y *= m_y ;
     set(x,y) ;
     return this;
@@ -1547,20 +1547,20 @@ public class Vec2 extends Vec {
       return mult(v.x,v.y);
     } else return null ;
   }
+  
 
-
-
+  
   /**
   division
   */
   /**
-  * divide Vector by a float value
+  * divide Vector by a float value 
   */
   Vec2 div(float d_x, float d_y) {
-    if(d_x != 0) x /= d_x;
-    if(d_y != 0) y /= d_y;
+    if(d_x != 0) x /= d_x; 
+    if(d_y != 0) y /= d_y; 
     set(x,y) ;
-    return this;
+    return this;   
   }
 
   Vec2 div(float d) {
@@ -1578,17 +1578,17 @@ public class Vec2 extends Vec {
       return div(v.x,v.y);
     } else return null ;
   }
-
-
-  /**
+  
+  
+  /** 
   Addition
   */
-  /**
-  * add float value
+  /** 
+  * add float value 
   */
   public Vec2 add(float a_a, float a_b) {
     x += a_a ;
-    y += a_b ;
+    y += a_b ; 
     set(x,y) ;
     return this ;
   }
@@ -1611,7 +1611,7 @@ public class Vec2 extends Vec {
 
 
   /**
-  * add two Vector together
+  * add two Vector together 
   * @deprecated is not necessary to use this method in the inner class, instead use the external one
   */
   @Deprecated
@@ -1620,7 +1620,7 @@ public class Vec2 extends Vec {
       x = v_a.x + v_b.x;
       y = v_a.y + v_b.y;
       return this ;
-    } else return null;
+    } else return null;  
   }
 
 
@@ -1630,7 +1630,7 @@ public class Vec2 extends Vec {
   /* add float value */
   public Vec2 sub(float s_a,float s_b) {
     x -= s_a;
-    y -= s_b;
+    y -= s_b; 
     set(x,y);
     return this ;
   }
@@ -1650,9 +1650,9 @@ public class Vec2 extends Vec {
       return sub(v.x,v.y);
     } else return null;
   }
-
+  
   /**
-  * sub two Vector together
+  * sub two Vector together 
   * @deprecated is not necessary to use this method in the inner class, instead use the external one
   */
   @Deprecated
@@ -1691,6 +1691,22 @@ public class Vec2 extends Vec {
 
 
 
+  /**
+  POW
+  */
+  public Vec2 pow(int pow) {
+    this.pow(pow,pow);
+    return this;
+  }
+  public Vec2 pow(int pow_x, int pow_y) {
+    x = (float)Math.pow(x,pow_x);
+    y = (float)Math.pow(y,pow_y);
+    set(x,y);
+    return this;
+  }
+
+  
+  
   /**
   Direction
   */
@@ -1738,7 +1754,7 @@ public class Vec2 extends Vec {
 
   /**
   Angle
-  Heading for PVector
+  Heading for PVector 
   */
   /**
   *
@@ -1759,7 +1775,7 @@ public class Vec2 extends Vec {
   public float heading() {
     return angle();
   }
-
+  
 
   /**
   Min Max
@@ -1812,18 +1828,18 @@ public class Vec2 extends Vec {
   */
   public Vec2 map_vec(float minIn, float maxIn, float minOut, float maxOut) {
     x = map(x,minIn, maxIn, minOut, maxOut);
-    y = map(y,minIn, maxIn, minOut, maxOut);
+    y = map(y,minIn, maxIn, minOut, maxOut);  
     set(x,y) ;
     return this ;
   }
 
   public Vec2 map_vec(Vec2 minIn, Vec2 maxIn, Vec2 minOut, Vec2 maxOut) {
     x = map(x,minIn.x, maxIn.x, minOut.x, maxOut.x);
-    y = map(y,minIn.y, maxIn.y, minOut.y, maxOut.y);
+    y = map(y,minIn.y, maxIn.y, minOut.y, maxOut.y);   
     set(x,y) ;
     return this ;
   }
-
+  
    /**
   Mag and MagSQ
   */
@@ -1862,12 +1878,12 @@ public class Vec2 extends Vec {
     }
     return this;
   }
-
-
+  
+  
   /**
   Distance
   */
-  /**
+  /** 
   * distance between himself and an other vector
   * @return float
   */
@@ -1881,13 +1897,13 @@ public class Vec2 extends Vec {
       return 0 ;
     }
   }
-
-
+  
+  
   /**
   Jitter
   */
   /**
-  * create jitter effect around the vector position with global range
+  * create jitter effect around the vector position with global range 
   */
   public Vec2 jitter(int range) {
     return jitter(range,range);
@@ -1898,10 +1914,10 @@ public class Vec2 extends Vec {
     } else {
       return jitter(0,0);
     }
-
+    
   }
-  /**
-  * with specific range
+  /** 
+  * with specific range 
   */
   public Vec2 jitter(int range_x,int range_y) {
     x += random_next_gaussian(range_x,3);
@@ -1909,20 +1925,20 @@ public class Vec2 extends Vec {
     set(x,y);
     return this;
   }
-
-
+  
+  
   /**
   Revolution
   */
   /**
-  * create a circular motion effect
+  * create a circular motion effect 
   */
   Vec2 revolution(int radius, float speed) {
     float new_speed = speed *.01;
     float m_x = sin(frameCount *new_speed);
     float m_y = cos(frameCount *new_speed);
     m_x *=radius;
-    m_y *=radius;
+    m_y *=radius;   
     return this;
   }
 
@@ -1932,7 +1948,7 @@ public class Vec2 extends Vec {
     float m_x = sin(frameCount *new_speed);
     float m_y = cos(frameCount *new_speed);
     m_x *=r_x;
-    m_y *=r_y;
+    m_y *=r_y;    
     return this;
   }
 
@@ -1941,7 +1957,7 @@ public class Vec2 extends Vec {
     float m_x = sin(frameCount *new_speed);
     float m_y = cos(frameCount *new_speed);
     m_x *=radius.x;
-    m_y *=radius.y;
+    m_y *=radius.y;    
     return this ;
   }
 
@@ -1951,51 +1967,51 @@ public class Vec2 extends Vec {
   boolean equals(Vec2 target) {
     if(target != null ) {
       if((x == target.x) && (y == target.y)) {
-        return true;
+        return true; 
       } else return false;
     } else return false;
   }
 
   boolean equals(float target) {
-    if((x == target) && (y == target))
-    return true;
+    if((x == target) && (y == target)) 
+    return true; 
     else return false;
   }
-
+  
   boolean equals(float t_x,float t_y) {
-    if((x == t_x) && (y == t_y))
-    return true;
+    if((x == t_x) && (y == t_y)) 
+    return true; 
     else return false;
   }
 
 
 
-
+  
   /**
   Compare deprecated
   */
   boolean compare(Vec2 target) {
     if(target != null ) {
       if((x == target.x) && (y == target.y)) {
-        return true;
+        return true; 
       } else return false;
     } else return false;
   }
 
   boolean compare(float target) {
-    if((x == target) && (y == target))
-    return true ;
+    if((x == target) && (y == target)) 
+    return true ; 
     else return false ;
   }
-
+  
   boolean compare(float t_x,float t_y) {
-    if((x == t_x) && (y == t_y))
-    return true;
+    if((x == t_x) && (y == t_y)) 
+    return true; 
     else return false;
   }
-
-
-
+  
+  
+  
   /**
   Copy
   */
@@ -2035,7 +2051,7 @@ VEC 3
 v 1.0.0
 */
 class Vec3 extends Vec {
-
+ 
   /**
   Constructor
   */
@@ -2043,10 +2059,10 @@ class Vec3 extends Vec {
     super(3) ;
     set(x,y,z);
   }
-
+  
    /**
   Random constructor
-  */
+  */ 
   /**
   * random generator for the Vec
   */
@@ -2061,7 +2077,7 @@ class Vec3 extends Vec {
       println("the key word for the random is not available use the String 'RANDOM' or 'RANDOM ZERO' ") ;
     }
   }
-
+  
   Vec3(String key_random, int r1, int r2, int r3) {
     super(3) ;
     if(key_random.equals(RANDOM)) {
@@ -2093,7 +2109,7 @@ class Vec3 extends Vec {
   * Sets components of the vector using two or three separate
   * variables, the data from a Vec, or the values from a float array.
   */
-
+   
    public Vec3 set(float v) {
     set(v,v,v);
     return this ;
@@ -2189,17 +2205,17 @@ class Vec3 extends Vec {
     set(source[0],source[1],source[2]);
     return this ;
   }
-
-
-
-
-
-
-
-
-
-
-
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   /**
   METHOD
   */
@@ -2212,18 +2228,18 @@ class Vec3 extends Vec {
   */
   float sum() {
     return x+y+z;
-  }
+  } 
   /**
   Mult
   v 0.0.2
   */
-  /**
-  * multiply Vector by a different float value
+  /** 
+  * multiply Vector by a different float value 
   */
   Vec3 mult(float m_x, float m_y, float m_z) {
     x *= m_x;
-    y *= m_y;
-    z *= m_z;
+    y *= m_y; 
+    z *= m_z; 
     set(x,y,z);
     return this;
   }
@@ -2231,32 +2247,32 @@ class Vec3 extends Vec {
   Vec3 mult(float m) {
     return mult(m,m,m);
   }
-
+  
   // mult by vector
   Vec3 mult(Vec v) {
     if(v != null) {
       return mult(v.x,v.y,v.z);
-    } else return null;
+    } else return null;   
   }
   Vec3 mult(iVec v) {
     if(v != null) {
       return mult(v.x,v.y,v.z);
-    } else return null;
+    } else return null;   
   }
-
-
-
+  
+  
+  
   /**
   Division
   v 0.0.3
   */
   /**
-  * divide Vector by a float value
+  * divide Vector by a float value 
   */
   Vec3 div(float d_x, float d_y, float d_z) {
-    if(d_x != 0) x /= d_x;
-    if(d_y != 0) y /= d_y;
-    if(d_z != 0) z /= d_z;
+    if(d_x != 0) x /= d_x; 
+    if(d_y != 0) y /= d_y; 
+    if(d_z != 0) z /= d_z; 
     set(x,y,z);
     return this;
   }
@@ -2264,25 +2280,25 @@ class Vec3 extends Vec {
   Vec3 div(float d) {
     return div(d,d,d);
   }
-
+  
   Vec3 div(Vec v) {
     if(v != null) {
       return div(v.x,v.y,v.z);
-    } else return null;
+    } else return null;   
   }
   Vec3 div(iVec v) {
     if(v != null) {
       return div(v.x,v.y,v.z);
-    } else return null;
+    } else return null;   
   }
-
-
-
+  
+  
+  
   /**
   Addition
   */
-  /**
-  * add float value
+  /** 
+  * add float value 
   */
 
   Vec3 add(float a_x,float a_y,float a_z) {
@@ -2307,9 +2323,9 @@ class Vec3 extends Vec {
       return add(v.x,v.y,v.z);
     } return null;
   }
-
+  
   /**
-  * add two Vector together
+  * add two Vector together 
   * @deprecated is not necessary to use this method in the inner class, instead use the external one
   */
   @Deprecated
@@ -2328,8 +2344,8 @@ class Vec3 extends Vec {
   /**
   Substraction
   */
-  /**
-  * add float value
+  /** 
+  * add float value 
   */
   Vec3 sub(float s_x,float s_y,float s_z) {
     x -= s_x;
@@ -2354,9 +2370,9 @@ class Vec3 extends Vec {
       sub(v.x,v.y,v.z);
     } return null;
   }
-
+  
   /**
-  * sub two Vector together
+  * sub two Vector together 
   * @deprecated is not necessary to use this method in the inner class, instead use the external one
   */
   @Deprecated
@@ -2389,27 +2405,46 @@ class Vec3 extends Vec {
       println("Your Vec arg is", null) ;
       return 0 ;
     }
-
+    
   }
   public float dot(float x, float y, float z) {
     return this.x*x + this.y*y + this.z*z;
   }
 
+
+
+
+  /**
+  POW
+  */
+  public Vec3 pow(int pow) {
+    this.pow(pow,pow,pow);
+    return this;
+  }
+  public Vec3 pow(int pow_x, int pow_y, int pow_z) {
+    x = (float)Math.pow(x,pow_x);
+    y = (float)Math.pow(y,pow_y);
+    z = (float)Math.pow(z,pow_z);
+    set(x,y,z);
+    return this;
+  }
+
+
+
   /**
   Cross
-  v 0.0.2
   */
   Vec3 cross(Vec3 v) {
     if(v != null) {
       return cross(v, null);
     } else return null ;
-
+    
   }
   Vec3 cross(float x, float y, float z) {
     Vec3 v = Vec3(x,y,z) ;
     return cross(v, null);
   }
-
+  
 
   /**
   this one is very odd, why taeget is necessary ????
@@ -2428,7 +2463,7 @@ class Vec3 extends Vec {
     } else return null ;
 
   }
-
+  
 
   /**
   Direction cartesian
@@ -2448,8 +2483,8 @@ class Vec3 extends Vec {
     set(x,y,z) ;
     return this ;
   }
-
-
+  
+  
 
   /**
   Tangent
@@ -2467,7 +2502,7 @@ class Vec3 extends Vec {
       return tangent ;
     } else return null ;
   }
-
+  
 
   /**
   Map
@@ -2531,14 +2566,14 @@ class Vec3 extends Vec {
 
   public Vec3 map_vec(Vec3 minIn, Vec3 maxIn, Vec3 minOut, Vec3 maxOut) {
     x = map(x,minIn.x,maxIn.x,minOut.x,maxOut.x);
-    y = map(y,minIn.y,maxIn.y,minOut.y,maxOut.y);
-    z = map(z,minIn.z,maxIn.z,minOut.z,maxOut.z);
+    y = map(y,minIn.y,maxIn.y,minOut.y,maxOut.y);   
+    z = map(z,minIn.z,maxIn.z,minOut.z,maxOut.z);   
     set(x,y,z) ;
     return this ;
   }
-
-
-
+  
+  
+  
   /**
   Mag and MagSQ
   */
@@ -2578,7 +2613,7 @@ class Vec3 extends Vec {
     }
     return this;
   }
-
+  
   /**
   Distance
   */
@@ -2597,12 +2632,12 @@ class Vec3 extends Vec {
       return 0 ;
     }
   }
-
+  
   /**
   Jitter
   v 0.0.2
   */
-  /**
+  /** 
   * create jitter effect around the vector position, with global range
   */
   public Vec3 jitter(int range) {
@@ -2612,10 +2647,10 @@ class Vec3 extends Vec {
     if(range != null) {
       return jitter((int)range.x,(int)range.y,(int)range.z) ;
     } else return jitter(0, 0, 0) ;
-
+    
   }
-  /**
-  * with specific range
+  /** 
+  * with specific range 
   */
   public Vec3 jitter(int range_x,int range_y, int range_z) {
     x += random_next_gaussian(range_x,3);
@@ -2624,13 +2659,13 @@ class Vec3 extends Vec {
     set(x,y,z);
     return this;
   }
-
-
+  
+  
   /**
   Revolution
   */
-  /**
-  * create a circular motion effect
+  /** 
+  * create a circular motion effect 
   */
   Vec3 revolutionX(int rx, int ry, float speed) {
     return revolutionX(Vec2(rx,ry), speed) ;
@@ -2640,7 +2675,7 @@ class Vec3 extends Vec {
   }
   Vec3 revolutionX(Vec2 radius, float speed) {
     if(radius != null) {
-      float new_speed = speed *.01 ;
+      float new_speed = speed *.01 ; 
 
       float m_x = sin(frameCount *new_speed) ;
       float m_y = cos(frameCount *new_speed) ;
@@ -2659,7 +2694,7 @@ class Vec3 extends Vec {
   }
   Vec3 revolutionY(Vec2 radius, float speed) {
     if(radius != null) {
-      float new_speed = speed *.01 ;
+      float new_speed = speed *.01 ; 
 
       float m_x = sin(frameCount *new_speed) ;
       float m_z = cos(frameCount *new_speed) ;
@@ -2678,7 +2713,7 @@ class Vec3 extends Vec {
   }
   Vec3 revolutionZ(Vec2 radius, float speed) {
     if(radius != null) {
-      float new_speed = speed *.01 ;
+      float new_speed = speed *.01 ; 
 
       float m_y = sin(frameCount *new_speed) ;
       float m_z = cos(frameCount *new_speed) ;
@@ -2695,47 +2730,47 @@ class Vec3 extends Vec {
   boolean equals(Vec3 target) {
     if(target != null) {
       if((x == target.x) && (y == target.y) && (z == target.z)) {
-        return true ;
+        return true ; 
       } else return false ;
     } else return false ;
   }
-
+  
   boolean equals(float target) {
-    if((x == target) && (y == target) && (z == target))
-    return true ;
+    if((x == target) && (y == target) && (z == target)) 
+    return true ; 
     else return false ;
   }
-
+  
   boolean equals(float t_x,float t_y,float t_z) {
-    if((x == t_x) && (y == t_y) && (z == t_z))
-    return true ;
+    if((x == t_x) && (y == t_y) && (z == t_z)) 
+    return true ; 
     else return false ;
   }
-
-
+  
+  
   /**
   Compare deprecated
   */
   boolean compare(Vec3 target) {
     if(target != null) {
       if((x == target.x) && (y == target.y) && (z == target.z)) {
-        return true ;
+        return true ; 
       } else return false ;
     } else return false ;
   }
-
+  
   boolean compare(float target) {
-    if((x == target) && (y == target) && (z == target))
-    return true ;
+    if((x == target) && (y == target) && (z == target)) 
+    return true ; 
     else return false ;
   }
-
+  
   boolean compare(float t_x,float t_y,float t_z) {
-    if((x == t_x) && (y == t_y) && (z == t_z))
-    return true ;
+    if((x == t_x) && (y == t_y) && (z == t_z)) 
+    return true ; 
     else return false ;
   }
-
+   
   /**
   Copy
   */
@@ -2778,7 +2813,7 @@ class Vec4 extends Vec {
   /**
   Constructor
   */
-
+  
   Vec4(float x, float y, float z, float w) {
     super(4) ;
     set(x,y,z,w);
@@ -2788,7 +2823,7 @@ class Vec4 extends Vec {
 
   /**
   Random constructor
-  */
+  */ 
   /**
   * random generator for the Vec
   */
@@ -2803,7 +2838,7 @@ class Vec4 extends Vec {
       println("the key word for the random is not available use the String 'RANDOM' or 'RANDOM ZERO' ") ;
     }
   }
-
+  
   Vec4(String key_random, int r1, int r2, int r3, int r4) {
     super(4) ;
     if(key_random.equals(RANDOM)) {
@@ -2825,7 +2860,7 @@ class Vec4 extends Vec {
       println("the key word for the random is not available use the String 'RANDOM RANGE' ") ;
     }
   }
-
+  
   /**
   Set
   */
@@ -2837,7 +2872,7 @@ class Vec4 extends Vec {
     set(v,v,v,v);
     return this ;
   }
-
+  
   /**
    * @param v any variable of type Vec
    */
@@ -2943,7 +2978,7 @@ class Vec4 extends Vec {
 
 
 
-  /**
+  /** 
   METHOD
   */
       /**
@@ -2955,15 +2990,15 @@ class Vec4 extends Vec {
   */
   float sum() {
     return x+y+z+w;
-  }
+  } 
   /**
   Multiplication
   v 0.0.2
   */
     Vec4 mult(float m_x, float m_y, float m_z, float m_w) {
-    x *= m_x ;
-    y *= m_y ;
-    z *= m_z ;
+    x *= m_x ; 
+    y *= m_y ; 
+    z *= m_z ; 
     w *= m_w ;
     set(x,y,z,w) ;
     return this ;
@@ -2984,19 +3019,19 @@ class Vec4 extends Vec {
       return mult(v.x,v.y,v.z,v.w);
     } else return null ;
   }
-
+   
   /**
   Division
   v 0.0.3
   */
-  /**
+  /** 
   * @return Vec
-  * divide Vector by a float value
+  * divide Vector by a float value 
   */
   Vec4 div(float d_x, float d_y, float d_z, float d_w) {
-    if(d_x != 0) x /= d_x;
-    if(d_y != 0) y /= d_y;
-    if(d_z != 0) z /= d_z;
+    if(d_x != 0) x /= d_x; 
+    if(d_y != 0) y /= d_y; 
+    if(d_z != 0) z /= d_z; 
     if(d_w != 0) w /= d_w;
     set(x,y,z,w);
     return this;
@@ -3004,7 +3039,7 @@ class Vec4 extends Vec {
   Vec4 div(float d) {
     return div(d,d,d,d);
   }
-
+  
   Vec4 div(Vec v) {
     if(v != null) {
       return div(v.x,v.y,v.z,v.w);
@@ -3016,14 +3051,14 @@ class Vec4 extends Vec {
       return div(v.x,v.y,v.z,v.w);
     } else return null;
   }
-
-
+  
+  
   /**
   Addition
   v 0.0.2
   */
   /**
-  * add float value
+  * add float value 
   */
   Vec4 add(float a_x,float a_y,float a_z,float a_w) {
     x += a_x;
@@ -3051,7 +3086,7 @@ class Vec4 extends Vec {
   }
 
   /**
-  * add two Vector together
+  * add two Vector together 
   * @deprecated is not necessary to use this method in the inner class, instead use the external one
   */
   @Deprecated
@@ -3069,15 +3104,15 @@ class Vec4 extends Vec {
   /**
   Substraction
   */
-  /**
+  /** 
   * sub float value
-  * @return Vec4
+  * @return Vec4 
   */
   Vec4 sub(float a_x,float a_y,float a_z, float a_w) {
     x -= a_x;
     y -= a_y;
     z -= a_z;
-    w -= a_w;
+    w -= a_w; 
     set(x,y,z,w);
     return this;
   }
@@ -3097,9 +3132,9 @@ class Vec4 extends Vec {
       return sub(v.x,v.y,v.z,v.w);
     } else return null;
   }
-
+  
   /**
-  * sub two Vector together
+  * sub two Vector together 
   * @deprecated is not necessary to use this method in the inner class, instead use the external one
   */
   @Deprecated
@@ -3132,10 +3167,30 @@ class Vec4 extends Vec {
       println("Your Vec arg is", null) ;
       return 0 ;
     }
-
+    
   }
   public float dot(float x, float y, float z, float w) {
     return this.x*x + this.y*y + this.z*z + this.w*w;
+  }
+
+
+
+
+
+  /**
+  POW
+  */
+  public Vec4 pow(int pow) {
+    this.pow(pow,pow,pow,pow);
+    return this;
+  }
+  public Vec4 pow(int pow_x, int pow_y, int pow_z, int pow_w) {
+    x = (float)Math.pow(x,pow_x);
+    y = (float)Math.pow(y,pow_y);
+    z = (float)Math.pow(z,pow_z);
+    w = (float)Math.pow(w,pow_w);
+    set(x,y,z,w);
+    return this;
   }
 
 
@@ -3158,7 +3213,7 @@ class Vec4 extends Vec {
     set(x,y,z,w);
     return this;
   }
-
+  
   /**
   Min Max
   */
@@ -3222,8 +3277,8 @@ class Vec4 extends Vec {
 
   public Vec4 map_vec(Vec4 minIn, Vec4 maxIn, Vec4 minOut, Vec4 maxOut) {
     x = map(x,minIn.x,maxIn.x,minOut.x,maxOut.x);
-    y = map(y,minIn.y,maxIn.y,minOut.y,maxOut.y);
-    z = map(z,minIn.z,maxIn.z,minOut.z,maxOut.z);
+    y = map(y,minIn.y,maxIn.y,minOut.y,maxOut.y);   
+    z = map(z,minIn.z,maxIn.z,minOut.z,maxOut.z);   
     w = map(w,minIn.w,maxIn.w,minOut.w,maxOut.w);
     set(x,y,z,w);
     return this;
@@ -3264,7 +3319,7 @@ class Vec4 extends Vec {
     }
     return this;
   }
-
+  
   /**
   Distance
   */
@@ -3283,13 +3338,13 @@ class Vec4 extends Vec {
       return 0 ;
     }
   }
-
-
+  
+  
   /**
   Jitter
   */
   /**
-  * create jitter effect around the vector position, with global range
+  * create jitter effect around the vector position, with global range 
   */
   public Vec4 jitter(int range) {
     return jitter(range,range,range,range) ;
@@ -3300,7 +3355,7 @@ class Vec4 extends Vec {
     } else return jitter(0) ;
   }
   /**
-  * with specific range
+  * with specific range 
   */
   public Vec4 jitter(int range_x,int range_y, int range_z, int range_w) {
     x += random_next_gaussian(range_x,3);
@@ -3318,47 +3373,47 @@ class Vec4 extends Vec {
   boolean equals(Vec4 target) {
     if(target != null ) {
       if((x == target.x) && (y == target.y) && (z == target.z) && (w == target.w)) {
-        return true;
+        return true; 
       } else return false;
     } else return false;
   }
   boolean equals(float target) {
-    if((x == target) && (y == target) && (z == target) && (w == target))
-    return true;
+    if((x == target) && (y == target) && (z == target) && (w == target)) 
+    return true; 
     else return false;
   }
-
+  
   boolean equals(float t_x,float t_y,float t_z,float t_w) {
-    if((x == t_x) && (y == t_y) && (z == t_z)&& (w == t_w))
-    return true;
+    if((x == t_x) && (y == t_y) && (z == t_z)&& (w == t_w)) 
+    return true; 
     else return false;
   }
 
 
-
-
+  
+   
   /**
   Compare deprecated
   */
   boolean compare(Vec4 target) {
     if(target != null ) {
       if((x == target.x) && (y == target.y) && (z == target.z) && (w == target.w)) {
-        return true ;
+        return true ; 
       } else return false ;
     } else return false ;
   }
   boolean compare(float target) {
-    if((x == target) && (y == target) && (z == target) && (w == target))
-    return true;
+    if((x == target) && (y == target) && (z == target) && (w == target)) 
+    return true; 
     else return false;
   }
-
+  
   boolean compare(float t_x,float t_y,float t_z,float t_w) {
-    if((x == t_x) && (y == t_y) && (z == t_z)&& (w == t_w))
-    return true ;
+    if((x == t_x) && (y == t_y) && (z == t_z)&& (w == t_w)) 
+    return true ; 
     else return false ;
   }
-
+  
   /**
   Copy
   */
@@ -3411,7 +3466,7 @@ class Vec5 extends Vec{
       println("the key word for the random is not available use the String 'RANDOM' or 'RANDOM ZERO' ") ;
     }
   }
-
+  
   Vec5(String key_random, int r1, int r2, int r3, int r4, int r5) {
     super(5) ;
     if(key_random.equals(RANDOM)) {
@@ -3520,7 +3575,7 @@ class Vec5 extends Vec{
     float [] list = {a,b,c,d,e} ;
     return min(list) ;
   }
-
+  
   /**
   Copy
   */
@@ -3529,7 +3584,7 @@ class Vec5 extends Vec{
   }
 
 
-
+  
   /**
   Print info
   */
@@ -3559,7 +3614,7 @@ class Vec6 extends Vec {
     set(a,b,c,d,e,f);
   }
 
-
+  
   /**
   Random Constructor
   */
@@ -3574,7 +3629,7 @@ class Vec6 extends Vec {
       println("the key word for the random is not available use the String 'RANDOM' or 'RANDOM ZERO' ") ;
     }
   }
-
+  
   Vec6(String key_random, int r1, int r2, int r3, int r4, int r5, int r6) {
     super(6) ;
     if(key_random.equals(RANDOM)) {
@@ -3613,7 +3668,7 @@ class Vec6 extends Vec {
   * @param v any variable of type Vec
   */
   public Vec6 set(Vec v) {
-    if ( v == null) {
+    if ( v == null) {    
       a = b = c = d = e = f = 0;
       return this;
     } else if(v instanceof Vec5 || v instanceof Vec6) {
@@ -3705,3 +3760,11 @@ class Vec6 extends Vec {
     return "[ " + a + ", " + b + ", " + c + ", " + d + ", " + e + ", " + f + " ]" ;
   }
 }
+
+
+
+
+
+
+
+

@@ -5,21 +5,21 @@ void settings() {
 
 
 void setup() {
-  /**
+  
   sound_system_setup();
-  surface.setSize(sounda.get_buffer_size(), sounda.get_buffer_size());
-  */
+  surface.setSize(sounda.buffer_size(), sounda.buffer_size());
+ 
   background(0);
 
-  test_setup();
+  // test_setup();
 }
 
 
 
 void draw() {
   background_rope(r.BLOOD);
-  // sound_system_draw();
-  test_draw();
+  sound_system_draw();
+  // test_draw();
 
 }
 
@@ -43,6 +43,7 @@ void test_draw() {
   
   float smooth_slow = mouseX/10;
   float smooth_quick = smooth_slow *10;
+
   transient_detection(smooth_quick, smooth_slow);
   display_result(height/6);
 }
@@ -59,6 +60,7 @@ float [] diff_value;
 float [] log_value;
 
 float [] transient_value;
+boolean [] transiente;
 
 
 
@@ -98,25 +100,43 @@ void low_pass(float smooth) {
 transient work
 */
 float smoothing_fast,smoothing_slow;
+float ratio_log ;
 void transient_detection(float smooth_fast, float smooth_slow) {
+  
   // pow part
   if(pow_value == null || pow_value.length < raw_value.length ) {
     pow_value = new float [raw_value.length];
   }
-  // here pass the first filtering value from first low pass
-  for(int i = 0 ; i  < pow_value.length ; i++) {
-    pow_value[i] = low_pass_value[i];
-    pow_value[i] *= pow_value[i];
-  }
-  
-  // new low pass quick
   if(low_pass_value_fast == null || low_pass_value_fast.length < raw_value.length ) {
     low_pass_value_fast = new float [raw_value.length];
   }
+
+  if(low_pass_value_slow == null || low_pass_value_slow.length < raw_value.length ) {
+    low_pass_value_slow = new float [raw_value.length];
+  }
+
+  if(diff_value == null || diff_value.length < raw_value.length ) {
+    diff_value = new float [raw_value.length];
+  }
+
+  if(log_value == null || log_value.length < raw_value.length ) {
+    log_value = new float [raw_value.length];
+  }
+
+  if(transiente == null || log_value.length < raw_value.length ) {
+    transiente = new boolean[raw_value.length];
+  }
+
+
+  // here pass the first filtering value from first low pass
+  for(int i = 0 ; i  < pow_value.length ; i++) {
+    pow_value[i] = low_pass_value[i];
+    pow_value[i] = pow(pow_value[i],2);
+  }
   
+  // new low pass quick
   float ref_fast = pow_value[0];
   smoothing_fast = abs(smooth_fast)+1;
-  // println("smooth quick", smoothing_quick);
   // pass second thread value: first low pass and pow treatment
   for(int i = 0 ; i  < low_pass_value_fast.length ; i++) {
     float current_value = pow_value[i];
@@ -124,15 +144,10 @@ void transient_detection(float smooth_fast, float smooth_slow) {
     low_pass_value_fast[i] = ref_fast;
   }
   
-
   // new low pass slow
-  if(low_pass_value_slow == null || low_pass_value_slow.length < raw_value.length ) {
-    low_pass_value_slow = new float [raw_value.length];
-  }
-  
   float ref_slow = pow_value[0];
   smoothing_slow = abs(smooth_slow)+1;
-  // println("smooth slow", smoothing_slow);
+
   // pass second thread value: first low pass and pow treatment
   for(int i = 0 ; i  < low_pass_value_slow.length ; i++) {
     float current_value = pow_value[i];
@@ -141,22 +156,40 @@ void transient_detection(float smooth_fast, float smooth_slow) {
   }
 
   // difference between quick and fast low pass
-  if(diff_value == null || diff_value.length < raw_value.length ) {
-    diff_value = new float [raw_value.length];
-  }
   for(int i = 0 ; i  < diff_value.length ; i++) {
     // diff_value[i] = low_pass_value_slow[i] - low_pass_value_fast[i];
     diff_value[i] = low_pass_value_fast[i] - low_pass_value_slow[i];
   }
 
-  // difference between quick and fast low pass
-  if(log_value == null || log_value.length < raw_value.length ) {
-    log_value = new float [raw_value.length];
-  }
+  // difference between quick and fast low pass 
+  ratio_log = 1 +(mouseY/10);
   for(int i = 0 ; i  < log_value.length ; i++) {
-    log_value[i] = log(1+diff_value[i]);
+    log_value[i] = log(1+(ratio_log*diff_value[i]));
   }
+
+
+
+  // transiente detection ans hysteresie
+  for(int i = 0 ; i  < log_value.length ; i++) {
+    transiente[i] = false;
+    float threshold_1 = .1;
+    float threshold_2 = .5;
+    float value = log_value[i];
+    if(value > threshold_2 && !transiente[i]) {
+      value = 1;
+      transiente[i] = true;
+    } else if(value < threshold_1 && transiente[i]) {
+      value = 0;
+      transiente[i] = false;
+    }
+  } 
 }
+
+
+
+
+
+
 
 
 void display_result(float factor) {
@@ -174,7 +207,7 @@ void display_result(float factor) {
   text("fast low pass: "+smoothing_fast,30, pos_y[3]);
   text("slow low pass: "+smoothing_slow,30, pos_y[4]);
   text("diff slow - fast",30, pos_y[5]);
-  text("log diff + 1",30, pos_y[6]);
+  text("log diff * " +ratio_log+" + 1",30, pos_y[6]);
 
   for(int i = 0 ; i < test.buffer_size() ;i++) {
     // no filter
@@ -203,9 +236,28 @@ void display_result(float factor) {
      // log value + 1
     y = int(log_value[i] *factor) + pos_y[6];
     set(i, y,r.YELLOW);
-
-    // end
   }
+  // transiente 
+  for(int i = 0 ; i < transiente.length ; i++) {
+    if(transiente[i]) {
+      radius_transiente = width/2;
+      break;
+
+    }
+  }
+  ellipse_transiente();
 }
+
+
+
+float radius_transiente ;
+void ellipse_transiente() {
+  fill(0);
+  noStroke();
+  ellipse(width -(width/3),height/2,radius_transiente,radius_transiente);
+  radius_transiente *= .95;
+}
+
+
 
 

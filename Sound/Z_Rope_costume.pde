@@ -106,7 +106,7 @@ int ref_size_pic = -1 ;
 
 void costume_list() {
 	if(!list_costume_is_built) {
-		/*
+		/* 
 		* add(name, code, renderer, type)
 		* code: int constante to access directly
 		* render: 2 = 2D ; 3 = 3D ;
@@ -129,7 +129,7 @@ void costume_list() {
 		costume_dict.add("DODECAGON_ROPE", DODECAGON_ROPE, 2, 0) ;
 
 		costume_dict.add("TEXT_ROPE", TEXT_ROPE, 2, 4) ;
-
+    
     costume_dict.add("CROSS_RECT_ROPE", CROSS_RECT_ROPE, 2, 0) ;
 		costume_dict.add("CROSS_BOX_2_ROPE", CROSS_BOX_2_ROPE, 3, 0) ;
 		costume_dict.add("CROSS_BOX_3_ROPE", CROSS_BOX_3_ROPE, 3, 0) ;
@@ -300,10 +300,10 @@ void init_bool_aspect() {
 void aspect_rope(int fill, int stroke, float strokeWeight) {
   //checkfill color
   if(alpha(fill) <= 0 || !fill_rope_is)  {
-    noFill() ;
+    noFill() ; 
   } else {
     fill(fill) ;
-  }
+  } 
   //check stroke color
   if(alpha(stroke) <=0 || strokeWeight <= 0 || !stroke_rope_is) {
     noStroke() ;
@@ -318,25 +318,25 @@ void aspect_rope(int fill, int stroke, float strokeWeight) {
 void aspect_rope(int fill, int stroke, float strokeWeight, int costume) {
   if(costume != POINT_ROPE || costume != POINT) {
     if(alpha(fill) <= 0 || !fill_rope_is) {
-    	noFill() ;
+    	noFill() ; 
     } else {
     	fill(fill) ;
     }
 
     if(alpha(stroke) <= 0  || strokeWeight <= 0 || !stroke_rope_is) {
-    	noStroke() ;
+    	noStroke() ; 
     } else {
     	stroke(stroke) ;
       strokeWeight(strokeWeight) ;
-    }
+    }   
   } else  {
     if(alpha(fill) == 0) {
-    	noStroke() ;
+    	noStroke() ; 
     } else {
     	stroke(fill) ;
     	strokeWeight(strokeWeight) ;
     }
-    noFill() ;
+    noFill() ;   
   }
   //
   init_bool_aspect() ;
@@ -347,10 +347,10 @@ void aspect_rope(int fill, int stroke, float strokeWeight, int costume) {
 void aspect_rope(Vec fill, Vec stroke, float strokeWeight) {
   //checkfill color
   if(fill.w <=0 || !fill_rope_is)  {
-    noFill() ;
+    noFill() ; 
   } else {
     manage_fill(fill) ;
-  }
+  } 
   //check stroke color
   if(stroke.w <=0 || strokeWeight <= 0 || !stroke_rope_is) {
     noStroke() ;
@@ -366,24 +366,24 @@ void aspect_rope(Vec fill, Vec stroke, float strokeWeight, int costume) {
 	//println("aspect_rope()", fill_rope_is, stroke_rope_is) ;
   if(costume != POINT_ROPE || costume != POINT) {
     if(fill.w <= 0 || !fill_rope_is) {
-    	noFill() ;
+    	noFill() ; 
     } else {
     	manage_fill(fill) ;
-    }
+    } 
     if(stroke.w <= 0  || strokeWeight <= 0 || !stroke_rope_is) {
-    	noStroke() ;
+    	noStroke() ; 
     } else {
     	manage_stroke(stroke) ;
     	strokeWeight(strokeWeight) ;
-    }
+    }   
   } else {
     if(fill.w <= 0 || !fill_rope_is) {
-    	noStroke() ;
+    	noStroke() ; 
     } else {
     	manage_stroke(fill) ;
     	strokeWeight(strokeWeight) ;
     }
-    noFill() ;
+    noFill() ;   
   }
   //
   init_bool_aspect() ;
@@ -434,7 +434,7 @@ void manage_stroke(Vec s) {
 
 
 /**
-simple text
+simple text 
 v 0.0.1
 */
 String costume_text_rope = null ;
@@ -462,7 +462,7 @@ void costume_text(String s) {
 
 
 /**
-add pic
+add pic 
 v 0.0.1
 */
 ArrayList <Costume_pic> costume_pic_list = new ArrayList<Costume_pic>() ;
@@ -482,7 +482,7 @@ void load_costume_pic(String path) {
 class Costume_pic {
 	PImage img ;
 	ROPE_svg svg ;
-	int type = -1 ;
+	int type = -1 ; 
 
 	String name ;
 	int ID ;
@@ -500,7 +500,7 @@ class Costume_pic {
 			svg.build() ;
 			type = 2 ;
 		}
-
+		
 		String [] split = path.split("/") ;
 		name = split[split.length -1] ;
 		name = name.substring(0, name.lastIndexOf(".")) ;
@@ -608,7 +608,7 @@ managing costume rope method
 void costume_rope(Vec pos, Vec size, float angle, Vec dir, int which_costume, String sentence) {
   Vec3 pos_final = Vec3(0) ;
   Vec3 size_final = Vec3(1) ;
-	if((pos instanceof Vec2 || pos instanceof Vec3)
+	if((pos instanceof Vec2 || pos instanceof Vec3) 
 			&& (size instanceof Vec2 || size instanceof Vec3)
 			&& (dir instanceof Vec2 || dir instanceof Vec3)) {
 		// pos
@@ -654,12 +654,12 @@ void costume_rope(Vec pos, Vec size, float angle, Vec dir, int which_costume, St
 
 
 /**
-MAIN METHOD
+MAIN METHOD 
 String COSTUME
 
-Change the method for method with
+Change the method for method with 
 case and which_costume
-and
+and 
 break
 */
 void costume_rope(Vec3 pos, Vec3 size, float angle, Vec dir, String sentence) {
@@ -683,13 +683,13 @@ void costume_rope(Vec3 pos, Vec3 size, float angle, Vec dir, String sentence) {
 
 
 /**
-MAIN METHOD
+MAIN METHOD 
 V.0.1.0
 Which costume ?
 
-Change the method for method with
+Change the method for method with 
 case and which_costume
-and
+and 
 break
 */
 
@@ -902,7 +902,7 @@ void costume_rope(Vec3 pos, Vec3 size, float angle, Vec dir, int which_costume) 
 		rotate_behavior(Vec3(angle)) ;
 		box(size) ;
 		stop_matrix() ;
-	}
+	} 
 
 	else if (which_costume == STAR_4_ROPE) {
 		float [] ratio = {.38} ;
@@ -976,7 +976,7 @@ void costume_rope(Vec3 pos, Vec3 size, float angle, Vec dir, int which_costume) 
 		float angle_null = 0 ;
 		star(Vec3(0), size, 12, angle_null, ratio) ;
 		stop_matrix() ;
-	}
+	} 
 
 
 
@@ -1311,12 +1311,12 @@ void costume_rope(Vec3 pos, Vec3 size, float angle, Vec dir, int which_costume) 
 					} else {
 						scale = Vec2(size.x / p.svg.width(), size.y / p.svg.height()) ;
 					}
-
+					
 					p.svg.scaling(scale) ;
 					p.svg.draw() ;
 					break ;
 				}
-
+				
 			}
 		}
 		stop_matrix() ;
@@ -1345,7 +1345,7 @@ STAR
 */
 
 void star(Vec position, int size_XY, int summits) {
-	float [] ratio = new float[1];
+	float [] ratio = new float[1]; 
 	ratio[0] = .38 ;
 	float angle = 0 ;
 	Vec2 size = Vec2(size_XY, size_XY) ;
@@ -1416,7 +1416,7 @@ void star(Vec position, Vec size_raw, int summits, float angle, float[] ratio) {
 
 	Vec3 [] p = polygon_2D(summits *2, angle) ;
 	int count_ratio = 0 ;
-
+	
 	for(int i = 0 ; i < p.length ; i++) {
 		// make a star, change the interior radius
 		if(ratio.length <= 1 ) {
@@ -1480,7 +1480,7 @@ void cross_box_3(Vec3 size) {
 	float ratio_cross = .3 ;
 	float scale_cross = size.sum() *.3 ;
 	float small_part = scale_cross *ratio_cross ;
-
+   
 	box(size.x, small_part, small_part) ;
 	box(small_part, size.y, small_part) ;
 	box(small_part, small_part, size.z) ;
@@ -1520,7 +1520,7 @@ class Virus {
 			}
 		}
 	}
-
+  
   // set
   void set_size(Vec s) {
   	Vec3 final_size = Vec3(1) ;
@@ -1545,7 +1545,7 @@ class Virus {
 		}
 		pos.set(final_pos) ;
 	}
-
+  
 
   void rotation(float angle) {
   	this.angle = angle ;
@@ -1555,13 +1555,13 @@ class Virus {
 	Vec2 angle(float angle) {
 		return to_cartesian_2D(angle) ;
 	}
-
+  
 
   // show
   void show() {
   	show(-1) ;
   }
-
+	
 
 
 	void show(int close) {
@@ -1600,7 +1600,7 @@ class Virus {
 		}
 		if(angle != 0) stop_matrix() ;
 	}
-
+  
   // get
 	Vec3 [][] get() {
 		return branch ;
@@ -1654,5 +1654,5 @@ void virus(Vec pos, Vec size, int node, int num, int speed_mutation, float angle
   virus_method.rotation(angle) ;
 	virus_method.set_pos(pos) ;
 	virus_method.set_size(size) ;
-	virus_method.show(close) ;
+	virus_method.show(close) ;	
 }

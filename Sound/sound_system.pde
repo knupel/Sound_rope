@@ -11,7 +11,7 @@ void stop() {
 /**
 setup
 */
-float [] radius;
+float [] radius_beat,radius_transient;
 void sound_system_setup() {
 	build_log_sound() ;
 
@@ -29,8 +29,29 @@ void sound_system_setup() {
   section_in_out[2] = iVec2(30,85);
   section_in_out[3] = iVec2(85,128);
   sounda.set_section(section_in_out);
+  
+  /**
+  transient
+  */
+  int [] transient_section_id = new int[section_in_out.length] ;
+  transient_section_id[0] = 0;
+  transient_section_id[1] = 1;
+  transient_section_id[2] = 2;
+  transient_section_id[3] = 3;
 
+  Vec2 [] transient_part_threshold = new Vec2[section_in_out.length];
+  transient_part_threshold[0] = Vec2(.1, 2.5);
+  transient_part_threshold[1] = Vec2(.3, 4.5);
+  transient_part_threshold[2] = Vec2(.4, 6.5);
+  transient_part_threshold[3] = Vec2(.5, 8.5);
 
+  sounda.set_transient(transient_section_id, transient_part_threshold);
+  // set_beat(beat_part_threshold); // this method don't need to set section
+
+  radius_transient = new float[transient_part_threshold.length];
+  /**
+  beat
+  */
   int [] beat_section_id = new int[section_in_out.length] ;
   beat_section_id[0] = 0;
   beat_section_id[1] = 1;
@@ -38,15 +59,16 @@ void sound_system_setup() {
   beat_section_id[3] = 3;
 
   float [] beat_part_threshold = new float[section_in_out.length];
-  beat_part_threshold[0] = 7.5;
-  beat_part_threshold[1] = 6.5;
+  beat_part_threshold[0] = 3.5;
+  beat_part_threshold[1] = 2.5;
   beat_part_threshold[2] = 1.5;
-  beat_part_threshold[3] = .6;
+  beat_part_threshold[3] = .5;
 
   sounda.set_beat(beat_section_id, beat_part_threshold);
   // set_beat(beat_part_threshold); // this method don't need to set section
 
-  radius = new float[beat_part_threshold.length];
+  radius_beat = new float[beat_part_threshold.length];
+ 
 
   float [] tempo_threshold = new float[section_in_out.length];
   tempo_threshold[0] = 4.5;
@@ -64,6 +86,7 @@ void sound_system_draw() {
 
   show_spectrum();
   show_beat();
+  show_transient();
   show_beat_range();
   show_tempo();
 
@@ -124,27 +147,27 @@ void show_beat_range() {
 }
 
 
+void show_transient() {
+  sounda.audio_buffer(r.MIX);
 
-
-void show_beat() {
-  for(int i = 0 ; i < radius.length ;i++) {
-    if(sounda.beat_is(i)) {
-      radius[i] = height *.75 ;
+  for(int i = 0 ; i < sounda.section_num() ; i++) {
+    if(sounda.transient_is(i)) {
+      radius_transient[i] = height *.75 ;
     }
-    radius[i] *= .95;
+    radius_transient[i] *= .95;
   }
   float dist = width /5;
   textAlign(CENTER);
   float min_text_size = 1.;
-  for(int i = 0 ; i < radius.length ;i++) {
+  for(int i = 0 ; i < radius_transient.length ;i++) {
     int step = (i+1);
     fill(r.YELLOW,125);
-    ellipse(dist *step,height/2,radius[i],radius[i]);
-    float text_size = radius[i] *.05;
+    ellipse(dist *step,height/4,radius_transient[i],radius_transient[i]);
+    float text_size = radius_transient[i] *.05;
     if(text_size > 1) {
       fill(r.WHITE);
       textSize(text_size);
-      text("beat "+i, dist *step, height/3);
+      text("TRANSIENT "+i, dist *step, height/3);
     }
   }
 
@@ -153,7 +176,50 @@ void show_beat() {
   int size = 14 ;
   textSize(size);
   int pos_x = width/6;
-  int pos_y = height/6;
+  int pos_y = height/12;
+
+  if(sounda.section_num() > 1) {
+    for(int i = 0 ; i < sounda.section_num();i++) {
+      int rank = i;
+      int x = pos_x ;
+      int y = int(pos_y +(rank*(size*1.3)));
+      text("transient "+(i+1)+" threshold "+ sounda.get_transient_threshold(i)+" : " +sounda.transient_is(i),x,y);
+    }
+  }
+}
+
+
+
+
+
+void show_beat() {
+  for(int i = 0 ; i < radius_beat.length ;i++) {
+    if(sounda.beat_is(i)) {
+      radius_beat[i] = height *.75 ;
+    }
+    radius_beat[i] *= .95;
+  }
+  float dist = width /5;
+  textAlign(CENTER);
+  float min_text_size = 1.;
+  for(int i = 0 ; i < radius_beat.length ;i++) {
+    int step = (i+1);
+    fill(r.YELLOW,125);
+    ellipse(dist *step,height -(height/4),radius_beat[i],radius_beat[i]);
+    float text_size = radius_beat[i] *.05;
+    if(text_size > 1) {
+      fill(r.WHITE);
+      textSize(text_size);
+      text("BEAT "+i, dist *step, height -(height/3));
+    }
+  }
+
+  textAlign(LEFT);
+  fill(r.WHITE);
+  int size = 14 ;
+  textSize(size);
+  int pos_x = width/6;
+  int pos_y = height/3;
 
   if(sounda.section_num() > 1) {
     for(int i = 0 ; i < sounda.section_num();i++) {
@@ -165,18 +231,23 @@ void show_beat() {
 
 
 
+
 void show_spectrum() {
   noStroke();
 
   sounda.audio_buffer(RIGHT) ;
   fill(r.WHITE);
   show_beat_spectrum_level(Vec2(0), height/2);
+  
+
   fill(r.BLACK);
   show_spectrum_level(Vec2(0),height/2);
 
   sounda.audio_buffer(LEFT);
   fill(r.WHITE);
   show_beat_spectrum_level(Vec2(0),-height/2);
+  
+
   fill(r.BLACK);
   show_spectrum_level(Vec2(0),-height/2);
 
@@ -203,6 +274,9 @@ void show_spectrum_level(Vec2 pos, int size) {
     rect(pos_x, pos_y, size_x, size_y) ;
   }
 }
+
+
+
 
 void show_beat_spectrum_level(Vec2 pos, int size) {
 	float band_width = height /  sounda.band_num() ;
@@ -233,56 +307,5 @@ void show_beat_spectrum_level(Vec2 pos, int size) {
 
 
 
-/**
-log
-*/
-Table log_sound ;
-TableRow [] tableRow_sound ;
-String date_log_sound = "" ;
-void build_log_sound() {
-  log_sound = new Table() ;
-  date_log_sound = year()+"_"+month()+"_"+day()+"_"+hour()+"_"+minute()+"_"+second() ;
-  log_sound = new Table() ;
-  log_sound.addColumn("time") ;
-  log_sound.addColumn("band id") ;
-  log_sound.addColumn("section") ;
-  log_sound.addColumn("beat") ;
-  log_sound.addColumn("threshold") ;
-  log_sound.addColumn("spectrum") ;
-}
 
 
-void log_sound(int log_sound_frame, boolean log_beat_only) {
-  if(frameCount%log_sound_frame == 0) {
-    String time = hour() +" "+ minute() +" "+ second() +" "+ frameCount ;
-    for(int target_beat = 0 ; target_beat < sounda.section_num() ;target_beat++) {
-      for(int target_band = 0 ; target_band < sounda.get_spectrum().length ; target_band++) {
-        if(log_beat_only) {
-          if(sounda.beat_band_is(target_beat,target_band)) {
-            write_log_sound(time,target_beat,target_band, sounda.beat_band_is(target_beat,target_band), sounda.get_section(target_band), sounda.get_beat_threshold(target_beat,target_band), sounda.get_spectrum(target_band)) ;
-          }
-        } else {
-          write_log_sound(time,target_beat,target_band, sounda.beat_band_is(target_beat,target_band), sounda.get_section(target_band), sounda.get_beat_threshold(target_beat,target_band), sounda.get_spectrum(target_band)) ;
-        }
-      }
-    }
-  }
-}
-
-
-void write_log_sound(String time, int id_beat, int id_band, boolean beat_is, int section, float threshold, float spectrum) {
-  TableRow newRow = log_sound.addRow();
-  newRow.setString("time", time);
-  newRow.setInt("beat id", id_beat);
-  newRow.setInt("band id", id_band);
-  if(beat_is) {
-    newRow.setString("beat", "true");
-  } else {
-    newRow.setString("beat", "false");
-  }
-  newRow.setInt("section", section);
-  newRow.setFloat("threshold", threshold);
-  newRow.setFloat("spectrum", spectrum);
-
-  saveTable(log_sound, sketchPath("") + "/log/log_sound_"+date_log_sound+".csv") ;
-}
