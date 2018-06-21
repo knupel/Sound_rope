@@ -29,6 +29,23 @@ public class Sounda implements Rope_Constants {
   AudioBuffer source_buffer;
   FFT fft;
 
+  // transient
+  /*
+  float smooth_low_pass = mouseX/10;
+  float smooth_slow = mouseX/10;
+  float smooth_fast = smooth_slow *10;
+  float ratio_log = 1 +(mouseY/10);;
+  float threshold_1 = .1;
+  float threshold_2 = .5;
+  */
+  float [] smooth_low_pass;
+  float [] smooth_slow;
+  float [] smooth_fast;
+  float [] ratio_log;
+  float [] threshold_1;
+  float [] threshold_2;
+
+
 
   public Sounda(int analyze_length) {
     this.analyze_length = analyze_length;
@@ -335,7 +352,7 @@ public class Sounda implements Rope_Constants {
 
   /**
   TRANSIENT DETECTION
-  v 0.0.1
+  v 0.0.2
   */
   /**
   transient method
@@ -343,6 +360,8 @@ public class Sounda implements Rope_Constants {
   */
   boolean transient_advance_is ;
   boolean [][] transient_band_is ;
+
+
  
   // setting
   public void set_transient(Vec2... threshold) {
@@ -401,23 +420,108 @@ public class Sounda implements Rope_Constants {
   }
   
 
+  // set param transient
+  public void set_transient_low_pass(float... smooth_low_pass) {
+    this.smooth_low_pass = smooth_low_pass;
+  }
+
+  public void set_transient_smooth_slow(float... smooth_slow) {
+    this.smooth_slow = smooth_slow;
+  }
+
+  public void set_transient_smooth_fast(float... smooth_fast) {
+    this.smooth_fast = smooth_fast;
+  }
+
+  public void set_transient_threshold_first(float... threshold_1) {
+    this.threshold_1 = threshold_1;
+  }
+
+  public void set_transient_threshold_second(float... threshold_2) {
+    this.threshold_2 = threshold_2;
+  }
+
+  public void set_transient_ratio_transient(float... ratio_log) {
+    this.ratio_log = ratio_log;
+  }
   
+
+  // get param transient
+  public float[] get_transient_low_pass(float... smooth_low_pass) {
+    return this.smooth_low_pass;
+  }
+
+  public float[] get_transient_smooth_slow(float... smooth_slow) {
+    return this.smooth_slow;
+  }
+
+  public float[] get_transient_smooth_fast(float... smooth_fast) {
+    return this.smooth_fast;
+  }
+
+  public float[] get_transient_threshold_first(float... threshold_1) {
+    return this.threshold_1;
+  }
+
+  public float[] get_transient_threshold_second(float... threshold_2) {
+    return this.threshold_2;
+  }
+
+  public float[] get_transient_ratio_transient(float... ratio_log) {
+    return this.ratio_log;
+  }
+  
+
+  
+  /**
+  main transient method
+  */
+
+  void print_transient_param() {
+    printTempo(60,"__");
+    for(int i = 0 ; i < smooth_low_pass.length ; i ++) {
+      printTempo(60,"smooth low pass:",smooth_low_pass[i],frameCount);
+    }
+    for(int i = 0 ; i < smooth_slow.length ; i ++) {
+      printTempo(60,"smooth slow:",smooth_slow[i],frameCount);
+    }
+    for(int i = 0 ; i < smooth_fast.length ; i ++) {
+      printTempo(60,"smooth fast:",smooth_fast[i],frameCount);
+    }
+    for(int i = 0 ; i < threshold_1.length ; i ++) {
+      printTempo(60,"threshold first:",threshold_1[i],frameCount);
+    }
+    for(int i = 0 ; i < threshold_2.length ; i ++) {
+      printTempo(60,"threshold second:",threshold_2[i],frameCount);
+    }
+    for(int i = 0 ; i < ratio_log.length ; i ++) {
+      printTempo(60,"ratio transient:",ratio_log[i],frameCount);
+    }
+  }
+
+
 
   public boolean transient_is(int section_target) {
     boolean transient_event_is = false;
-    float smooth_low_pass = mouseX/10;
-    float ratio_log = 1 +(mouseY/10);;
-    
-    float smooth_slow = mouseX/10;
-    float smooth_fast = smooth_slow *10;
-    float threshold_1 = .1;
-    float threshold_2 = .5;
-    printTempo(60,"ratio log:",ratio_log,frameCount);
-    printTempo(60,"smooth low pass:",smooth_low_pass,frameCount);
-    printTempo(60,"smoothslow:",smooth_slow,frameCount);
-    printTempo(60,"smooth_fast:",smooth_fast,frameCount);
 
-    
+    if(smooth_low_pass == null) set_transient_low_pass(100);     
+    if(smooth_slow == null) set_transient_smooth_slow(50);
+    if(smooth_fast == null) set_transient_smooth_fast(500);
+    if(ratio_log == null) set_transient_ratio_transient(200);
+    if(threshold_1 == null) set_transient_threshold_first(.1);
+    if(threshold_2 == null) set_transient_threshold_second(.5);
+
+
+
+    int section_target_low_pass = 0;
+    int section_target_smooth_slow = 0;
+    int section_target_smooth_fast = 0;
+    int section_target_ratio_log = 0;
+    int section_target_threshold_1 = 0;
+    int section_target_threshold_2 = 0;
+
+
+    print_transient_param();
 
     if(section_target < section_band.length) {
       // set the value must be analyze
@@ -438,7 +542,7 @@ public class Sounda implements Rope_Constants {
         raw_value[index_value] = source_buffer.get(index);
       }
 
-      low_pass(smooth_low_pass,in,out);
+      low_pass(smooth_low_pass[section_target_low_pass],in,out);
       // here pass the first filtering value from first low pass
       for(int i = 0 ; i  < pow_value.length ; i++) {
         pow_value[i] = low_pass_value[i];
@@ -446,7 +550,7 @@ public class Sounda implements Rope_Constants {
       }
       // new low pass quick
       float ref_fast = pow_value[0];
-      smoothing_fast = abs(smooth_fast)+1;
+      smoothing_fast = abs(smooth_fast[section_target_smooth_fast])+1;
       for(int i = 0 ; i  < low_pass_value_fast.length ; i++) {
         float current_value = pow_value[i];
         ref_fast += (current_value - ref_fast) / smoothing_fast;
@@ -455,7 +559,7 @@ public class Sounda implements Rope_Constants {
 
       // new low pass slow
       float ref_slow = pow_value[0];
-      smoothing_slow = abs(smooth_slow)+1;
+      smoothing_slow = abs(smooth_slow[section_target_smooth_slow])+1;
       // pass second thread value: first low pass and pow treatment
       for(int i = 0 ; i  < low_pass_value_slow.length ; i++) {
         float current_value = pow_value[i];
@@ -470,19 +574,18 @@ public class Sounda implements Rope_Constants {
       }
 
       // difference between quick and fast low pass 
-      ratio_log = 1 +(mouseY/10);
       for(int i = 0 ; i  < log_value.length ; i++) {
-        log_value[i] = log(1+(ratio_log*diff_value[i]));
+        log_value[i] = log(1+(ratio_log[section_target_ratio_log]*diff_value[i]));
       }
       
       // transiente detection and hysteresie
       for(int i = 0 ; i  < log_value.length ; i++) {
         transient_is[i] = false;
         float value = log_value[i];
-        if(value > threshold_2 && !transient_is[i]) {
+        if(value > threshold_2[section_target_threshold_2] && !transient_is[i]) {
           value = 1;
           transient_is[i] = true;
-        } else if(value < threshold_1 && transient_is[i]) {
+        } else if(value < threshold_1[section_target_threshold_1] && transient_is[i]) {
           value = 0;
           transient_is[i] = false;
         }
@@ -560,6 +663,8 @@ public class Sounda implements Rope_Constants {
     }
   }
   
+
+
 
   Section get_transient(int transient_target) {
     return section_band[transient_target];

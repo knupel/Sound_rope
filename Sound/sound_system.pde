@@ -11,7 +11,8 @@ void stop() {
 /**
 setup
 */
-float [] radius_beat,radius_transient;
+
+
 void sound_system_setup() {
 	build_log_sound() ;
 
@@ -22,17 +23,31 @@ void sound_system_setup() {
   float scale_spectrum_sound = .11 ;
   sounda.set_spectrum(num_spectrum_bands, scale_spectrum_sound) ;
 
+
+  set_section();
+  set_transient();
+  set_beat();
+  set_tempo();
+}
+
+iVec2 [] section_in_out;
+void set_section() {
   int num_section = 4 ;
-  iVec2 [] section_in_out = new iVec2[num_section];
-  section_in_out[0] = iVec2(0,5);
-  section_in_out[1] = iVec2(5,30);
-  section_in_out[2] = iVec2(30,85);
-  section_in_out[3] = iVec2(85,128);
+  section_in_out = new iVec2[num_section];
+  section_in_out[0] = iVec2(0,15);
+  section_in_out[1] = iVec2(15,40);
+  section_in_out[2] = iVec2(40,90);
+  section_in_out[3] = iVec2(90,128);
   sounda.set_section(section_in_out);
-  
-  /**
-  transient
-  */
+
+}
+
+
+
+
+
+float [] radius_transient;
+void set_transient() {
   int [] transient_section_id = new int[section_in_out.length] ;
   transient_section_id[0] = 0;
   transient_section_id[1] = 1;
@@ -46,12 +61,11 @@ void sound_system_setup() {
   transient_part_threshold[3] = Vec2(.5, 8.5);
 
   sounda.set_transient(transient_section_id, transient_part_threshold);
-  // set_beat(beat_part_threshold); // this method don't need to set section
-
   radius_transient = new float[transient_part_threshold.length];
-  /**
-  beat
-  */
+}
+
+float [] radius_beat; 
+void set_beat() {
   int [] beat_section_id = new int[section_in_out.length] ;
   beat_section_id[0] = 0;
   beat_section_id[1] = 1;
@@ -65,11 +79,13 @@ void sound_system_setup() {
   beat_part_threshold[3] = .5;
 
   sounda.set_beat(beat_section_id, beat_part_threshold);
-  // set_beat(beat_part_threshold); // this method don't need to set section
 
   radius_beat = new float[beat_part_threshold.length];
- 
+}
 
+
+
+void set_tempo() {
   float [] tempo_threshold = new float[section_in_out.length];
   tempo_threshold[0] = 4.5;
   tempo_threshold[1] = 3.5;
@@ -81,13 +97,20 @@ void sound_system_setup() {
 }
 
 
+
+
+
+
+
+
+// DRAW
 void sound_system_draw() {
 	sounda.update();
 
   show_spectrum();
   show_beat();
   show_transient();
-  show_beat_range();
+  show_section();
   show_tempo();
 
   int log_each_frame = 60;
@@ -99,6 +122,21 @@ void sound_system_draw() {
 
 
 
+
+
+
+// section
+void show_section() {
+  stroke(r.WHITE);
+  strokeWeight(1);
+  float step = sounda.buffer_size() / sounda.band_num();
+  for(int i = 1 ; i < sounda.section_num() -1 ; i++) {
+    int line_in_x = int(sounda.get_section_in(i) *step);
+    line(line_in_x, 0, line_in_x, height) ;
+    int line_out_x = int(sounda.get_section_out(i) *step);
+    line(line_out_x, 0, line_out_x, height);
+  }
+}
 
 
 
@@ -134,21 +172,22 @@ void show_tempo() {
 
 
 
-void show_beat_range() {
-  stroke(r.WHITE);
-  strokeWeight(1);
-  float step = sounda.buffer_size() / sounda.band_num();
-  for(int i = 1 ; i < sounda.section_num() -1 ; i++) {
-    int line_in_x = int(sounda.get_section_in(i) *step);
-    line(line_in_x, 0, line_in_x, height) ;
-    int line_out_x = int(sounda.get_section_out(i) *step);
-    line(line_out_x, 0, line_out_x, height);
-  }
-}
 
 
+
+
+
+
+// transient
 void show_transient() {
   sounda.audio_buffer(r.MIX);
+
+  sounda.set_transient_low_pass(mouseX/10);     
+  sounda.set_transient_smooth_slow(mouseX/10);
+  sounda.set_transient_smooth_fast(sounda.get_transient_smooth_slow()[0] *10);
+  sounda.set_transient_ratio_transient(1 +(mouseY/10));
+  sounda.set_transient_threshold_first(.1);
+  sounda.set_transient_threshold_second(.5);
 
   for(int i = 0 ; i < sounda.section_num() ; i++) {
     if(sounda.transient_is(i)) {
@@ -177,21 +216,81 @@ void show_transient() {
   textSize(size);
   int pos_x = width/6;
   int pos_y = height/12;
+  
 
+  int rank = 0;
   if(sounda.section_num() > 1) {
     for(int i = 0 ; i < sounda.section_num();i++) {
-      int rank = i;
+      rank = i;
       int x = pos_x ;
       int y = int(pos_y +(rank*(size*1.3)));
       text("transient "+(i+1)+" threshold "+ sounda.get_transient_threshold(i)+" : " +sounda.transient_is(i),x,y);
     }
   }
+  
+  String value = ":";
+  rank++;
+  for(int i = 0 ; i < sounda.get_transient_low_pass().length ; i++) {
+    value += (" " +sounda.get_transient_low_pass()[i]);
+  }
+  int y = int(pos_y +(rank*(size*1.3)));
+  text("transient low pass: "+ value,pos_x,y);  
+
+  value = ":";
+  rank++;
+  for(int i = 0 ; i < sounda.get_transient_smooth_slow().length ; i++) {
+    value += (" " +sounda.get_transient_smooth_slow()[i]);
+  }
+  y = int(pos_y +(rank*(size*1.3)));
+  text("transient smooth slow: "+ value,pos_x,y);
+
+  value = ":";
+  rank++;
+  for(int i = 0 ; i < sounda.get_transient_smooth_fast().length ; i++) {
+    value += (" " +sounda.get_transient_smooth_fast()[i]);
+  }
+  y = int(pos_y +(rank*(size*1.3)));
+  text("transient smooth fast: "+ value,pos_x,y);
+
+  value = ":";
+  rank++;
+  for(int i = 0 ; i < sounda.get_transient_ratio_transient().length ; i++) {
+    value += (" " +sounda.get_transient_ratio_transient()[i]);
+  }
+  y = int(pos_y +(rank*(size*1.3)));
+  text("transient ratio transient: "+ value,pos_x,y);
+
+  value = ":";
+  rank++;
+  for(int i = 0 ; i < sounda.get_transient_threshold_first().length ; i++) {
+    value += (" " +sounda.get_transient_threshold_first()[i]);
+  }
+  y = int(pos_y +(rank*(size*1.3)));
+  text("transient threshold first: "+ value,pos_x,y);
+
+  value = ":";
+  rank++;
+  for(int i = 0 ; i < sounda.get_transient_threshold_second().length ; i++) {
+    value += (" " +sounda.get_transient_threshold_second()[i]);
+  }
+  y = int(pos_y +(rank*(size*1.3)));
+  text("transient threshold second: "+ value,pos_x,y);
+
+
+
 }
 
 
 
 
 
+
+
+
+
+
+
+// beat
 void show_beat() {
   for(int i = 0 ; i < radius_beat.length ;i++) {
     if(sounda.beat_is(i)) {
@@ -219,7 +318,7 @@ void show_beat() {
   int size = 14 ;
   textSize(size);
   int pos_x = width/6;
-  int pos_y = height/3;
+  int pos_y = height/2;
 
   if(sounda.section_num() > 1) {
     for(int i = 0 ; i < sounda.section_num();i++) {
@@ -232,6 +331,11 @@ void show_beat() {
 
 
 
+
+
+
+
+// spectrum
 void show_spectrum() {
   noStroke();
 
@@ -257,7 +361,7 @@ void show_spectrum() {
   int size = 14 ;
   textSize(size);
   int pos_x = width/6;
-  int pos_y = height/2 +(height/6);
+  int pos_y = height/2;
   // only one tempo is available init_tempo(false);
   float value = truncate(sounda.get_spectrum_average(),5) *100;
   text("Spectrum average value: "+value,pos_x,pos_y);
