@@ -59,11 +59,21 @@ void set_transient() {
 
   Vec2 [] transient_part_threshold = new Vec2[section_in_out.length];
   transient_part_threshold[0] = Vec2(.1, 2.5);
-  transient_part_threshold[1] = Vec2(.3, 4.5);
-  transient_part_threshold[2] = Vec2(.4, 6.5);
-  transient_part_threshold[3] = Vec2(.5, 8.5);
+  transient_part_threshold[1] = Vec2(.1, 2.5);
+  transient_part_threshold[2] = Vec2(.1, 2.5);
+  transient_part_threshold[3] = Vec2(.1, 2.5);
 
   sounda.set_transient(transient_section_id, transient_part_threshold);
+
+  sounda.set_transient_low_pass(20);     
+  sounda.set_transient_smooth_slow(3.);
+  sounda.set_transient_smooth_fast(21.);
+  sounda.set_transient_ratio_transient(75); 
+  sounda.set_transient_threshold_first(.1);
+  sounda.set_transient_threshold_second(.35);
+  // lp>20 || tss>200 || tsf>800 || trt>75 || ttf>0.1 || tts>0.5
+  // lp>20 || tss>3 || tsf>21 || trt>75 || ttf>0.1 || tts>0.35 // more detail in the curve with tss and tsf low
+
   radius_transient = new float[transient_part_threshold.length];
 }
 
@@ -232,12 +242,22 @@ void show_tempo() {
 // transient
 void show_transient() {
   sounda.audio_buffer(r.MIX);
+  /*
   sounda.set_transient_low_pass(mouseX/10);     
   sounda.set_transient_smooth_slow(mouseX/10);
   sounda.set_transient_smooth_fast(sounda.get_transient_smooth_slow()[0] *10);
   sounda.set_transient_ratio_transient(1 +(mouseY/10));
   sounda.set_transient_threshold_first(.1);
   sounda.set_transient_threshold_second(.5);
+  */
+  /*
+  sounda.set_transient_low_pass(3);     
+  sounda.set_transient_smooth_slow(50);
+  sounda.set_transient_smooth_fast(2000);
+  sounda.set_transient_ratio_transient(50); // 100 not bad
+  sounda.set_transient_threshold_first(.1);
+  sounda.set_transient_threshold_second(1.);
+  */
 
   for(int i = 0 ; i < sounda.section_num() ; i++) {
     if(sounda.transient_is(i)) {

@@ -1169,7 +1169,6 @@ class Transient extends Sounda {
 
 
   public void set_transient(int[] target_transient_section, Vec2... threshold) {
-    // printArray(threshold);
     if(section != null) {
       transient_advance_is = true ;
       transient_leg_is = new boolean [target_transient_section.length][buffer.length];
@@ -1296,6 +1295,7 @@ class Transient extends Sounda {
       // new low pass quick
       float ref_fast = pow_value[0];
       smoothing_fast = abs(smooth_fast[section_target_smooth_fast])+1;
+      // println(smoothing_fast);
       for(int i = 0 ; i  < low_pass_value_fast.length ; i++) {
         float current_value = pow_value[i];
         ref_fast += (current_value - ref_fast) / smoothing_fast;
@@ -1314,7 +1314,7 @@ class Transient extends Sounda {
 
       // difference between quick and fast low pass
       for(int i = 0 ; i  < diff_value.length ; i++) {
-        // diff_value[i] = low_pass_value_slow[i] - low_pass_value_fast[i];
+        //diff_value[i] = low_pass_value_slow[i] - low_pass_value_fast[i];
         diff_value[i] = low_pass_value_fast[i] - low_pass_value_slow[i];
       }
 
@@ -1397,7 +1397,8 @@ class Transient extends Sounda {
     int length = out -in ;
     low_pass_value = new float[length];
   
-    float ref = buffer[0];
+    // float ref = buffer[0];
+    float ref = buffer[in];
     smoothing = abs(smooth)+1;
     // println("smooth", smoothing);
     for(int index = in ; index < out ; index++) {
