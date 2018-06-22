@@ -68,9 +68,9 @@ void set_transient() {
   sounda.set_transient_low_pass(20);     
   sounda.set_transient_smooth_slow(3.);
   sounda.set_transient_smooth_fast(21.);
-  sounda.set_transient_ratio_transient(75); 
-  sounda.set_transient_threshold_first(.1);
-  sounda.set_transient_threshold_second(.35);
+  sounda.set_transient_ratio_transient(100,50,40,30); 
+  sounda.set_transient_threshold_low(.05,.08,.12,.16);
+  sounda.set_transient_threshold_high(.8,.3,.25,.20);
   // lp>20 || tss>200 || tsf>800 || trt>75 || ttf>0.1 || tts>0.5
   // lp>20 || tss>3 || tsf>21 || trt>75 || ttf>0.1 || tts>0.35 // more detail in the curve with tss and tsf low
 
@@ -332,16 +332,16 @@ void show_transient() {
 
   value = ":";
   rank++;
-  for(int i = 0 ; i < sounda.get_transient_threshold_first().length ; i++) {
-    value += (" " +sounda.get_transient_threshold_first()[i]);
+  for(int i = 0 ; i < sounda.get_transient_threshold_low().length ; i++) {
+    value += (" " +sounda.get_transient_threshold_low()[i]);
   }
   y = int(pos_y +(rank*(size*1.3)));
   text("transient threshold first: "+ value,pos_x,y);
 
   value = ":";
   rank++;
-  for(int i = 0 ; i < sounda.get_transient_threshold_second().length ; i++) {
-    value += (" " +sounda.get_transient_threshold_second()[i]);
+  for(int i = 0 ; i < sounda.get_transient_threshold_high().length ; i++) {
+    value += (" " +sounda.get_transient_threshold_high()[i]);
   }
   y = int(pos_y +(rank*(size*1.3)));
   text("transient threshold second: "+ value,pos_x,y);

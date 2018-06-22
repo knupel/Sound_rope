@@ -1,6 +1,9 @@
 */TODO
  
 
+*scale
+
+Scale the sensibility detection with the total spectrum, if the sound is low, the sensibility is high
 
 */Tempo
 
