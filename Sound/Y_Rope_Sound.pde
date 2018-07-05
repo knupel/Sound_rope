@@ -1132,7 +1132,7 @@ public class Sounda implements Rope_Constants {
 /**
 TRANSIENT DETECTION
 2018-2018
-v 0.0.2
+v 0.0.3
 --
 main transient method
 on idea of Jean-Baptiste Vallon Hoarau
@@ -1397,7 +1397,7 @@ class Transient extends Sounda {
       }
       // new low pass fast
       float ref_fast = pow_value[0];
-      smoothing_fast = abs(smooth_fast[section_target_smooth_fast])+1;
+      float smoothing_fast = abs(smooth_fast[section_target_smooth_fast])+1;
       // println(smoothing_fast);
       for(int i = 0 ; i  < low_pass_value_fast.length ; i++) {
         float current_value = pow_value[i];
@@ -1407,7 +1407,7 @@ class Transient extends Sounda {
 
       // new low pass slow
       float ref_slow = pow_value[0];
-      smoothing_slow = abs(smooth_slow[section_target_smooth_slow])+1;
+      float smoothing_slow = abs(smooth_slow[section_target_smooth_slow])+1;
       // pass second thread value: first low pass and pow treatment
       for(int i = 0 ; i  < low_pass_value_slow.length ; i++) {
         float current_value = pow_value[i];
