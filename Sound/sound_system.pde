@@ -51,20 +51,6 @@ void set_section() {
 
 float [] radius_transient;
 void set_transient() {
-  int [] transient_section_id = new int[sounda.section_size()] ;
-  transient_section_id[0] = 0;
-  transient_section_id[1] = 1;
-  transient_section_id[2] = 2;
-  transient_section_id[3] = 3;
-
-  Vec2 [] transient_part_threshold = new Vec2[sounda.section_size()];
-  transient_part_threshold[0] = Vec2(.1, 2.5);
-  transient_part_threshold[1] = Vec2(.1, 2.5);
-  transient_part_threshold[2] = Vec2(.1, 2.5);
-  transient_part_threshold[3] = Vec2(.1, 2.5);
-
-  sounda.set_transient(transient_section_id, transient_part_threshold);
-
   sounda.set_transient_low_pass(20);     
   sounda.set_transient_smooth_slow(3.);
   sounda.set_transient_smooth_fast(21.);
@@ -73,6 +59,17 @@ void set_transient() {
   sounda.set_transient_threshold_high(.8,.3,.25,.20);
   // lp>20 || tss>200 || tsf>800 || trt>75 || ttf>0.1 || tts>0.5
   // lp>20 || tss>3 || tsf>21 || trt>75 || ttf>0.1 || tts>0.35 // more detail in the curve with tss and tsf low
+  
+  Vec2 [] transient_part_threshold = new Vec2[sounda.section_size()];
+  transient_part_threshold[0] = Vec2(.1, 0.5);
+  transient_part_threshold[1] = Vec2(.1, 0.5);
+  transient_part_threshold[2] = Vec2(.1, 0.5);
+  transient_part_threshold[3] = Vec2(.1, 0.5);
+  sounda.init_transient(transient_part_threshold);
+  // after you can sect a specific transient like
+  int section_index = 0 ;
+  Vec2 new_value_threshold = Vec2(.25, 5.9);
+  sounda.set_transient(section_index,new_value_threshold);
 
   radius_transient = new float[transient_part_threshold.length];
 }

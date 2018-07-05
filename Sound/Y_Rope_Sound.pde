@@ -354,13 +354,21 @@ public class Sounda implements Rope_Constants {
   TRANSIENT DETECTION
   v 0.1.0
   */
-  Transient transient_detection ;
-  public void set_transient(int[] target_transient_section, Vec2... threshold) {
+  Transient transient_detection;
+  public void init_transient(Vec2... threshold) {
     if(transient_detection == null) transient_detection = new Transient();
     audio_buffer(MIX);
     buffering();
     transient_detection.set_section(section);
-    transient_detection.set_transient(target_transient_section, threshold);
+    int [] linear_section = new int[threshold.length];
+    for(int i = 0 ; i < linear_section.length ; i++) {
+      linear_section[i] = i ;
+    }
+    transient_detection.set_transient(linear_section,threshold);
+  }
+
+  public void set_transient(int index, Vec2 threshold) {
+    transient_detection.set_transient(index, threshold);
   }
 
   // set param transient
@@ -1244,9 +1252,17 @@ class Transient extends Sounda {
     set_transient(id_transient_section,threshold);
   }
 
+  public void set_transient(int index, Vec2 threshold) {
+    if(index < section_size()) {
+      section[index].set_threshold_transient(threshold);
+    } else {
+      printErrTempo(60,"class Transient – method set_transient(int"+index+" Vec2 "+threshold+") is out of the range");
+    }
+  }
+
   private boolean transient_advance_is ;
   private boolean [][] transient_leg_is ;
-  public void set_transient(int[] target_transient_section, Vec2... threshold) {
+  private void set_transient(int[] target_transient_section, Vec2... threshold) {
     if(section != null) {
       transient_advance_is = true ;
       transient_leg_is = new boolean [target_transient_section.length][buffer.length];
@@ -1447,51 +1463,57 @@ class Transient extends Sounda {
       }
 
       // display just for devellopement
-      boolean dev = true ;
+      boolean dev = true;
       if(dev) {
-        float factor =height/6;
-        int num = 8;
-        int step = height / num;
-        int [] pos_y = new int[num] ;
-        for(int i = 0 ; i < num ; i++) {
-          pos_y[i] = step *(i +1); 
-        }
-        for(int i = 0 ; i < transient_is.length ;i++) {
-        // no filter
-          int x = i +in;
-          // println(x,i,in,transient_is.length);
-          int y = int(raw_value[i] *factor) + pos_y[0];
-          set(x, y,r.YELLOW);
-          // low pass filter
-          y = int(low_pass_value[i] *factor) + pos_y[1];
-          set(x, y,r.YELLOW);
-          // transient work
-          // show pow value
-          y = int(pow_value[i] *factor) + pos_y[2];
-          set(x, y,r.YELLOW);
-
-          // show low pass quick
-          y = int(low_pass_value_fast[i] *factor) + pos_y[3];
-          set(x, y,r.YELLOW);
-
-          // show low pass slow
-          y = int(low_pass_value_slow[i] *factor) + pos_y[4];
-          set(x, y,r.YELLOW);
-
-          // diff between fast and slow
-          y = int(diff_value[i] *factor) + pos_y[5];
-          set(x, y,r.YELLOW);
-
-           // log value + 1
-          y = int(log_value[i] *factor) + pos_y[6];
-          set(x, y,r.YELLOW);
-        }
+        show_visual(in, transient_is, raw_value, low_pass_value, pow_value, low_pass_value_fast, low_pass_value_slow, diff_value, log_value);
       }
+
       // end display dev   
     } else {
       printErrTempo(60,"method transient_is(section",section_target,") is out of the range, by default method return false",frameCount);
     }
     return transient_event_is;
+  }
+
+
+  private void show_visual(int in, boolean [] transient_is, float [] raw_value, float [] low_pass_value, float [] pow_value, float [] low_pass_value_fast, float [] low_pass_value_slow, float [] diff_value, float [] log_value) {
+    float factor =height/6;
+    int num = 8;
+    int step = height / num;
+    int [] pos_y = new int[num] ;
+    for(int i = 0 ; i < num ; i++) {
+      pos_y[i] = step *(i +1); 
+    }
+    for(int i = 0 ; i < transient_is.length ;i++) {
+    // no filter
+      int x = i +in;
+      // println(x,i,in,transient_is.length);
+      int y = int(raw_value[i] *factor) + pos_y[0];
+      set(x, y,r.YELLOW);
+      // low pass filter
+      y = int(low_pass_value[i] *factor) + pos_y[1];
+      set(x, y,r.YELLOW);
+      // transient work
+      // show pow value
+      y = int(pow_value[i] *factor) + pos_y[2];
+      set(x, y,r.YELLOW);
+
+      // show low pass quick
+      y = int(low_pass_value_fast[i] *factor) + pos_y[3];
+      set(x, y,r.YELLOW);
+
+      // show low pass slow
+      y = int(low_pass_value_slow[i] *factor) + pos_y[4];
+      set(x, y,r.YELLOW);
+
+      // diff between fast and slow
+      y = int(diff_value[i] *factor) + pos_y[5];
+      set(x, y,r.YELLOW);
+
+       // log value + 1
+      y = int(log_value[i] *factor) + pos_y[6];
+      set(x, y,r.YELLOW);
+    }
   }
 
   float [] low_pass_value;
