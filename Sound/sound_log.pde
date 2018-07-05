@@ -20,7 +20,7 @@ void build_log_sound() {
 void log_sound(int log_sound_frame, boolean log_beat_only) {
   if(frameCount%log_sound_frame == 0) {
     String time = hour() +" "+ minute() +" "+ second() +" "+ frameCount ;
-    for(int target_beat = 0 ; target_beat < sounda.section_num() ;target_beat++) {
+    for(int target_beat = 0 ; target_beat < sounda.section_size() ;target_beat++) {
       for(int target_band = 0 ; target_band < sounda.get_spectrum().length ; target_band++) {
         if(log_beat_only) {
           if(sounda.beat_band_is(target_beat,target_band)) {

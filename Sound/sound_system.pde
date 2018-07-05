@@ -51,13 +51,13 @@ void set_section() {
 
 float [] radius_transient;
 void set_transient() {
-  int [] transient_section_id = new int[section_in_out.length] ;
+  int [] transient_section_id = new int[sounda.section_size()] ;
   transient_section_id[0] = 0;
   transient_section_id[1] = 1;
   transient_section_id[2] = 2;
   transient_section_id[3] = 3;
 
-  Vec2 [] transient_part_threshold = new Vec2[section_in_out.length];
+  Vec2 [] transient_part_threshold = new Vec2[sounda.section_size()];
   transient_part_threshold[0] = Vec2(.1, 2.5);
   transient_part_threshold[1] = Vec2(.1, 2.5);
   transient_part_threshold[2] = Vec2(.1, 2.5);
@@ -80,13 +80,13 @@ void set_transient() {
 
 float [] radius_beat; 
 void set_beat() {
-  int [] beat_section_id = new int[section_in_out.length] ;
+  int [] beat_section_id = new int[sounda.section_size()] ;
   beat_section_id[0] = 0;
   beat_section_id[1] = 1;
   beat_section_id[2] = 2;
   beat_section_id[3] = 3;
 
-  float [] beat_part_threshold = new float[section_in_out.length];
+  float [] beat_part_threshold = new float[sounda.section_size()];
   beat_part_threshold[0] = 3.5;
   beat_part_threshold[1] = 2.5;
   beat_part_threshold[2] = 1.5;
@@ -101,7 +101,7 @@ void set_beat() {
 
 
 void set_tempo() {
-  float [] tempo_threshold = new float[section_in_out.length];
+  float [] tempo_threshold = new float[sounda.section_size()];
   tempo_threshold[0] = 4.5;
   tempo_threshold[1] = 3.5;
   tempo_threshold[2] = 2.5;
@@ -190,7 +190,7 @@ void show_section() {
   strokeWeight(1);
   // float step = sounda.buffer_size() / sounda.spectrum_size();
   float step = 1;
-  for(int i = 1 ; i < sounda.section_num() -1 ; i++) {
+  for(int i = 1 ; i < sounda.section_size() -1 ; i++) {
     int line_in_x = int(sounda.get_section_in(i) *step);
     line(line_in_x, 0, line_in_x, height) ;
     int line_out_x = int(sounda.get_section_out(i) *step);
@@ -220,8 +220,8 @@ void show_tempo() {
   // only one tempo is available init_tempo(false);
   text("tempo global: "+sounda.get_tempo_name()+" "+sounda.get_tempo(),pos_x,pos_y);
   // all beat have a tempo catchable init_tempo(true);
-  if(sounda.section_num() > 1) {
-    for(int i = 0 ; i < sounda.section_num();i++) {
+  if(sounda.section_size() > 1) {
+    for(int i = 0 ; i < sounda.section_size();i++) {
       int rank = i+1;
       text("Tempo "+i+" threshold "+ sounda.get_tempo_threshold(i)+" – " +sounda.get_tempo_name(i)+" "+sounda.get_tempo(i),pos_x,pos_y +(rank*(size*1.3)));
     }
@@ -259,7 +259,7 @@ void show_transient() {
   sounda.set_transient_threshold_second(1.);
   */
 
-  for(int i = 0 ; i < sounda.section_num() ; i++) {
+  for(int i = 0 ; i < sounda.section_size() ; i++) {
     if(sounda.transient_is(i)) {
       radius_transient[i] = height *.75 ;
     }
@@ -289,8 +289,8 @@ void show_transient() {
   
 
   int rank = 0;
-  if(sounda.section_num() > 1) {
-    for(int i = 0 ; i < sounda.section_num();i++) {
+  if(sounda.section_size() > 1) {
+    for(int i = 0 ; i < sounda.section_size();i++) {
       rank = i;
       int x = pos_x ;
       int y = int(pos_y +(rank*(size*1.3)));
@@ -390,8 +390,8 @@ void show_beat() {
   int pos_x = width/6;
   int pos_y = height/2;
 
-  if(sounda.section_num() > 1) {
-    for(int i = 0 ; i < sounda.section_num();i++) {
+  if(sounda.section_size() > 1) {
+    for(int i = 0 ; i < sounda.section_size();i++) {
       int rank = i+1;
       text("Beat "+i+" threshold "+ sounda.get_beat_threshold(i)+" : " +sounda.beat_is(i),pos_x,pos_y +(rank*(size*1.3)));
     }
@@ -403,7 +403,7 @@ void show_beat() {
 
 void show_beat_spectrum_level(Vec2 pos, int size) {
   float band_width = height /  sounda.spectrum_size() ;
-  for(int i = 0 ; i < sounda.section_num() ; i++) {
+  for(int i = 0 ; i < sounda.section_size() ; i++) {
     for(int k = 0; k < sounda.spectrum_size() ; k++) {
       if(sounda.beat_band_is(i,k)) {
         float pos_x = k *band_width +pos.x;

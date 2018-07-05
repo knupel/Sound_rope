@@ -1,7 +1,7 @@
 /**
 SOUNDA Rope
 for SOUNDA > SOUND-Analyze
-v 1.4.2
+v 1.4.3
 * Copyleft (c) 2017-2018
 * Stan le Punk > http://stanlepunk.xyz/
 * @author Stan le Punk
@@ -17,7 +17,7 @@ v 1.4.2
 
 /**
 Class Sounda
-v 0.0.3
+v 0.0.4
 */
 public class Sounda implements Rope_Constants {
   private int analyze_length;
@@ -334,11 +334,11 @@ public class Sounda implements Rope_Constants {
     }
   }
 
-  public int section_num() {
+  public int section_size() {
     if(section != null && section.length > 0) {
       return section.length ;
     } else {
-      printErr("method section_num(): no array beat found method return -1");
+      printErr("method section_size(): no array beat found method return -1");
       return -1;
     }
   }
@@ -440,7 +440,7 @@ public class Sounda implements Rope_Constants {
   public boolean transient_is() {
     boolean transient_is = false ;
     buffering();
-    for(int i = 0 ; i < transient_detection.section_num() ; i++) {
+    for(int i = 0 ; i < transient_detection.section_size() ; i++) {
       if(transient_detection.transient_is(i)) {
         transient_is = true;
         break;
@@ -514,7 +514,7 @@ public class Sounda implements Rope_Constants {
       beat_band_is = new boolean [target_beat_section.length][spectrum_size()];
       // init var
       for(int i = 0 ; i < beat_band_is.length ; i++) {
-        if(target_beat_section[i] < section_num()) {
+        if(target_beat_section[i] < section_size()) {
           int target_section = target_beat_section[i];
           section[target_section].set_threshold_beat(threshold[i]);
 
@@ -547,7 +547,7 @@ public class Sounda implements Rope_Constants {
   // boolean beat is
   public boolean beat_is() {
     boolean beat_is = false ;
-    for(int i = 0 ; i < section_num() ; i++) {
+    for(int i = 0 ; i < section_size() ; i++) {
       for(int k = 0 ; k < spectrum_bands ; k++ ) {
         if(beat_band_is(i,k)) {
           beat_is = true ;
@@ -634,9 +634,9 @@ public class Sounda implements Rope_Constants {
   public void set_tempo(float... threshold) {
     if(threshold != null) {
       // printErrTempo(60,"method set_tempo() is not availble at this time try in an other life");
-      if(section_num() > 0 && threshold.length <= section_num()) {
-        tempo = new Tempo[section_num()];
-        for(int i = 0 ; i < section_num() ; i++) {
+      if(section_size() > 0 && threshold.length <= section_size()) {
+        tempo = new Tempo[section_size()];
+        for(int i = 0 ; i < section_size() ; i++) {
           tempo[i] = new Tempo(get_beat(i));
           // tempo[i] = new Tempo(get_transient(i));
           tempo[i].set_threshold(threshold[i]);
@@ -1252,7 +1252,7 @@ class Transient extends Sounda {
       transient_leg_is = new boolean [target_transient_section.length][buffer.length];
       // init var
       for(int i = 0 ; i < transient_leg_is.length ; i++) {
-        if(target_transient_section[i] < section_num()) {
+        if(target_transient_section[i] < section_size()) {
           int target_section = target_transient_section[i];
           section[target_section].set_threshold_transient(threshold[i]);
         } else {
@@ -1276,7 +1276,7 @@ class Transient extends Sounda {
   // boolean transient is
   public boolean transient_is() {
     boolean transient_is = false ;
-    for(int i = 0 ; i < section_num() ; i++) {
+    for(int i = 0 ; i < section_size() ; i++) {
       if(transient_is(i)) {
         transient_is = true;
         break;
