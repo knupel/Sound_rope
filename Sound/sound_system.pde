@@ -54,7 +54,7 @@ void set_transient() {
   sounda.set_transient_low_pass(20);     
   sounda.set_transient_smooth_slow(3.);
   sounda.set_transient_smooth_fast(21.);
-  sounda.set_transient_ratio_transient(100,50,40,30); 
+  sounda.set_transient_ratio_log(100,50,40,30); 
   sounda.set_transient_threshold_low(.05,.08,.12,.16);
   sounda.set_transient_threshold_high(.8,.3,.25,.20);
   // lp>20 || tss>200 || tsf>800 || trt>75 || ttf>0.1 || tts>0.5
@@ -321,8 +321,8 @@ void show_transient() {
 
   value = ":";
   rank++;
-  for(int i = 0 ; i < sounda.get_transient_ratio_transient().length ; i++) {
-    value += (" " +sounda.get_transient_ratio_transient()[i]);
+  for(int i = 0 ; i < sounda.get_transient_ratio_log().length ; i++) {
+    value += (" " +sounda.get_transient_ratio_log()[i]);
   }
   y = int(pos_y +(rank*(size*1.3)));
   text("transient ratio transient: "+ value,pos_x,y);

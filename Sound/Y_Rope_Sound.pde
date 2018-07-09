@@ -17,7 +17,7 @@ v 1.4.3
 
 /**
 Class Sounda
-v 0.0.4
+v 0.1.0
 */
 public class Sounda implements Rope_Constants {
   private int analyze_length;
@@ -296,7 +296,6 @@ public class Sounda implements Rope_Constants {
       }
     }
     for(int i = 0 ; i < num_section ; i++) {
-      // int length_analyze = in_out[i].y - in_out[i].x ;
       section[i] = new Section(len,in_out[i].x,in_out[i].y);
     }
   }
@@ -360,96 +359,130 @@ public class Sounda implements Rope_Constants {
     audio_buffer(MIX);
     buffering();
     transient_detection.set_section(section);
-    int [] linear_section = new int[threshold.length];
-    for(int i = 0 ; i < linear_section.length ; i++) {
-      linear_section[i] = i ;
-    }
-    transient_detection.set_transient(linear_section,threshold);
+    transient_detection.set_transient_detection(section,threshold);
   }
 
   public void set_transient(int index, Vec2 threshold) {
-    transient_detection.set_transient(index, threshold);
+    transient_detection.set_transient_detection(section,index,threshold);
   }
 
   // set param transient
-  public void set_transient_low_pass(float... smooth_low_pass) {
+  public void set_transient_low_pass(float... low_pass) {
     if(transient_detection != null) {
-       transient_detection.set_transient_low_pass(smooth_low_pass);
+       if(low_pass.length <= section.length) {
+        int index = 0;
+        for(int i = 0 ; i < section.length ; i++) {
+          if(index >=low_pass.length) index = 0;
+          transient_detection.set_low_pass(section[i],low_pass[index]);
+          index++;
+        }
+      }
+     
     } else {
-      printErr("method set_transient_low_pass(): set_transient() need in to write in first before the other setting methods");
+      printErr("method set_transient_low_pass(): method init_transient() need in to write in first before the other setting methods");
     }
   }
 
   public void set_transient_smooth_slow(float... smooth_slow) {
     if(transient_detection != null) {
-       transient_detection.set_transient_smooth_slow(smooth_slow);
+       if(smooth_slow.length <= section.length) {
+        int index = 0;
+        for(int i = 0 ; i < section.length ; i++) {
+          if(index >= smooth_slow.length) index = 0;
+          transient_detection.set_smooth_slow(section[i],smooth_slow[index]);
+        }
+      }
     } else {
-      printErr("method set_transient_smooth_slow(): set_transient() need in to write in first before the other setting methods");
+      printErr("method set_transient_smooth_slow(): method init_transient() need in to write in first before the other setting methods");
     }
   }
 
   public void set_transient_smooth_fast(float... smooth_fast) {
     if(transient_detection != null) {
-       transient_detection.set_transient_smooth_fast(smooth_fast);
+       if(smooth_fast.length <= section.length) {
+        int index = 0;
+        for(int i = 0 ; i < section.length ; i++) {
+          if(index >= smooth_fast.length) index = 0;
+          transient_detection.set_smooth_fast(section[i],smooth_fast[index]);
+        }
+      }
     } else {
-      printErr("method set_transient_smooth_fast(): set_transient() need in to write in first before the other setting methods");
+      printErr("method set_transient_smooth_fast(): method init_transient() need in to write in first before the other setting methods");
     }
   }
 
-  public void set_transient_ratio_transient(float... ratio_log) {
+  public void set_transient_ratio_log(float... ratio_log) {
     if(transient_detection != null) {
-       transient_detection.set_transient_ratio_transient(ratio_log);
+      if(ratio_log.length <= section.length) {
+        int index = 0;
+        for(int i = 0 ; i < section.length ; i++) {
+          if(index >= ratio_log.length) index = 0;
+          transient_detection.set_ratio_log(section[i],ratio_log[index]);
+        }
+      }
     } else {
-      printErr("method set_transient_ratio_transient(): set_transient() need in to write in first before the other setting methods");
+      printErr("method set_transient_ratio_transient(): method init_transient() need in to write in first before the other setting methods");
     }
   }
 
   public void set_transient_threshold_low(float... threshold_low) {
     if(transient_detection != null) {
-       transient_detection.set_transient_threshold_low(threshold_low);
+      if(threshold_low.length <= section.length) {
+        int index = 0;
+        for(int i = 0 ; i < section.length ; i++) {
+          if(index >= threshold_low.length) index = 0;
+          transient_detection.set_threshold_low(section[i],threshold_low[index]);
+        }
+      }
     } else {
-      printErr("method set_transient_threshold_low(): set_transient() need in to write in first before the other setting methods");
+      printErr("method set_transient_threshold_low(): method init_transient() need in to write in first before the other setting methods");
     }
   }
 
   public void set_transient_threshold_high(float... threshold_high) {
     if(transient_detection != null) {
-       transient_detection.set_transient_threshold_high(threshold_high);
+      if(threshold_high.length <= section.length) {
+        int index = 0;
+        for(int i = 0 ; i < section.length ; i++) {
+          if(index >= threshold_high.length) index = 0;
+          transient_detection.set_threshold_high(section[i],threshold_high[index]);
+        }
+      }
     } else {
-      printErr("method set_transient_threshold_high(): set_transient() need in to write in first before the other setting methods");
+      printErr("method set_transient_threshold_high(): method init_transient() need in to write in first before the other setting methods");
     }
   }
 
   // get param transient
   public float[] get_transient_low_pass() {
-    return transient_detection.smooth_low_pass;
+    return transient_detection.get_low_pass();
   }
 
   public float[] get_transient_smooth_slow() {
-    return transient_detection.smooth_slow;
+    return transient_detection.get_smooth_slow();
   }
 
   public float[] get_transient_smooth_fast() {
-    return transient_detection.smooth_fast;
+    return transient_detection.get_smooth_fast();
   }
 
   public float[] get_transient_threshold_low() {
-    return transient_detection.threshold_low;
+    return transient_detection.get_threshold_low();
   }
 
   public float[] get_transient_threshold_high() {
-    return transient_detection.threshold_high;
+    return transient_detection.get_threshold_high();
   }
 
-  public float[] get_transient_ratio_transient() {
-    return transient_detection.ratio_log;
+  public float[] get_transient_ratio_log() {
+    return transient_detection.get_ratio_log();
   }
 
   public boolean transient_is() {
     boolean transient_is = false ;
     buffering();
     for(int i = 0 ; i < transient_detection.section_size() ; i++) {
-      if(transient_detection.transient_is(i)) {
+      if(transient_detection.detection_is(section,i)) {
         transient_is = true;
         break;
       }
@@ -458,19 +491,25 @@ public class Sounda implements Rope_Constants {
   }
 
   public boolean transient_is(int section_target) {
+    boolean result = false ;
     buffering();
-    return transient_detection.transient_is(section_target);
+    if(source_buffer != null) {
+      result = transient_detection.detection_is(section,section_target);
+    } 
+    return result;
   }
 
   /**
   pass buffer audio to transient class
   */
   private void buffering() {
-    float [] temp = new float[source_buffer.size()];
-    for(int i = 0 ; i < temp.length ; i++) {
-      temp[i] = source_buffer.get(i);
+    if(source_buffer != null) {
+      float [] temp = new float[source_buffer.size()];
+      for(int i = 0 ; i < temp.length ; i++) {
+        temp[i] = source_buffer.get(i);
+      }
+      transient_detection.buffer(temp);
     }
-    transient_detection.buffer(temp);
   }
 
   public Vec2 get_transient_threshold(int section_target, int band_target) {
@@ -478,7 +517,11 @@ public class Sounda implements Rope_Constants {
   }
 
   public Vec2 get_transient_threshold(int section_target) {
-    return transient_detection.get_transient_threshold(section_target);
+    if(transient_detection != null) {
+      return transient_detection.get_transient_threshold(section_target);
+    } else {
+      return null;
+    }
   }
   
 
@@ -718,10 +761,19 @@ public class Sounda implements Rope_Constants {
   */
   /**
   class Section
-  v 0.3.0
+  v 0.4.0
   */
   protected class Section {
-    Vec2 threshold_transient = Vec2(0,1);
+    // transient param
+    
+    float low_pass = 100;
+    float smooth_slow = 50 ;
+    float smooth_fast = 500;
+    float ratio_log = 200;
+    float threshold_low = .1;
+    float threshold_high = .5;
+
+    // beat param
     float threshold_beat = 1;
     int in ;
     int out ;
@@ -748,7 +800,9 @@ public class Sounda implements Rope_Constants {
       leg = new int[out -in +1];
       this.in = in;
       this.out = out;
-      this.threshold_transient = threshold_transient.copy();
+      this.threshold_low = threshold_transient.x;
+      this.threshold_high = threshold_transient.y;
+      //this.threshold_transient = threshold_transient.copy();
     }
 
     public Section(int length, int in, int out, float threshold_beat) {
@@ -780,7 +834,8 @@ public class Sounda implements Rope_Constants {
 
     // set 
     public void set_threshold_transient(Vec2 threshold_transient) {
-      this.threshold_transient = threshold_transient;
+      this.threshold_low = threshold_transient.x;
+      this.threshold_high = threshold_transient.y;
     }
 
     public void set_threshold_beat(float threshold_beat) {
@@ -799,7 +854,7 @@ public class Sounda implements Rope_Constants {
 
     // get
     public Vec2 get_threshold_transient() {
-      return threshold_transient;
+      return Vec2(threshold_low,threshold_high);
     }
 
     public float get_threshold_beat() {
@@ -1140,7 +1195,7 @@ public class Sounda implements Rope_Constants {
 /**
 TRANSIENT DETECTION
 2018-2018
-v 0.0.3
+v 0.1.0
 --
 main transient method
 on idea of Jean-Baptiste Vallon Hoarau
@@ -1170,8 +1225,8 @@ y = pow[n]
 
 step 3 
 --
-low pass fast
-value [] lp_fast ; 
+smooth fast
+value [] smooth_fast ; 
 loop on buffer where n is a current value
 ref = pow[0];
 s_fast = abs(smooth_fast) +1; > keep value positive upper to 1
@@ -1180,18 +1235,18 @@ lp_fast[n] = ref;
 
 step 4 and 5
 --
-low pass slow
+smooth slow
 
-value [] lp_slow ; 
+value [] smooth_slow ; 
 loop on buffer where n is a current value
 ref = pow[0];
 s_slow = abs(smooth_slow)+1; > keep value positive upper to 1
 float current_value = pow[n];
 ref = ref + (current_value - ref) / s_slow;
-lp_fast[n] = ref;
+smooth_fast[n] = ref;
 
 diff between value fast and slow or reverse
-diff[n] = lp_fast[n] - lp_slow[n]
+diff[n] = smooth_fast[n] - smooth_slow[n]
 y = diff[n]
 
 step 6
@@ -1219,40 +1274,27 @@ if the answer is true in the couple : BINGO it's a transient
 class Transient extends Sounda {
   float [] buffer;
 
-  float [] smooth_low_pass;
-  float [] smooth_slow;
-  float [] smooth_fast;
-  float [] ratio_log;
-  float [] threshold_low;
-  float [] threshold_high;
-
-
   Transient() {
     super();
   }
-
 
   public void buffer(float [] buffer) {
     this.buffer = buffer; 
   }
 
 
+
+
   // setting
-  public void set_transient(Vec2... threshold) {
-    iVec2 [] in_out = new iVec2[threshold.length];
-    int part = buffer.length / in_out.length;
-    for(int i = 0 ; i < in_out.length ; i++) {
-      in_out[i] = iVec2(i*part,(i+1)*part);
-    }
-    set_section(buffer.length,in_out);
+  public void set_transient_detection(Section [] section, Vec2... threshold) {
     int [] id_transient_section = new int [threshold.length];
     for(int i = 0 ; i < id_transient_section.length ; i++) {
       id_transient_section[i]=i;
     }
-    set_transient(id_transient_section,threshold);
+    set_transient_detection(section,id_transient_section,threshold);
   }
 
-  public void set_transient(int index, Vec2 threshold) {
+  public void set_transient_detection(Section [] section, int index, Vec2 threshold) {
     if(index < section_size()) {
       section[index].set_threshold_transient(threshold);
     } else {
@@ -1260,9 +1302,10 @@ class Transient extends Sounda {
     }
   }
 
+
   private boolean transient_advance_is ;
   private boolean [][] transient_leg_is ;
-  private void set_transient(int[] target_transient_section, Vec2... threshold) {
+  private void set_transient_detection(Section [] section, int[] target_transient_section, Vec2... threshold) {
     if(section != null) {
       transient_advance_is = true ;
       transient_leg_is = new boolean [target_transient_section.length][buffer.length];
@@ -1289,108 +1332,77 @@ class Transient extends Sounda {
     }
   }
 
+
+  
+
+  // set param transient
+  public void set_low_pass(Section section, float low_pass) {
+    section.low_pass = low_pass;
+  }
+
+  public void set_smooth(Section section, float slow, float fast) {
+    section.smooth_slow = slow;
+    section.smooth_fast = fast;
+  }
+
+  public void set_smooth_slow(Section section, float slow) {
+    section.smooth_slow = slow;
+  }
+
+  public void set_smooth_fast(Section section, float fast) {
+    section.smooth_fast = fast;
+  }
+
+
+  public void set_ratio_log(Section section, float ratio_log) {
+    section.ratio_log = ratio_log;
+  }
+
+  public void set_threshold(Section section, float low, float high) {
+    section.threshold_low = low;
+    section.threshold_high = high; 
+  }
+
+  public void set_threshold_low(Section section, float low) {
+    section.threshold_low = low;
+  }
+
+
+  public void set_threshold_high(Section section, float high) {
+    section.threshold_high = high; 
+  }
+
+
+
+
+  
+
   // boolean transient is
-  public boolean transient_is() {
-    boolean transient_is = false ;
+  // method use when you work without the class SOUNDA
+  public boolean detection_is() {
+    boolean transient_is = false;
     for(int i = 0 ; i < section_size() ; i++) {
-      if(transient_is(i)) {
+      if(detection_is(section,i)) {
         transient_is = true;
         break;
       }
     }
     return transient_is;
   }
-  
-
-  // set param transient
-  public void set_transient_low_pass(float... smooth_low_pass) {
-    this.smooth_low_pass = smooth_low_pass;
-  }
-
-  public void set_transient_smooth_slow(float... smooth_slow) {
-    this.smooth_slow = smooth_slow;
-  }
-
-  public void set_transient_smooth_fast(float... smooth_fast) {
-    this.smooth_fast = smooth_fast;
-  }
-
-  public void set_transient_ratio_transient(float... ratio_log) {
-    this.ratio_log = ratio_log;
-  }
-
-  public void set_transient_threshold_low(float... threshold_low) {
-    this.threshold_low = threshold_low;
-  }
-
-  public void set_transient_threshold_high(float... threshold_high) {
-    this.threshold_high = threshold_high;
-  }
 
 
-  
-
-  
-
-  
-
-  private int define_target(int target, float [] list) {
-    // println("define");
-    // println(target,list.length);
-    int final_target = 0;
-    if(target < list.length && target >= 0) {
-      final_target = target ;
-    } else if(target >= list.length) {
-      final_target = target - list.length;
-    }
-    // security to against infinity loop
-    int max_loop = 4 ;
-    if(final_target > list.length *max_loop) {
-      final_target = 0 ;
-    } else if(final_target > list.length && final_target < list.length *max_loop) {
-      final_target = define_target(final_target, list) ;
-    } else if(final_target < list.length && final_target >= 0) {
-      // final_target = 0;
-    } else {
-      final_target = 0;
-    }
-    // println(final_target);
-    return final_target;
-  }
-
-  void default_setting() {
-    if(smooth_low_pass == null) set_transient_low_pass(100);     
-    if(smooth_slow == null) set_transient_smooth_slow(50);
-    if(smooth_fast == null) set_transient_smooth_fast(500);
-    if(ratio_log == null) set_transient_ratio_transient(200);
-    if(threshold_low == null) set_transient_threshold_low(.1);
-    if(threshold_high == null) set_transient_threshold_high(.5);
-  }
-
-  public boolean transient_is(int section_target) {
-    boolean transient_event_is = false;
-    // starting default value if no setting is call outside of the class Transient
-    default_setting();
+  public boolean detection_is(Section [] section, int section_index) {
+ 
+    boolean transient_event_is = false;   
     
-    // here we set the sensibility of each section
-    int section_target_low_pass = define_target(section_target, smooth_low_pass);
-    int section_target_smooth_slow = define_target(section_target, smooth_slow);
-    int section_target_smooth_fast = define_target(section_target, smooth_fast);
-    int section_target_ratio_log = define_target(section_target, ratio_log);
-    int section_target_threshold_low = define_target(section_target, threshold_low);
-    int section_target_threshold_high = define_target(section_target, threshold_high);
-
-    // print_transient_param();
-
-    if(section_target < section.length) {
+    int in = floor(section[section_index].in);
+    int out = floor(section[section_index].out);
+    int num_leg = out - in ;
+    if(section_index < section.length && num_leg > 0) {
       // set the value must be analyze
-      int in = floor(section[section_target].in);
-      int out = floor(section[section_target].out);
-
-      int num_leg = out - in ;
       float [] pow_value = new float[num_leg];
-      float [] low_pass_value_fast = new float[num_leg];
-      float [] low_pass_value_slow = new float[num_leg];
+      float [] value_fast = new float[num_leg];
+      float [] value_slow = new float[num_leg];
       float [] diff_value = new float[num_leg];
       float [] log_value = new float[num_leg];
       boolean [] transient_is = new boolean[num_leg];
@@ -1405,7 +1417,7 @@ class Transient extends Sounda {
         }
       }
 
-      low_pass(smooth_low_pass[section_target_low_pass],in,out);
+      low_pass(section[section_index].low_pass,in,out);
       // here pass the first filtering value from first low pass
       for(int i = 0 ; i  < pow_value.length ; i++) {
         pow_value[i] = low_pass_value[i];
@@ -1413,47 +1425,47 @@ class Transient extends Sounda {
       }
       // new low pass fast
       float ref_fast = pow_value[0];
-      float smoothing_fast = abs(smooth_fast[section_target_smooth_fast])+1;
-      // println(smoothing_fast);
-      for(int i = 0 ; i  < low_pass_value_fast.length ; i++) {
+      float smoothing_fast = abs(section[section_index].smooth_fast)+1;
+      for(int i = 0 ; i  < value_fast.length ; i++) {
         float current_value = pow_value[i];
         ref_fast += (current_value - ref_fast) / smoothing_fast;
-        low_pass_value_fast[i] = ref_fast;
+        value_fast[i] = ref_fast;
       }
 
       // new low pass slow
       float ref_slow = pow_value[0];
-      float smoothing_slow = abs(smooth_slow[section_target_smooth_slow])+1;
+      float smoothing_slow = abs(section[section_index].smooth_slow)+1;
       // pass second thread value: first low pass and pow treatment
-      for(int i = 0 ; i  < low_pass_value_slow.length ; i++) {
+      for(int i = 0 ; i  < value_slow.length ; i++) {
         float current_value = pow_value[i];
         ref_slow += (current_value - ref_slow) / smoothing_slow;
-        low_pass_value_slow[i] = ref_slow;
+        value_slow[i] = ref_slow;
       }
 
       // difference between quick and fast low pass
-      for(int i = 0 ; i  < diff_value.length ; i++) {
+      for(int i = 0 ; i < diff_value.length ; i++) {
         //diff_value[i] = low_pass_value_slow[i] - low_pass_value_fast[i];
-        diff_value[i] = low_pass_value_fast[i] - low_pass_value_slow[i];
+        diff_value[i] = value_fast[i] - value_slow[i];
       }
 
       // log 
       for(int i = 0 ; i  < log_value.length ; i++) {
-        log_value[i] = log(1+(ratio_log[section_target_ratio_log]*diff_value[i]));
+        log_value[i] = log(1+(section[section_index].ratio_log*diff_value[i]));
       }
       
       // transiente detection and hysteresie
-      for(int i = 0 ; i  < log_value.length ; i++) {
+      for(int i = 0 ; i < log_value.length ; i++) {
         transient_is[i] = false;
         float value = log_value[i];
-        if(value > threshold_high[section_target_threshold_high] && !transient_is[i]) {
+        if(value > section[section_index].threshold_high && !transient_is[i]) {
           value = 1;
           transient_is[i] = true;
-        } else if(value < threshold_low[section_target_threshold_low] && transient_is[i]) {
+        } else if(value < section[section_index].threshold_low && transient_is[i]) {
           value = 0;
           transient_is[i] = false;
         }
       }
+     
       
       for(int i = 0 ; i < transient_is.length ; i++) {
         if(transient_is[i]) {
@@ -1465,12 +1477,12 @@ class Transient extends Sounda {
       // display just for devellopement
       boolean dev = true;
       if(dev) {
-        show_visual(in, transient_is, raw_value, low_pass_value, pow_value, low_pass_value_fast, low_pass_value_slow, diff_value, log_value);
+        show_visual(in, transient_is, raw_value, low_pass_value, pow_value, value_fast, value_slow, diff_value, log_value);
       }
 
       // end display dev   
     } else {
-      printErrTempo(60,"method transient_is(section",section_target,") is out of the range, by default method return false",frameCount);
+      printErrTempo(60,"method transient_is(section",section_index,") is out of the range, by default method return false",frameCount);
     }
     return transient_event_is;
   }
@@ -1484,9 +1496,12 @@ class Transient extends Sounda {
     for(int i = 0 ; i < num ; i++) {
       pos_y[i] = step *(i +1); 
     }
+    float ratio_display = 1 ;
+    if(buffer.length > 0) ratio_display = width / buffer.length;
     for(int i = 0 ; i < transient_is.length ;i++) {
     // no filter
       int x = i +in;
+      x *= ratio_display;
       // println(x,i,in,transient_is.length);
       int y = int(raw_value[i] *factor) + pos_y[0];
       set(x, y,r.YELLOW);
@@ -1535,58 +1550,82 @@ class Transient extends Sounda {
   }
 
 
-  void print_transient_param() {
+  void print_transient_param(Section [] section) {
     printTempo(60,"__");
-    for(int i = 0 ; i < smooth_low_pass.length ; i ++) {
-      printTempo(60,"smooth slow pass:",smooth_low_pass[i],frameCount);
+    for(int i = 0 ; i < section.length ; i ++) {
+      printTempo(60,"smooth slow pass:",section[i].low_pass,frameCount);
     }
-    for(int i = 0 ; i < smooth_slow.length ; i ++) {
-      printTempo(60,"smooth slow:",smooth_slow[i],frameCount);
+    for(int i = 0 ; i < section.length ; i ++) {
+      printTempo(60,"smooth slow:",section[i].smooth_slow,frameCount);
     }
-    for(int i = 0 ; i < smooth_fast.length ; i ++) {
-      printTempo(60,"smooth fast:",smooth_fast[i],frameCount);
+    for(int i = 0 ; i < section.length ; i ++) {
+      printTempo(60,"smooth fast:",section[i].smooth_fast,frameCount);
     }
-    for(int i = 0 ; i < threshold_low.length ; i ++) {
-      printTempo(60,"threshold low:",threshold_low[i],frameCount);
+    for(int i = 0 ; i < section.length ; i ++) {
+      printTempo(60,"threshold low:",section[i].threshold_low,frameCount);
     }
-    for(int i = 0 ; i < threshold_high.length ; i ++) {
-      printTempo(60,"threshold high:",threshold_high[i],frameCount);
+    for(int i = 0 ; i < section.length ; i ++) {
+      printTempo(60,"threshold high:",section[i].threshold_high,frameCount);
     }
-    for(int i = 0 ; i < ratio_log.length ; i ++) {
-      printTempo(60,"ratio transient:",ratio_log[i],frameCount);
+    for(int i = 0 ; i < section.length ; i ++) {
+      printTempo(60,"ratio transient:",section[i].ratio_log,frameCount);
     }
   }
   
 
 
   // get param transient
-  public float[] get_transient_low_pass() {
-    return this.smooth_low_pass;
+  public float[] get_low_pass() {
+    float [] value = new float[section.length];
+    for(int i = 0 ; i < section.length ;i++) {
+      value[i] = section[i].low_pass;
+    }
+    return value;
   }
 
-  public float[] get_transient_smooth_slow() {
-    return this.smooth_slow;
+  public float[] get_smooth_slow() {
+    float [] value = new float[section.length];
+    for(int i = 0 ; i < section.length ;i++) {
+      value[i] = section[i].smooth_slow;
+    }
+    return value;
   }
 
-  public float[] get_transient_smooth_fast() {
-    return this.smooth_fast;
+  public float[] get_smooth_fast() {
+    float [] value = new float[section.length];
+    for(int i = 0 ; i < section.length ;i++) {
+      value[i] = section[i].smooth_fast;
+    }
+    return value;
   }
 
-  public float[] get_transient_ratio_transient() {
-    return this.ratio_log;
+  public float[] get_ratio_log() {
+    float [] value = new float[section.length];
+    for(int i = 0 ; i < section.length ;i++) {
+      value[i] = section[i].ratio_log;
+    }
+    return value;
   }
 
-  public float[] get_transient_threshold_low() {
-    return this.threshold_low;
+  public float[] get_threshold_low() {
+    float [] value = new float[section.length];
+    for(int i = 0 ; i < section.length ;i++) {
+      value[i] = section[i].threshold_low;
+    }
+    return value;
   }
 
-  public float[] get_transient_threshold_high() {
-    return this.threshold_high;
+  public float[] get_threshold_high() {
+    float [] value = new float[section.length];
+    for(int i = 0 ; i < section.length ;i++) {
+      value[i] = section[i].threshold_high;
+    }
+    return value;
   }
 
 
   // get bet threshold
-  public Vec2 get_transient_threshold(int section_target, int band_target) {
+  public Vec2 get_transient_threshold(Section [] section, int section_target, int band_target) {
     Vec2 threshold = Vec2(Float.MAX_VALUE) ;
     // check if the target is on the beat range analyze
     if(transient_advance_is && transient_leg_is[section_target][band_target]) {
@@ -1596,8 +1635,10 @@ class Transient extends Sounda {
   }
 
 
-  public Vec2 get_transient_threshold(int section_target) {
+  public Vec2 get_transient_threshold(Section [] section, int section_target) {
     return section[section_target].get_threshold_transient();
   }
-
 }
+
+
+
