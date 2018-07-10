@@ -120,6 +120,7 @@ void set_tempo() {
 void sound_system_draw() {
 	// sounda.update_tempo(true);
   sounda.update_spectrum(true);
+  sounda.info(true);
 
   show_spectrum();
   show_beat();
