@@ -1,14 +1,18 @@
 
-Sound rope
+## Sound rope
+
 v 1.0.6
---
+
 >author Stan le Punk
 >see other Processing work on https://github.com/StanLepunK
 >2017-2017
 
 
-This code is based on Minin Library
+This sketch used Minin Library
 >see https://github.com/ddf/Minim
+
+This sketch used  Rope library
+[download](https://github.com/StanLepunK/Rope/blob/master/Rope.zip)
 
 Global
 --
@@ -20,8 +24,8 @@ audio_buffer(MIX) ;
 
 
 
-Spectrum
---
+## Spectrum
+
 void set_spectrum(int num, float scale, float scale)
 >set your sound, the max of bands can be analyze is '256'
 >set the scale of represention of sound spectrum values, this value is used to detect the beat too.
@@ -30,8 +34,8 @@ void set_spectrum(int num, float scale, float scale)
 
 
 
-Band
---
+## Band
+
 float band(int target) ;
 >return the value of the band
 
@@ -52,8 +56,8 @@ int num_bands() ;
 
 
 
-TIME TRACK
---
+## TIME TRACK
+
 void set_time_track(float threshold, float time_to_reset);
 >set the sensibility of your time_track
 >threshold is use to comapre this value with the spectrum sum, by default this value is '0.5'
@@ -70,8 +74,8 @@ float get_time_track();
 
 
 
-BEAT
---
+## BEAT
+
 void set_beat(float... threshold) ;
 >Add threshold to detect the beat, the value is set by block, if you have two value, the first is for the left part of spectrum, and the other is for the right part
 >If you have more band than value pass, the algorithm restart from the first value ; the value are in relation with the spectrum_scale value
@@ -103,8 +107,8 @@ int beat_num()
 
 
 
-COLOUR
---
+## COLOUR
+
 int [] color_spectrum(int component_colour, int sort, Vec2... range);
 
 int [] color_spectrum(int component_colour, int sort);
