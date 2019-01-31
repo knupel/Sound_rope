@@ -109,7 +109,7 @@ int beat_num()
 
 ## COLOUR
 
-int [] color_spectrum(int component_colour, int sort, Vec2... range);
+int [] color_spectrum(int component_colour, int sort, vec2... range);
 
 int [] color_spectrum(int component_colour, int sort);
 >return an array in of colour, the length depend of the num of component and the type of color depend of type of sort
@@ -121,7 +121,7 @@ arg
 '0' by block
 '1' by hashing
 
->Vec2 range: vec.x is a low value, vec.y is a high value, from '0' to '1' constrain the method to return a compoent in his range. for example if the min value is '0.5' and the hight is '1.0' and your colorMode is (RGB, 255,255,255,255); the min value return will be 127 and the max 255.
+>vec2 range: vec.x is a low value, vec.y is a high value, from '0' to '1' constrain the method to return a compoent in his range. for example if the min value is '0.5' and the hight is '1.0' and your colorMode is (RGB, 255,255,255,255); the min value return will be 127 and the max 255.
 
 
 

@@ -34,14 +34,14 @@ void set_spectrum() {
 }
 
 
-iVec2 [] section_in_out;
+ivec2 [] section_in_out;
 void set_section() {
   int num_section = 4 ;
-  section_in_out = new iVec2[num_section];
-  section_in_out[0] = iVec2(0,60);
-  section_in_out[1] = iVec2(60,160);
-  section_in_out[2] = iVec2(160,310);
-  section_in_out[3] = iVec2(310,sounda.buffer_size());
+  section_in_out = new ivec2[num_section];
+  section_in_out[0] = ivec2(0,60);
+  section_in_out[1] = ivec2(60,160);
+  section_in_out[2] = ivec2(160,310);
+  section_in_out[3] = ivec2(310,sounda.buffer_size());
   sounda.set_section(section_in_out); // by deffault the section is built on the buffer_size() value pass in the Sounda Constructor
 }
 
@@ -60,15 +60,15 @@ void set_transient() {
   // lp>20 || tss>200 || tsf>800 || trt>75 || ttf>0.1 || tts>0.5
   // lp>20 || tss>3 || tsf>21 || trt>75 || ttf>0.1 || tts>0.35 // more detail in the curve with tss and tsf low
   
-  Vec2 [] transient_part_threshold = new Vec2[sounda.section_size()];
-  transient_part_threshold[0] = Vec2(.1, 0.5);
-  transient_part_threshold[1] = Vec2(.1, 0.5);
-  transient_part_threshold[2] = Vec2(.1, 0.5);
-  transient_part_threshold[3] = Vec2(.1, 0.5);
+  vec2 [] transient_part_threshold = new vec2[sounda.section_size()];
+  transient_part_threshold[0] = vec2(.1, 0.5);
+  transient_part_threshold[1] = vec2(.1, 0.5);
+  transient_part_threshold[2] = vec2(.1, 0.5);
+  transient_part_threshold[3] = vec2(.1, 0.5);
   sounda.init_transient(transient_part_threshold);
   // after you can sect a specific transient like
   int section_index = 0 ;
-  Vec2 new_value_threshold = Vec2(.25, 5.9);
+  vec2 new_value_threshold = vec2(.25, 5.9);
   sounda.set_transient(section_index,new_value_threshold);
 
   radius_transient = new float[transient_part_threshold.length];
@@ -142,19 +142,19 @@ void show_spectrum() {
 
   sounda.audio_buffer(RIGHT) ;
   fill(r.WHITE);
-  show_beat_spectrum_level(Vec2(0), height/2);
+  show_beat_spectrum_level(vec2(0), height/2);
   
 
   fill(r.BLACK);
-  show_spectrum_level(Vec2(0),height/2);
+  show_spectrum_level(vec2(0),height/2);
 
   sounda.audio_buffer(LEFT);
   fill(r.WHITE);
-  show_beat_spectrum_level(Vec2(0),-height/2);
+  show_beat_spectrum_level(vec2(0),-height/2);
   
 
   fill(r.BLACK);
-  show_spectrum_level(Vec2(0),-height/2);
+  show_spectrum_level(vec2(0),-height/2);
 
 
   textAlign(LEFT);
@@ -169,7 +169,7 @@ void show_spectrum() {
 
 }
 
-void show_spectrum_level(Vec2 pos, int size) {
+void show_spectrum_level(vec2 pos, int size) {
   float band_width = height /  sounda.spectrum_size() ;
   for(int i = 0; i < sounda.spectrum_size(); i++) {
     float pos_x = i * band_width +pos.x;
@@ -399,7 +399,7 @@ void show_beat() {
 
 
 
-void show_beat_spectrum_level(Vec2 pos, int size) {
+void show_beat_spectrum_level(vec2 pos, int size) {
   float band_width = height /  sounda.spectrum_size() ;
   for(int i = 0 ; i < sounda.section_size() ; i++) {
     for(int k = 0; k < sounda.spectrum_size() ; k++) {
