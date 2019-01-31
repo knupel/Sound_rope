@@ -12,7 +12,7 @@ This sketch used Minin Library
 >see https://github.com/ddf/Minim
 
 This sketch used  Rope library
-[download](https://github.com/StanLepunK/Rope/blob/master/Rope.zip)
+[download](https://github.com/StanLepunK/Rope/blob/master/build_rope/Rope.zip)
 
 Global
 --
