@@ -1,8 +1,8 @@
 /**
 SOUNDA Rope
 for SOUNDA > SOUND-Analyze
-v 1.5.0
-* Copyleft (c) 2017-2018
+v 1.5.1
+* Copyleft (c) 2017-2019
 * Stan le Punk > http://stanlepunk.xyz/
 * @author Stan le Punk
 * @see https://github.com/StanLepunK/Sound_rope
@@ -788,7 +788,7 @@ public class Sounda implements rope.core.RConstants {
   */
   /**
   class Section
-  v 0.4.0
+  v 0.4.1
   */
   protected class Section {
     // transient param
@@ -816,17 +816,15 @@ public class Sounda implements rope.core.RConstants {
 
     public Section(int length, int in, int out) {
       this.length = length;
-      leg = new int[out -in +1];
-      this.in = in;
-      this.out = out;
+      set_in_out(in,out);
+      leg = new int[this.out-this.in];
     }
 
 
     public Section(int length, int in, int out, vec2 threshold_transient) {
       this.length = length;
-      leg = new int[out -in +1];
-      this.in = in;
-      this.out = out;
+      set_in_out(in,out);
+      leg = new int[this.out-this.in];
       this.threshold_low = threshold_transient.x;
       this.threshold_high = threshold_transient.y;
       //this.threshold_transient = threshold_transient.copy();
@@ -834,10 +832,17 @@ public class Sounda implements rope.core.RConstants {
 
     public Section(int length, int in, int out, float threshold_beat) {
       this.length = length;
-      leg = new int[out -in +1];
+      set_in_out(in,out);
+      leg = new int[this.out-this.in];
+      this.threshold_beat = threshold_beat;
+    }
+
+    private void set_in_out(int in, int out) {
+      if(out <= in ) {
+        out = in +1;
+      }
       this.in = in;
       this.out = out;
-      this.threshold_beat = threshold_beat;
     }
      
 
