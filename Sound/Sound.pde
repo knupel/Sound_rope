@@ -5,10 +5,8 @@ void settings() {
 
 
 void setup() {
-  
   sound_system_setup();
   surface.setSize(sounda.buffer_size(), sounda.buffer_size());
- 
   background(0);
 
   // transient_setup();
